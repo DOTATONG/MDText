@@ -2630,6 +2630,34 @@
   font: 13px/1.4 var(--ui-font);
 }
 
+.image-preview-position {
+  font-variant-numeric: tabular-nums;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+.image-preview-navigation {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.72);
+  color: white;
+  cursor: pointer;
+}
+
+.image-preview-navigation.previous { left: 18px; }
+.image-preview-navigation.next { right: 18px; }
+.image-preview-navigation svg { width: 24px; height: 24px; }
+.image-preview-navigation:hover { background: rgba(15, 23, 42, 0.92); }
+.image-preview-navigation:disabled { opacity: 0.35; cursor: default; }
+.image-preview-navigation:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
 .image-preview-hint {
   white-space: nowrap;
 }

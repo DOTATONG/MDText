@@ -1,19 +1,20 @@
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent } from 'react'
 import { createPortal } from 'react-dom'
-import { Minus, Plus, RotateCcw, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Minus, Plus, RotateCcw, X } from 'lucide-react'
 import type { MarkdownPreviewLabels } from './previewTypes'
 
 const MIN_SCALE = 0.1
 const MAX_SCALE = 8
 type Transform = { scale: number; x: number; y: number }
 
-export function MediaPreviewDialog({ src, alt, title, closeLabel, labels, onClose }: {
+export function MediaPreviewDialog({ src, alt, title, closeLabel, labels, onClose, navigation }: {
   src: string
   alt: string
   title: string
   closeLabel: string
   labels: MarkdownPreviewLabels
   onClose: () => void
+  navigation?: { index: number; total: number; onNavigate: (direction: -1 | 1) => void }
 }) {
   const dialogRef = useRef<HTMLDivElement>(null)
   const viewportRef = useRef<HTMLDivElement>(null)
@@ -23,7 +24,8 @@ export function MediaPreviewDialog({ src, alt, title, closeLabel, labels, onClos
   const [transform, setTransform] = useState<Transform>({ scale: 1, x: 0, y: 0 })
   const [dragging, setDragging] = useState(false)
   const onCloseRef = useRef(onClose)
-  useLayoutEffect(() => { onCloseRef.current = onClose }, [onClose])
+  const navigateRef = useRef<(direction: -1 | 1) => void>(() => {})
+  useLayoutEffect(() => { onCloseRef.current = onClose; navigateRef.current = navigate })
 
   function updateTransform(next: Transform) {
     transformRef.current = next
@@ -37,6 +39,14 @@ export function MediaPreviewDialog({ src, alt, title, closeLabel, labels, onClos
     updateTransform({ scale, x: anchorX - (anchorX - current.x) * ratio, y: anchorY - (anchorY - current.y) * ratio })
   }
 
+  function navigate(direction: -1 | 1) {
+    if (!navigation || navigation.index + direction < 0 || navigation.index + direction >= navigation.total) return
+    dragRef.current = null
+    setDragging(false)
+    updateTransform({ scale: 1, x: 0, y: 0 })
+    navigation.onNavigate(direction)
+  }
+
   useEffect(() => {
     const previousFocus = document.activeElement as HTMLElement | null
     const previousOverflow = document.body.style.overflow
@@ -47,6 +57,10 @@ export function MediaPreviewDialog({ src, alt, title, closeLabel, labels, onClos
         event.preventDefault()
         event.stopImmediatePropagation()
         onCloseRef.current()
+      } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        event.preventDefault()
+        event.stopImmediatePropagation()
+        navigateRef.current(event.key === 'ArrowLeft' ? -1 : 1)
       }
     }
     window.addEventListener('keydown', handleKeyDown, true)
@@ -115,7 +129,7 @@ export function MediaPreviewDialog({ src, alt, title, closeLabel, labels, onClos
       }}>
       <div ref={viewportRef} className="image-preview-viewport"
         onClick={(event) => { if (event.currentTarget === event.target) onClose() }}>
-        <img className={`image-preview-image${dragging ? ' dragging' : ''}`} src={src} alt={alt} draggable={false}
+        <img key={navigation?.index} className={`image-preview-image${dragging ? ' dragging' : ''}`} src={src} alt={alt} draggable={false}
           style={{ transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})` }}
           onPointerDown={startDrag} onPointerMove={moveDrag} onPointerUp={finishDrag}
           onPointerCancel={finishDrag} onLostPointerCapture={() => { dragRef.current = null; setDragging(false) }} />
@@ -128,8 +142,15 @@ export function MediaPreviewDialog({ src, alt, title, closeLabel, labels, onClos
           <output aria-live="polite">{Math.round(transform.scale * 100)}%</output>
           <button type="button" onClick={() => zoom(1.25)} disabled={transform.scale >= MAX_SCALE} aria-label={labels.previewZoomIn} title={labels.previewZoomIn}><Plus aria-hidden="true" /></button>
           <button type="button" onClick={() => updateTransform({ scale: 1, x: 0, y: 0 })} aria-label={labels.previewReset} title={labels.previewReset}><RotateCcw aria-hidden="true" /></button>
+          {navigation && navigation.total > 1 ? <span className="image-preview-position" aria-live="polite">{labels.previewPosition(navigation.index + 1, navigation.total)}</span> : null}
         </div>
       </div>
+      {navigation && navigation.total > 1 ? <>
+        <button type="button" className="image-preview-navigation previous" onClick={() => navigate(-1)} disabled={navigation.index === 0}
+          aria-label={labels.previewPrevious} title={labels.previewPrevious}><ChevronLeft aria-hidden="true" /></button>
+        <button type="button" className="image-preview-navigation next" onClick={() => navigate(1)} disabled={navigation.index === navigation.total - 1}
+          aria-label={labels.previewNext} title={labels.previewNext}><ChevronRight aria-hidden="true" /></button>
+      </> : null}
     </div>, document.body,
   )
 }

@@ -12,6 +12,9 @@ export type MarkdownPreviewLabels = {
   previewZoomOut: string
   previewReset: string
   previewInteractionHint: string
+  previewPrevious: string
+  previewNext: string
+  previewPosition: (current: number, total: number) => string
   imagePreview: string
   closeImagePreview: string
   imagePreviewAlt: (alt: string) => string

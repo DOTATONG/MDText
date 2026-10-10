@@ -64,6 +64,9 @@ describe('MarkdownPreview', () => {
       previewZoomOut: 'Zoom out',
       previewReset: 'Fit to window',
       previewInteractionHint: 'Scroll to zoom · Drag to move · Esc to close',
+      previewPrevious: 'Previous image or diagram',
+      previewNext: 'Next image or diagram',
+      previewPosition: (current: number, total: number) => `${current} / ${total}`,
       imagePreview: 'Image preview',
       closeImagePreview: 'Close image preview',
       imagePreviewAlt: (alt) => `${alt} preview`,
@@ -499,5 +502,71 @@ describe('MarkdownPreview', () => {
     expect(close).toHaveFocus()
     fireEvent.click(close)
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('navigates images and Mermaid in document order with buttons and arrow keys', async () => {
+    render(<MarkdownPreview content={'![First](first.png)\n\n```mermaid\ngraph TD\nA --> B\n```\n\n![Last](last.png)'} />)
+    await screen.findByRole('img', { name: 'Mermaid diagram' })
+    fireEvent.click(screen.getByRole('img', { name: 'First' }))
+    expect(screen.getByText('1 / 3')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Previous image or diagram' })).toBeDisabled()
+    fireEvent.click(screen.getByRole('button', { name: 'Zoom in' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Next image or diagram' }))
+    expect(screen.getByRole('dialog', { name: 'Mermaid diagram' })).toBeInTheDocument()
+    expect(document.querySelector('.image-preview-image')).toHaveAttribute('src', expect.stringContaining('data:image/svg+xml;'))
+    expect(document.querySelector('.image-preview-image')).toHaveStyle({ transform: 'translate(0px, 0px) scale(1)' })
+    expect(screen.getByText('2 / 3')).toBeInTheDocument()
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'ArrowRight' })
+    expect(screen.getByRole('img', { name: 'Last preview' })).toHaveAttribute('src', 'last.png')
+    expect(screen.getByText('3 / 3')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Next image or diagram' })).toBeDisabled()
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'ArrowRight' })
+    expect(screen.getByText('3 / 3')).toBeInTheDocument()
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'ArrowLeft' })
+    expect(screen.getByRole('dialog', { name: 'Mermaid diagram' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Close diagram preview' }))
+    fireEvent.doubleClick(screen.getByRole('img', { name: 'Mermaid diagram' }))
+    expect(screen.getByText('2 / 3')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Previous image or diagram' }))
+    expect(screen.getByRole('img', { name: 'First preview' })).toBeInTheDocument()
+  })
+
+  it('keeps galleries scoped to one document and excludes failed Mermaid diagrams', async () => {
+    vi.mocked(mermaid.render).mockRejectedValueOnce(new Error('Invalid diagram'))
+    render(<><MarkdownPreview content={'![First](first.png)\n\n```mermaid\nbroken\n```\n\n<img src="last.png" alt="Last" />'} />
+      <MarkdownPreview content={'![Other document](other.png)'} /></>)
+    await screen.findByRole('alert')
+    fireEvent.click(screen.getByRole('img', { name: 'First' }))
+    expect(screen.getByText('1 / 2')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Next image or diagram' }))
+    expect(screen.getByRole('img', { name: 'Last preview' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Next image or diagram' })).toBeDisabled()
+    fireEvent.click(screen.getByRole('button', { name: 'Close image preview' }))
+    fireEvent.click(screen.getByRole('img', { name: 'Other document' }))
+    expect(screen.queryByRole('button', { name: 'Next image or diagram' })).not.toBeInTheDocument()
+  })
+
+  it('reads a local image resolved after the gallery opened when navigating to it', async () => {
+    let resolveImage!: (image: { dataUrl: string; path: string }) => void
+    const readLocalImageFile = vi.fn(() => new Promise<{ dataUrl: string; path: string }>((resolve) => { resolveImage = resolve }))
+    render(<MarkdownPreview content={'![First](https://example.com/first.png)\n\n![Local](local.png)'} sourcePath="C:\\Docs\\readme.md" readLocalImageFile={readLocalImageFile} />)
+    await waitFor(() => expect(readLocalImageFile).toHaveBeenCalled())
+    fireEvent.click(screen.getByRole('img', { name: 'First' }))
+    resolveImage({ dataUrl: 'data:image/png;base64,local', path: 'C:\\Docs\\local.png' })
+    await waitFor(() => expect(screen.getByRole('img', { name: 'Local' })).toHaveAttribute('src', 'data:image/png;base64,local'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next image or diagram' }))
+    expect(screen.getByRole('img', { name: 'Local preview' })).toHaveAttribute('src', 'data:image/png;base64,local')
+  })
+
+  it('closes the gallery when switching documents and rebuilds it on the next open', () => {
+    const { rerender } = render(<MarkdownPreview content={'![First](first.png)\n\n![Last](last.png)'} sourcePath="first.md" />)
+    fireEvent.click(screen.getByRole('img', { name: 'Last' }))
+    expect(screen.getByText('2 / 2')).toBeInTheDocument()
+    rerender(<MarkdownPreview content={'![New](new.png)'} sourcePath="new.md" />)
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(document.body.style.overflow).not.toBe('hidden')
+    fireEvent.click(screen.getByRole('img', { name: 'New' }))
+    expect(screen.getByRole('img', { name: 'New preview' })).toHaveAttribute('src', 'new.png')
+    expect(screen.queryByRole('button', { name: 'Previous image or diagram' })).not.toBeInTheDocument()
   })
 })

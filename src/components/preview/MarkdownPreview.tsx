@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState, type ComponentProps, type MouseEvent, type Ref } from 'react'
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentProps, type MouseEvent, type Ref } from 'react'
 import ReactMarkdown, { defaultUrlTransform } from 'react-markdown'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeRaw from 'rehype-raw'
@@ -15,6 +15,8 @@ import type { FileAccess } from '../../platform/fileAccess'
 import { CodeBlock } from './CodeBlock'
 import { LocalMarkdownImage } from './LocalMarkdownImage'
 import { MermaidDiagram } from './MermaidDiagram'
+import { MediaPreviewDialog } from './MediaPreviewDialog'
+import { readPreviewMedia, type PreviewMedia } from './previewMedia'
 import {
   ColorValuePreview,
   getCodeBlockMetadata,
@@ -108,6 +110,28 @@ export const MarkdownPreview = memo(function MarkdownPreview({
   const searchMatchesRef = useRef<HTMLElement[]>([])
   const activeSearchMatchRef = useRef<HTMLElement | null>(null)
   const [mathPlugins, setMathPlugins] = useState<MathPlugins | null>(null)
+  const context = useMemo(() => ({ content, sourcePath }), [content, sourcePath])
+  const contextRef = useRef(context)
+  useLayoutEffect(() => { contextRef.current = context }, [context])
+  const [gallery, setGallery] = useState<{ elements: HTMLElement[]; index: number; media: PreviewMedia; context: typeof context } | null>(null)
+  const openMediaPreview = useCallback((element: HTMLElement) => {
+    const article = articleRef.current
+    if (!article) return
+    const elements = Array.from(article.querySelectorAll<HTMLElement>('.markdown-image > img[src], .mermaid-diagram'))
+      .filter((item) => item.tagName === 'IMG' ? Boolean(item.getAttribute('src')) : Boolean(item.querySelector('svg')))
+    const index = elements.indexOf(element)
+    const media = readPreviewMedia(element, labels)
+    if (index >= 0 && media) setGallery({ elements, index, media, context: contextRef.current })
+  }, [labels])
+  function navigateMedia(direction: -1 | 1) {
+    setGallery((current) => {
+      if (!current) return null
+      const index = current.index + direction
+      if (index < 0 || index >= current.elements.length) return current
+      const media = readPreviewMedia(current.elements[index], labels)
+      return media ? { ...current, index, media } : current
+    })
+  }
   const hasMath = useMemo(() => containsMarkdownMath(content), [content])
   const searchHighlightPlugin = useMemo(() => createSearchHighlightPlugin(searchQuery), [searchQuery])
   const setPreviewRef = useCallback((element: HTMLElement | null) => {
@@ -142,7 +166,7 @@ export const MarkdownPreview = memo(function MarkdownPreview({
     pre({ children, node, ...props }) {
       const mermaidChart = getMermaidChart(children)
       if (mermaidChart) {
-        return <MermaidDiagram chart={mermaidChart} labels={labels} sourceLine={node?.position?.start.line} theme={theme} />
+        return <MermaidDiagram chart={mermaidChart} labels={labels} sourceLine={node?.position?.start.line} theme={theme} onPreview={openMediaPreview} />
       }
       const metadata = getCodeBlockMetadata(children)
       return <CodeBlock code={metadata.code} language={metadata.language} labels={labels} {...props}>{children}</CodeBlock>
@@ -185,9 +209,9 @@ export const MarkdownPreview = memo(function MarkdownPreview({
     },
     img({ src, alt, node, ...props }) {
       void node
-      return <LocalMarkdownImage src={src} alt={alt} sourcePath={sourcePath} readLocalImageFile={readLocalImageFile} labels={labels} {...props} />
+      return <LocalMarkdownImage src={src} alt={alt} sourcePath={sourcePath} readLocalImageFile={readLocalImageFile} onPreview={openMediaPreview} {...props} />
     },
-  }), [labels, onOpenExternalLink, onOpenMarkdownLink, readLocalImageFile, sourcePath, theme])
+  }), [labels, onOpenExternalLink, onOpenMarkdownLink, openMediaPreview, readLocalImageFile, sourcePath, theme])
 
   useEffect(() => {
     const article = articleRef.current
@@ -215,7 +239,7 @@ export const MarkdownPreview = memo(function MarkdownPreview({
   }, [activeSearchIndex, content, searchQuery])
 
   return (
-    <article className="markdown-preview" aria-label="Markdown preview" ref={setPreviewRef}>
+    <><article className="markdown-preview" aria-label="Markdown preview" ref={setPreviewRef}>
       <MarkdownBody
         components={components}
         content={content}
@@ -223,6 +247,9 @@ export const MarkdownPreview = memo(function MarkdownPreview({
         remarkPlugins={remarkPlugins}
       />
     </article>
+      {gallery?.context === context ? <MediaPreviewDialog {...gallery.media} labels={labels} onClose={() => setGallery(null)}
+        navigation={{ index: gallery.index, total: gallery.elements.length, onNavigate: navigateMedia }} /> : null}
+    </>
   )
 })
 
@@ -251,6 +278,9 @@ const defaultPreviewLabels: MarkdownPreviewLabels = {
   previewZoomOut: 'Zoom out',
   previewReset: 'Fit to window',
   previewInteractionHint: 'Scroll to zoom · Drag to move · Esc to close',
+  previewPrevious: 'Previous image or diagram',
+  previewNext: 'Next image or diagram',
+  previewPosition: (current: number, total: number) => `${current} / ${total}`,
   imagePreview: 'Image preview',
   closeImagePreview: 'Close image preview',
   imagePreviewAlt: (alt) => `${alt} preview`,
