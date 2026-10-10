@@ -54,6 +54,8 @@ MDView 是一款轻量、美观、免费无广告的 Markdown 阅读器。将 AI
 
 直接预览 Mermaid 图表、LaTeX 公式、表格和高亮代码。支持的颜色值旁会显示对应色块，查看设计规范与配色方案更直观。
 
+双击 Mermaid 图表可打开独立预览；图表和图片预览都支持滚轮或按钮缩放、拖动移动，以及一键适应窗口。
+
 **阅读为主，随手可改**
 
 切换源码编辑，或在同步分屏中边写边看。图片可粘贴、拖入或批量插入，表格与公式也有快捷入口；查找替换、撤销重做和草稿恢复，让日常修改更省心。
@@ -81,6 +83,8 @@ A collapsible outline lets you jump between sections and highlights your current
 **Diagrams, formulas, and colors in context**
 
 Preview Mermaid diagrams, LaTeX formulas, tables, and highlighted code. Color swatches appear beside supported color values, making palettes and design specifications easier to read.
+
+Double-click a Mermaid diagram to open a separate preview. Diagram and image previews support wheel or button zoom, dragging to pan, and fitting to the window.
 
 **Built for reading, ready for quick edits**
 

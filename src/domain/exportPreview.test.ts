@@ -12,7 +12,7 @@ describe('createLightExportContent', () => {
     renderMermaidDiagram.mockResolvedValue({ svg: '<svg data-theme="light" />' })
     const { createLightExportContent } = await import('./exportPreview')
     const preview = document.createElement('article')
-    preview.innerHTML = '<div class="mermaid-diagram" data-mdview-mermaid-chart="graph TD"></div><p><mark class="search-match">match</mark></p>'
+    preview.innerHTML = '<div class="mermaid-diagram" title="Double-click to preview diagram" tabindex="0" data-mdview-mermaid-chart="graph TD"></div><p><mark class="search-match">match</mark></p>'
 
     await expect(createLightExportContent(preview, {
       sourcePath: '/tmp/report.md',

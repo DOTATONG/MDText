@@ -33,6 +33,8 @@ export async function createLightExportContent(
     const result = await renderMermaidDiagram(`mdview-export-mermaid-${index}`, chart, 'light')
     diagram.innerHTML = sanitizeMermaidSvg(result.svg)
     delete diagram.dataset.mdviewMermaidChart
+    diagram.removeAttribute('title')
+    diagram.removeAttribute('tabindex')
   }
 
   for (const image of Array.from(previewClone.querySelectorAll<HTMLImageElement>('img'))) {

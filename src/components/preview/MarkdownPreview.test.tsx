@@ -58,6 +58,12 @@ describe('MarkdownPreview', () => {
       mermaidDiagram: 'Mermaid diagram',
       mermaidLoading: 'Rendering Mermaid diagram...',
       mermaidError: 'Mermaid render failed',
+      openMermaidPreview: 'Double-click to preview diagram',
+      closeMermaidPreview: 'Close diagram preview',
+      previewZoomIn: 'Zoom in',
+      previewZoomOut: 'Zoom out',
+      previewReset: 'Fit to window',
+      previewInteractionHint: 'Scroll to zoom · Drag to move · Esc to close',
       imagePreview: 'Image preview',
       closeImagePreview: 'Close image preview',
       imagePreviewAlt: (alt) => `${alt} preview`,
@@ -428,5 +434,70 @@ describe('MarkdownPreview', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('Mermaid render failed')
     expect(screen.getByRole('alert')).toHaveTextContent('Invalid Mermaid syntax')
     expect(screen.getByText(/graph TD/)).toBeInTheDocument()
+  })
+
+  it('opens Mermaid on double-click with an isolated, correctly sized SVG and restores focus on Escape', async () => {
+    vi.mocked(mermaid.render).mockResolvedValueOnce({
+      svg: '<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 1600 900"><text>Large chart</text><script>alert(1)</script></svg>',
+    } as Awaited<ReturnType<typeof mermaid.render>>)
+    render(<MarkdownPreview content={'```mermaid\ngraph TD\nA --> B\n```'} />)
+    const diagram = await screen.findByRole('img', { name: 'Mermaid diagram' })
+    diagram.focus()
+    fireEvent.click(diagram)
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    fireEvent.doubleClick(diagram)
+    expect(screen.getByRole('dialog', { name: 'Mermaid diagram' }).parentElement).toBe(document.body)
+    const image = document.querySelector<HTMLImageElement>('.image-preview-image')!
+    const svg = decodeURIComponent(image.getAttribute('src')!.split(',')[1])
+    expect(svg).toContain('width="1600"')
+    expect(svg).toContain('height="900"')
+    expect(svg).not.toContain('<script')
+    expect(screen.getByRole('button', { name: 'Close diagram preview' })).toHaveFocus()
+    expect(document.body.style.overflow).toBe('hidden')
+    fireEvent.keyDown(window, { key: 'Escape' })
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(diagram).toHaveFocus()
+    expect(document.body.style.overflow).not.toBe('hidden')
+  })
+
+  it('zooms, drags and resets Mermaid using the shared preview controls', async () => {
+    render(<MarkdownPreview content={'```mermaid\ngraph TD\nA --> B\n```'} />)
+    fireEvent.doubleClick(await screen.findByRole('img', { name: 'Mermaid diagram' }))
+    const image = document.querySelector<HTMLImageElement>('.image-preview-image')!
+    image.setPointerCapture = vi.fn()
+    image.hasPointerCapture = vi.fn(() => true)
+    image.releasePointerCapture = vi.fn()
+    fireEvent.click(screen.getByRole('button', { name: 'Zoom in' }))
+    expect(image.style.transform).toContain('scale(1.25)')
+    fireEvent.pointerDown(image, { button: 0, pointerId: 1, clientX: 10, clientY: 20 })
+    fireEvent.pointerMove(image, { pointerId: 1, clientX: 90, clientY: 60 })
+    expect(image.style.transform).toContain('translate(80px, 40px)')
+    fireEvent.pointerUp(image, { pointerId: 1 })
+    expect(image.releasePointerCapture).toHaveBeenCalledWith(1)
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Fit to window' }))
+    expect(image.style.transform).toBe('translate(0px, 0px) scale(1)')
+    fireEvent.wheel(image.parentElement!, { deltaY: -100, clientX: 0, clientY: 0 })
+    expect(image.style.transform).not.toContain('scale(1)')
+    for (let i = 0; i < 20; i++) fireEvent.click(screen.getByRole('button', { name: 'Zoom in' }))
+    expect(screen.getByRole('button', { name: 'Zoom in' })).toBeDisabled()
+    expect(image.style.transform).toContain('scale(8)')
+    fireEvent.click(screen.getByRole('button', { name: 'Zoom out' }))
+    expect(screen.getByRole('button', { name: 'Zoom in' })).not.toBeDisabled()
+    fireEvent.click(image.parentElement!)
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('opens Mermaid with the keyboard and traps focus inside the dialog', async () => {
+    render(<MarkdownPreview content={'```mermaid\ngraph TD\nA --> B\n```'} />)
+    const diagram = await screen.findByRole('img', { name: 'Mermaid diagram' })
+    fireEvent.keyDown(diagram, { key: 'Enter' })
+    const close = screen.getByRole('button', { name: 'Close diagram preview' })
+    fireEvent.keyDown(close, { key: 'Tab', shiftKey: true })
+    expect(screen.getByRole('button', { name: 'Fit to window' })).toHaveFocus()
+    fireEvent.keyDown(document.activeElement!, { key: 'Tab' })
+    expect(close).toHaveFocus()
+    fireEvent.click(close)
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 })
