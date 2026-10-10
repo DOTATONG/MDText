@@ -20,6 +20,9 @@ export type MarkdownPreviewLabels = {
   previewSaved: string
   previewSaveCanceled: string
   previewSaveFailed: string
+  previewReadFailed?: string
+  previewRenderFailed?: string
+  previewWriteFailed?: string
   imagePreview: string
   closeImagePreview: string
   imagePreviewAlt: (alt: string) => string

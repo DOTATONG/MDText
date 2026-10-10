@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent } from 
 import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, Download, Minus, Plus, RotateCcw, X } from 'lucide-react'
 import type { MarkdownPreviewLabels } from './previewTypes'
-import { savePreviewImage } from '../../platform/previewImageSave'
+import { PreviewImageSaveError, savePreviewImage } from '../../platform/previewImageSave'
 
 const MIN_SCALE = 0.1
 const MAX_SCALE = 8
@@ -65,8 +65,13 @@ export function MediaPreviewDialog({ src, alt, title, closeLabel, labels, onClos
       const path = await savePreviewImage({ src, fileName, rasterizeSvg,
         backgroundColor: imageRef.current ? getComputedStyle(imageRef.current).backgroundColor : undefined })
       if (mountedRef.current) setSaveStatus({ message: path ? labels.previewSaved : labels.previewSaveCanceled, error: false })
-    } catch {
-      if (mountedRef.current) setSaveStatus({ message: labels.previewSaveFailed, error: true })
+    } catch (error) {
+      const detail = error instanceof PreviewImageSaveError ? {
+        read: labels.previewReadFailed,
+        render: labels.previewRenderFailed,
+        save: labels.previewWriteFailed,
+      }[error.stage] : undefined
+      if (mountedRef.current) setSaveStatus({ message: detail || labels.previewSaveFailed, error: true })
     } finally {
       savingRef.current = false
       if (mountedRef.current) setSaving(false)

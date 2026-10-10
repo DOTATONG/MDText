@@ -16,7 +16,10 @@ vi.mock('mermaid', () => ({
     })),
   },
 }))
-vi.mock('../../platform/previewImageSave', () => ({ savePreviewImage: vi.fn() }))
+vi.mock('../../platform/previewImageSave', async (importOriginal) => ({
+  ...await importOriginal<typeof import('../../platform/previewImageSave')>(),
+  savePreviewImage: vi.fn(),
+}))
 
 describe('MarkdownPreview', () => {
   it('renders Chinese bold punctuation followed immediately by prose', () => {
