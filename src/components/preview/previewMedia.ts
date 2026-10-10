@@ -1,13 +1,16 @@
 import { sanitizeMermaidSvg } from '../../domain/mermaidRenderer'
 import type { MarkdownPreviewLabels } from './previewTypes'
 
-export type PreviewMedia = { src: string; alt: string; title: string; closeLabel: string }
+export type PreviewMedia = { src: string; alt: string; title: string; closeLabel: string; fileName: string; rasterizeSvg: boolean }
 
 export function readPreviewMedia(element: HTMLElement, labels: MarkdownPreviewLabels): PreviewMedia | null {
   if (element.tagName === 'IMG') {
     const src = element.getAttribute('src')
     if (!src) return null
-    return { src, alt: labels.imagePreviewAlt(element.getAttribute('alt') || 'Image'), title: labels.imagePreview, closeLabel: labels.closeImagePreview }
+    const sourceName = src.startsWith('data:') ? '' : src.split(/[\\/]/).at(-1)?.split(/[?#]/)[0]
+    let fileName = sourceName || element.getAttribute('alt') || 'image'
+    try { fileName = decodeURIComponent(fileName) } catch { /* Keep malformed URL names usable. */ }
+    return { src, alt: labels.imagePreviewAlt(element.getAttribute('alt') || 'Image'), title: labels.imagePreview, closeLabel: labels.closeImagePreview, fileName, rasterizeSvg: false }
   }
   const svg = element.querySelector('svg')
   if (!svg) return null
@@ -22,5 +25,6 @@ export function readPreviewMedia(element: HTMLElement, labels: MarkdownPreviewLa
   return {
     src: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(new XMLSerializer().serializeToString(root))}`,
     alt: labels.mermaidDiagram, title: labels.mermaidDiagram, closeLabel: labels.closeMermaidPreview,
+    fileName: 'mermaid-diagram.png', rasterizeSvg: true,
   }
 }

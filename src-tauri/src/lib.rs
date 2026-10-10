@@ -393,6 +393,35 @@ async fn export_docx_file_dialog(
 }
 
 #[tauri::command]
+async fn export_preview_image_dialog(
+    app: AppHandle,
+    bytes: Vec<u8>,
+    default_path: String,
+    extension: String,
+) -> Result<Option<String>, String> {
+    if bytes.is_empty() || bytes.len() > MAX_EXPORT_IMAGE_BYTES {
+        return Err("The image is empty or exceeds the save limit.".to_string());
+    }
+    if !matches!(extension.as_str(), "png" | "jpg" | "gif" | "webp" | "bmp" | "avif" | "svg") {
+        return Err("Unsupported image format.".to_string());
+    }
+    let dialog = configure_default_path(
+        app.dialog().file().add_filter("Image", &[extension.as_str()]),
+        Path::new(&default_path),
+    );
+    let Some(path) = dialog.blocking_save_file() else { return Ok(None); };
+    let mut path = path.into_path()
+        .map_err(|_| "The selected item is not a local file path.".to_string())?;
+    if !path.extension().and_then(|value| value.to_str())
+        .is_some_and(|value| value.eq_ignore_ascii_case(&extension)) {
+        path = PathBuf::from(format!("{}.{extension}", path.to_string_lossy()));
+    }
+    ensure_image_path(&path)?;
+    atomic_write_file(&path, &bytes).map_err(|error| format!("Failed to save image: {error}"))?;
+    Ok(Some(path.to_string_lossy().to_string()))
+}
+
+#[tauri::command]
 fn get_docx_import_status(
     app: AppHandle,
     registry: State<'_, DocxImportRegistry>,
@@ -584,6 +613,7 @@ pub fn run() {
             save_markdown_file_dialog,
             export_html_file_dialog,
             export_docx_file_dialog,
+            export_preview_image_dialog,
             get_docx_import_status,
             select_docx_import_python,
             install_docx_import_dependencies,

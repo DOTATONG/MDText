@@ -15,6 +15,11 @@ export type MarkdownPreviewLabels = {
   previewPrevious: string
   previewNext: string
   previewPosition: (current: number, total: number) => string
+  previewSave: string
+  previewSaving: string
+  previewSaved: string
+  previewSaveCanceled: string
+  previewSaveFailed: string
   imagePreview: string
   closeImagePreview: string
   imagePreviewAlt: (alt: string) => string

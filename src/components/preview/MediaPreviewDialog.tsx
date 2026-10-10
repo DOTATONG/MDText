@@ -1,28 +1,36 @@
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent } from 'react'
 import { createPortal } from 'react-dom'
-import { ChevronLeft, ChevronRight, Minus, Plus, RotateCcw, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download, Minus, Plus, RotateCcw, X } from 'lucide-react'
 import type { MarkdownPreviewLabels } from './previewTypes'
+import { savePreviewImage } from '../../platform/previewImageSave'
 
 const MIN_SCALE = 0.1
 const MAX_SCALE = 8
 type Transform = { scale: number; x: number; y: number }
 
-export function MediaPreviewDialog({ src, alt, title, closeLabel, labels, onClose, navigation }: {
+export function MediaPreviewDialog({ src, alt, title, closeLabel, labels, onClose, navigation, fileName, rasterizeSvg }: {
   src: string
   alt: string
   title: string
   closeLabel: string
   labels: MarkdownPreviewLabels
   onClose: () => void
+  fileName: string
+  rasterizeSvg: boolean
   navigation?: { index: number; total: number; onNavigate: (direction: -1 | 1) => void }
 }) {
   const dialogRef = useRef<HTMLDivElement>(null)
   const viewportRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
+  const imageRef = useRef<HTMLImageElement>(null)
+  const savingRef = useRef(false)
+  const mountedRef = useRef(false)
   const transformRef = useRef<Transform>({ scale: 1, x: 0, y: 0 })
   const dragRef = useRef<{ id: number; x: number; y: number; origin: Transform } | null>(null)
   const [transform, setTransform] = useState<Transform>({ scale: 1, x: 0, y: 0 })
   const [dragging, setDragging] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<{ message: string; error: boolean } | null>(null)
   const onCloseRef = useRef(onClose)
   const navigateRef = useRef<(direction: -1 | 1) => void>(() => {})
   useLayoutEffect(() => { onCloseRef.current = onClose; navigateRef.current = navigate })
@@ -40,14 +48,33 @@ export function MediaPreviewDialog({ src, alt, title, closeLabel, labels, onClos
   }
 
   function navigate(direction: -1 | 1) {
-    if (!navigation || navigation.index + direction < 0 || navigation.index + direction >= navigation.total) return
+    if (savingRef.current || !navigation || navigation.index + direction < 0 || navigation.index + direction >= navigation.total) return
     dragRef.current = null
     setDragging(false)
     updateTransform({ scale: 1, x: 0, y: 0 })
+    setSaveStatus(null)
     navigation.onNavigate(direction)
   }
 
+  async function saveCurrentImage() {
+    if (savingRef.current) return
+    savingRef.current = true
+    setSaving(true)
+    setSaveStatus(null)
+    try {
+      const path = await savePreviewImage({ src, fileName, rasterizeSvg,
+        backgroundColor: imageRef.current ? getComputedStyle(imageRef.current).backgroundColor : undefined })
+      if (mountedRef.current) setSaveStatus({ message: path ? labels.previewSaved : labels.previewSaveCanceled, error: false })
+    } catch {
+      if (mountedRef.current) setSaveStatus({ message: labels.previewSaveFailed, error: true })
+    } finally {
+      savingRef.current = false
+      if (mountedRef.current) setSaving(false)
+    }
+  }
+
   useEffect(() => {
+    mountedRef.current = true
     const previousFocus = document.activeElement as HTMLElement | null
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -65,6 +92,7 @@ export function MediaPreviewDialog({ src, alt, title, closeLabel, labels, onClos
     }
     window.addEventListener('keydown', handleKeyDown, true)
     return () => {
+      mountedRef.current = false
       window.removeEventListener('keydown', handleKeyDown, true)
       document.body.style.overflow = previousOverflow
       if (previousFocus?.isConnected) previousFocus.focus()
@@ -129,26 +157,27 @@ export function MediaPreviewDialog({ src, alt, title, closeLabel, labels, onClos
       }}>
       <div ref={viewportRef} className="image-preview-viewport"
         onClick={(event) => { if (event.currentTarget === event.target) onClose() }}>
-        <img key={navigation?.index} className={`image-preview-image${dragging ? ' dragging' : ''}`} src={src} alt={alt} draggable={false}
+        <img ref={imageRef} key={navigation?.index} className={`image-preview-image${dragging ? ' dragging' : ''}`} src={src} alt={alt} draggable={false}
           style={{ transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})` }}
           onPointerDown={startDrag} onPointerMove={moveDrag} onPointerUp={finishDrag}
           onPointerCancel={finishDrag} onLostPointerCapture={() => { dragRef.current = null; setDragging(false) }} />
       </div>
       <button ref={closeRef} type="button" className="image-preview-close" onClick={onClose} aria-label={closeLabel}><X aria-hidden="true" /></button>
       <div className="image-preview-controls">
-        <span className="image-preview-hint">{labels.previewInteractionHint}</span>
+        <span className="image-preview-hint" role={saveStatus?.error ? 'alert' : 'status'}>{saving ? labels.previewSaving : saveStatus?.message || labels.previewInteractionHint}</span>
         <div className="image-preview-toolbar">
           <button type="button" onClick={() => zoom(0.8)} disabled={transform.scale <= MIN_SCALE} aria-label={labels.previewZoomOut} title={labels.previewZoomOut}><Minus aria-hidden="true" /></button>
           <output aria-live="polite">{Math.round(transform.scale * 100)}%</output>
           <button type="button" onClick={() => zoom(1.25)} disabled={transform.scale >= MAX_SCALE} aria-label={labels.previewZoomIn} title={labels.previewZoomIn}><Plus aria-hidden="true" /></button>
           <button type="button" onClick={() => updateTransform({ scale: 1, x: 0, y: 0 })} aria-label={labels.previewReset} title={labels.previewReset}><RotateCcw aria-hidden="true" /></button>
+          <button type="button" onClick={() => void saveCurrentImage()} disabled={saving} aria-label={labels.previewSave} title={labels.previewSave}><Download aria-hidden="true" /></button>
           {navigation && navigation.total > 1 ? <span className="image-preview-position" aria-live="polite">{labels.previewPosition(navigation.index + 1, navigation.total)}</span> : null}
         </div>
       </div>
       {navigation && navigation.total > 1 ? <>
-        <button type="button" className="image-preview-navigation previous" onClick={() => navigate(-1)} disabled={navigation.index === 0}
+        <button type="button" className="image-preview-navigation previous" onClick={() => navigate(-1)} disabled={saving || navigation.index === 0}
           aria-label={labels.previewPrevious} title={labels.previewPrevious}><ChevronLeft aria-hidden="true" /></button>
-        <button type="button" className="image-preview-navigation next" onClick={() => navigate(1)} disabled={navigation.index === navigation.total - 1}
+        <button type="button" className="image-preview-navigation next" onClick={() => navigate(1)} disabled={saving || navigation.index === navigation.total - 1}
           aria-label={labels.previewNext} title={labels.previewNext}><ChevronRight aria-hidden="true" /></button>
       </> : null}
     </div>, document.body,

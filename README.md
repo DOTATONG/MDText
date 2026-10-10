@@ -58,6 +58,8 @@ MDView 是一款轻量、美观、免费无广告的 Markdown 阅读器。将 AI
 
 预览弹窗可按文档顺序浏览图片和 Mermaid 图表，通过上一张/下一张按钮或左右方向键切换，并显示当前位置。
 
+在预览弹窗中可直接保存当前图片：普通图片保留原格式，Mermaid 图表保存为完整 PNG 图片，不受当前缩放和拖动影响。
+
 **阅读为主，随手可改**
 
 切换源码编辑，或在同步分屏中边写边看。图片可粘贴、拖入或批量插入，表格与公式也有快捷入口；查找替换、撤销重做和草稿恢复，让日常修改更省心。
@@ -89,6 +91,8 @@ Preview Mermaid diagrams, LaTeX formulas, tables, and highlighted code. Color sw
 Double-click a Mermaid diagram to open a separate preview. Diagram and image previews support wheel or button zoom, dragging to pan, and fitting to the window.
 
 Browse images and Mermaid diagrams in document order using the previous/next buttons or arrow keys, with a current-position indicator.
+
+Save the current image from the preview: regular images keep their original format, while Mermaid diagrams are saved as complete PNG images, independent of zoom and pan.
 
 **Built for reading, ready for quick edits**
 

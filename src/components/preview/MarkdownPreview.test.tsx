@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import mermaid from 'mermaid'
+import { savePreviewImage } from '../../platform/previewImageSave'
 import {
   MarkdownPreview,
   type MarkdownPreviewLabels,
@@ -15,6 +16,7 @@ vi.mock('mermaid', () => ({
     })),
   },
 }))
+vi.mock('../../platform/previewImageSave', () => ({ savePreviewImage: vi.fn() }))
 
 describe('MarkdownPreview', () => {
   it('renders Chinese bold punctuation followed immediately by prose', () => {
@@ -67,6 +69,11 @@ describe('MarkdownPreview', () => {
       previewPrevious: 'Previous image or diagram',
       previewNext: 'Next image or diagram',
       previewPosition: (current: number, total: number) => `${current} / ${total}`,
+      previewSave: 'Save image',
+      previewSaving: 'Saving image…',
+      previewSaved: 'Image saved',
+      previewSaveCanceled: 'Save canceled',
+      previewSaveFailed: 'Unable to save image. Please try again.',
       imagePreview: 'Image preview',
       closeImagePreview: 'Close image preview',
       imagePreviewAlt: (alt) => `${alt} preview`,
@@ -497,7 +504,7 @@ describe('MarkdownPreview', () => {
     fireEvent.keyDown(diagram, { key: 'Enter' })
     const close = screen.getByRole('button', { name: 'Close diagram preview' })
     fireEvent.keyDown(close, { key: 'Tab', shiftKey: true })
-    expect(screen.getByRole('button', { name: 'Fit to window' })).toHaveFocus()
+    expect(screen.getByRole('button', { name: 'Save image' })).toHaveFocus()
     fireEvent.keyDown(document.activeElement!, { key: 'Tab' })
     expect(close).toHaveFocus()
     fireEvent.click(close)
@@ -568,5 +575,40 @@ describe('MarkdownPreview', () => {
     fireEvent.click(screen.getByRole('img', { name: 'New' }))
     expect(screen.getByRole('img', { name: 'New preview' })).toHaveAttribute('src', 'new.png')
     expect(screen.queryByRole('button', { name: 'Previous image or diagram' })).not.toBeInTheDocument()
+  })
+
+  it('saves the currently displayed Mermaid after navigating and keeps it stable while saving', async () => {
+    let finishSave!: (path: string | null) => void
+    vi.mocked(savePreviewImage).mockReturnValueOnce(new Promise((resolve) => { finishSave = resolve }))
+    render(<MarkdownPreview content={'![Photo](photo.jpg)\n\n```mermaid\ngraph TD\nA --> B\n```'} />)
+    await screen.findByRole('img', { name: 'Mermaid diagram' })
+    fireEvent.click(screen.getByRole('img', { name: 'Photo' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Next image or diagram' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Zoom in' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Save image' }))
+    expect(savePreviewImage).toHaveBeenLastCalledWith(expect.objectContaining({
+      src: expect.stringContaining('data:image/svg+xml;'), fileName: 'mermaid-diagram.png', rasterizeSvg: true,
+    }))
+    expect(screen.getByRole('button', { name: 'Save image' })).toBeDisabled()
+    fireEvent.keyDown(window, { key: 'ArrowLeft' })
+    expect(screen.getByRole('dialog', { name: 'Mermaid diagram' })).toBeInTheDocument()
+    finishSave('diagram.png')
+    await screen.findByText('Image saved')
+    expect(screen.getByRole('button', { name: 'Save image' })).not.toBeDisabled()
+    fireEvent.click(screen.getByRole('button', { name: 'Previous image or diagram' }))
+    expect(screen.queryByText('Image saved')).not.toBeInTheDocument()
+  })
+
+  it('handles canceled and failed image saves and allows retrying', async () => {
+    vi.mocked(savePreviewImage).mockResolvedValueOnce(null).mockRejectedValueOnce(new Error('disk unavailable')).mockResolvedValueOnce('photo.jpg')
+    render(<MarkdownPreview content={'![Photo](photo.jpg)'} />)
+    fireEvent.click(screen.getByRole('img', { name: 'Photo' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Save image' }))
+    await screen.findByText('Save canceled')
+    fireEvent.click(screen.getByRole('button', { name: 'Save image' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('Unable to save image')
+    fireEvent.click(screen.getByRole('button', { name: 'Save image' }))
+    await screen.findByText('Image saved')
+    expect(savePreviewImage).toHaveBeenLastCalledWith(expect.objectContaining({ src: 'photo.jpg', fileName: 'photo.jpg', rasterizeSvg: false }))
   })
 })
