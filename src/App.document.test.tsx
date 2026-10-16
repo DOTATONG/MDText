@@ -211,7 +211,7 @@ describe('App', () => {
     expect(screen.getByText('Interface language')).toBeInTheDocument()
     expect(screen.getByRole('menuitem', { name: 'English' })).toBeInTheDocument()
     expect(screen.getByRole('menuitem', { name: '中文' })).toBeInTheDocument()
-    expect(screen.getByRole('menuitem', { name: 'Reading Settings' })).toBeInTheDocument()
+    expect(screen.getByRole('menuitem', { name: 'Settings' })).toBeInTheDocument()
   })
 
   it('offers to restore a pending draft during a normal launch', async () => {
@@ -329,8 +329,8 @@ describe('App', () => {
     renderApp({ fileAccess: createFileAccess() })
 
     await openAppMenu(user)
-    await user.click(screen.getByRole('menuitem', { name: 'Reading Settings' }))
-    expect(screen.getByRole('dialog', { name: 'Reading Settings' })).toBeInTheDocument()
+    await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
+    expect(screen.getByRole('dialog', { name: 'Settings' })).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Dark' }))
 

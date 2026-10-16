@@ -34,6 +34,7 @@ import { useAppMenu } from './hooks/useAppMenu'
 import { useAppUpdater } from './hooks/useAppUpdater'
 import { useDocumentController } from './hooks/useDocumentController'
 import { useDocumentSearch } from './hooks/useDocumentSearch'
+import { useFileAssociation } from './hooks/useFileAssociation'
 import { useImageInsertion } from './hooks/useImageInsertion'
 import { useWindowFileDrop } from './hooks/useWindowFileDrop'
 import { usePreviewController } from './hooks/usePreviewController'
@@ -47,6 +48,8 @@ import type { DocxImportStatus } from './platform/fileAccess'
 import { openExternalLink } from './platform/externalLinks'
 import type { AppUpdateClient } from './platform/appUpdates'
 import { unsupportedAppUpdateClient } from './platform/unsupportedAppUpdates'
+import type { FileAssociationClient } from './platform/fileAssociation'
+import { tauriFileAssociation } from './platform/fileAssociation'
 import type { WindowFileDropClient } from './platform/windowFileDrop'
 import { tauriWindowFileDrop } from './platform/windowFileDrop'
 import {
@@ -63,6 +66,7 @@ type ViewMode = ReadingViewMode
 type AppProps = {
   appUpdateClient?: AppUpdateClient
   fileAccess: FileAccess
+  fileAssociation?: FileAssociationClient
   initialLanguage?: AppLanguage
   supportsAppUpdates?: boolean
   windowFileDrop?: WindowFileDropClient
@@ -72,6 +76,7 @@ type AppProps = {
 function App({
   appUpdateClient = unsupportedAppUpdateClient,
   fileAccess,
+  fileAssociation = tauriFileAssociation,
   initialLanguage,
   supportsAppUpdates = true,
   windowFileDrop = tauriWindowFileDrop,
@@ -376,6 +381,20 @@ function App({
     onOpenMarkdownFile: (path) => void openMarkdownLinkFile(path),
   })
 
+  const {
+    isUpdating: isMarkdownAssociationBusy,
+    status: markdownAssociationStatus,
+    toggle: toggleMarkdownAssociation,
+  } = useFileAssociation({
+    client: fileAssociation,
+    messages: {
+      added: t.markdownAssociationAdded,
+      removed: t.markdownAssociationRemoved,
+    },
+    onNotify: showAppToast,
+    onNotifyError: (error) => setStatusMessage(getErrorMessage(error)),
+  })
+
   const { exportDocx: handleExportDocx, exportHtml: handleExportHtml, exportPdf: handleExportPdf } = useDocumentExport({
     closeMenu,
     document: markdownDocument,
@@ -397,6 +416,10 @@ function App({
   function handleOpenAboutFromAppMenu() {
     closeMenu()
     setIsAboutOpen(true)
+  }
+
+  function handleToggleMarkdownAssociation() {
+    void toggleMarkdownAssociation()
   }
 
   function handleLanguageSelect(nextLanguage: AppLanguage) {
@@ -711,6 +734,8 @@ function App({
         updateErrorMessage={updateErrorMessage}
         updatePhase={updatePhase}
         updateProgress={updateProgress}
+        fileAssociationBusy={isMarkdownAssociationBusy}
+        fileAssociationRegistered={markdownAssociationStatus?.registered ?? false}
         onCheckUpdates={() => void handleCheckForUpdates()}
         onCloseAbout={() => setIsAboutOpen(false)}
         onCloseReadingSettings={() => setIsReadingSettingsOpen(false)}
@@ -720,6 +745,9 @@ function App({
         onOpenPortableDownload={() => void openPortableDownload()}
         onResetReadingPreferences={resetReadingPreferences}
         onRestoreDraft={() => void restorePendingDraft()}
+        onToggleFileAssociation={
+          markdownAssociationStatus?.supported ? handleToggleMarkdownAssociation : undefined
+        }
         onUpdateReadingPreferences={updateReadingPreferences}
         onCloseDocxImport={closeDocxImport}
         onConvertDocx={() => void convertDocx()}

@@ -85,7 +85,8 @@ Run MDView.exe directly after extracting this ZIP archive.
 
 Notes:
 - This portable package does not install MDView.
-- It does not register .md or .markdown file associations.
+- Extracting it registers nothing. Open Settings in MDView and add MDView to the Markdown
+  "Open with" list to associate files for the current user.
 - Updates open GitHub Releases so this package remains portable.
 - WebView2 Runtime is still required on Windows.
 "@ | Set-Content -LiteralPath (Join-Path $stagingPath "README-portable.txt") -Encoding UTF8

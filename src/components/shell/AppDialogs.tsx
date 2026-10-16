@@ -13,8 +13,10 @@ import type { DocxImportStatus } from '../../platform/fileAccess'
 export function AppDialogs({
   availableUpdate, distribution, isAboutOpen, isReadingSettingsOpen, pendingDraft,
   isDocxImportOpen, docxImportPhase, docxImportStatus, readingPreferences, t, updateErrorMessage, updatePhase, updateProgress,
+  fileAssociationBusy, fileAssociationRegistered,
   onCheckUpdates, onCloseAbout, onCloseReadingSettings, onDismissUpdate, onDiscardDraft,
   onInstallUpdate, onOpenPortableDownload, onResetReadingPreferences, onRestoreDraft,
+  onToggleFileAssociation,
   onUpdateReadingPreferences,
   onCloseDocxImport, onConvertDocx, onInstallDocx, onRefreshDocxImport, onSelectDocxPython, onOpenPythonDownload,
 }: {
@@ -31,6 +33,8 @@ export function AppDialogs({
   updateErrorMessage: string | null
   updatePhase: AppUpdatePhase
   updateProgress: AppUpdateProgress | null
+  fileAssociationBusy: boolean
+  fileAssociationRegistered: boolean
   onCheckUpdates: () => void
   onCloseAbout: () => void
   onCloseReadingSettings: () => void
@@ -40,6 +44,7 @@ export function AppDialogs({
   onOpenPortableDownload: () => void
   onResetReadingPreferences: () => void
   onRestoreDraft: () => void
+  onToggleFileAssociation?: () => void
   onUpdateReadingPreferences: (preferences: Partial<ReadingPreferences>) => void
   onCloseDocxImport: () => void
   onConvertDocx: () => void
@@ -51,7 +56,7 @@ export function AppDialogs({
   return <>
     <DraftRecoveryDialog draft={pendingDraft} onDiscard={onDiscardDraft} onRestore={onRestoreDraft} t={t} />
     <AboutDialog open={isAboutOpen} onClose={onCloseAbout} t={t} />
-    <ReadingSettingsDialog open={isReadingSettingsOpen} preferences={readingPreferences} onClose={onCloseReadingSettings} onReset={onResetReadingPreferences} onUpdate={onUpdateReadingPreferences} t={t} />
+    <ReadingSettingsDialog open={isReadingSettingsOpen} preferences={readingPreferences} onClose={onCloseReadingSettings} onReset={onResetReadingPreferences} onUpdate={onUpdateReadingPreferences} fileAssociationBusy={fileAssociationBusy} fileAssociationRegistered={fileAssociationRegistered} onToggleFileAssociation={onToggleFileAssociation} t={t} />
     <UpdateDialog distribution={distribution} errorMessage={updateErrorMessage} onCheckAgain={onCheckUpdates} onClose={onDismissUpdate} onInstall={onInstallUpdate} onOpenPortableDownload={onOpenPortableDownload} phase={updatePhase} progress={updateProgress} t={t} update={availableUpdate} />
     <DocxImportDialog open={isDocxImportOpen} phase={docxImportPhase} status={docxImportStatus} t={t} onClose={onCloseDocxImport} onConvert={onConvertDocx} onInstall={onInstallDocx} onRefresh={onRefreshDocxImport} onSelectPython={onSelectDocxPython} onOpenPythonDownload={onOpenPythonDownload} />
   </>

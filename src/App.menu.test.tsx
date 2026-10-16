@@ -372,6 +372,56 @@ describe('App', () => {
     expect(screen.getByRole('menuitem', { name: '清空最近文件' })).toBeDisabled()
   })
 
+  it('registers the .md association from the settings dialog', async () => {
+    const user = userEvent.setup()
+    const setRegistered = vi.fn(async (registered: boolean) => associationStatus(registered))
+    renderApp({
+      fileAccess: createFileAccess(),
+      fileAssociation: {
+        getStatus: vi.fn(async () => associationStatus(false)),
+        setRegistered,
+      },
+    })
+
+    await openSettings(user)
+    await user.click(screen.getByRole('button', { name: 'Add to the "Open with" list' }))
+
+    expect(setRegistered).toHaveBeenCalledWith(true)
+    expect(await screen.findByText(
+      'MDView has been added to the "Open with" list for .md and .markdown files.',
+    )).toBeInTheDocument()
+  })
+
+  it('removes the .md association from the settings dialog', async () => {
+    const user = userEvent.setup()
+    const setRegistered = vi.fn(async (registered: boolean) => associationStatus(registered))
+    renderApp({
+      fileAccess: createFileAccess(),
+      fileAssociation: {
+        getStatus: vi.fn(async () => associationStatus(true)),
+        setRegistered,
+      },
+    })
+
+    await openSettings(user)
+    await user.click(screen.getByRole('button', { name: 'Remove from the "Open with" list' }))
+
+    expect(setRegistered).toHaveBeenCalledWith(false)
+    expect(await screen.findByText(
+      'The current user association for .md files has been removed.',
+    )).toBeInTheDocument()
+  })
+
+  it('hides the .md association section when the platform cannot register it', async () => {
+    const user = userEvent.setup()
+    renderApp({ fileAccess: createFileAccess() })
+
+    await openSettings(user)
+
+    expect(screen.getByRole('button', { name: 'Dark' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /"Open with" list/ })).not.toBeInTheDocument()
+  })
+
 })
 
 function renderApp(props: ComponentProps<typeof App>) {
@@ -395,6 +445,15 @@ async function openExportMenu(user: ReturnType<typeof userEvent.setup>) {
 
 async function openAppMenu(user: ReturnType<typeof userEvent.setup>) {
   await user.click(screen.getByRole('button', { name: 'App' }))
+}
+
+async function openSettings(user: ReturnType<typeof userEvent.setup>) {
+  await openAppMenu(user)
+  await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
+}
+
+function associationStatus(registered: boolean) {
+  return { supported: true, registered, executablePath: 'C:\\Tools\\MDView.exe' }
 }
 
 function file(path: string, content: string): OpenedMarkdownFile {

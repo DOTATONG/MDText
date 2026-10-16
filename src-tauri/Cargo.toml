@@ -34,6 +34,11 @@ notify = "8.2"
 
 [target.'cfg(windows)'.dependencies]
 tauri-plugin-updater = "2"
+# Forwards a second launch (an "Open with" click) to the running instance instead of opening a
+# second window.
+tauri-plugin-single-instance = "2"
+# Backs the per-user file association commands in `src/file_association.rs`.
+winreg = "0.55"
 
 [target.'cfg(any(target_os = "windows", target_os = "macos"))'.dependencies]
 font-kit = "0.14.3"

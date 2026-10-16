@@ -1,5 +1,6 @@
 mod distribution;
 mod docx_import;
+mod file_association;
 mod file_watcher;
 mod fs_utils;
 mod image_utils;
@@ -22,7 +23,13 @@ use tauri::{AppHandle, Manager, State};
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
 
-#[cfg(any(target_os = "macos", target_os = "ios", target_os = "android"))]
+// Only `push_opened_files` emits, and it is compiled on the platforms that can hand the app a file.
+#[cfg(any(
+    target_os = "windows",
+    target_os = "macos",
+    target_os = "ios",
+    target_os = "android"
+))]
 use tauri::Emitter;
 
 const FILE_ACCESS_POLICY_FILENAME: &str = "approved-markdown-files.json";
@@ -42,6 +49,10 @@ const DROPPED_IMAGE_MIME_TYPES: [&str; 6] = [
 ];
 
 use distribution::get_app_distribution;
+use file_association::{
+    get_markdown_file_association_status, register_markdown_file_association,
+    unregister_markdown_file_association,
+};
 use file_watcher::FileWatcherRegistry;
 use fs_utils::{
     atomic_write_file, configure_default_path, ensure_docx_path, ensure_extension,
@@ -644,7 +655,22 @@ fn reveal_file_in_folder(
 pub fn run() {
     let startup_files = collect_opened_files_from_args();
     let startup_files_for_policy = startup_files.clone();
-    let builder = tauri::Builder::default()
+    let builder = tauri::Builder::default();
+
+    // Registered ahead of every other plugin so a second launch is handed to this instance instead
+    // of starting another copy of the application.
+    #[cfg(target_os = "windows")]
+    let builder = builder.plugin(tauri_plugin_single_instance::init(|app, argv, _cwd| {
+        focus_main_window(app);
+
+        // `argv[0]` is the executable itself, and non-Markdown arguments are filtered out.
+        let files = startup::collect_opened_files(argv.into_iter().skip(1));
+        if !files.is_empty() {
+            push_opened_files(app, files);
+        }
+    }));
+
+    let builder = builder
         .manage(OpenedFiles(Mutex::new(startup_files)))
         .manage(DocxImportRegistry::default())
         .manage(FileWatcherRegistry::default())
@@ -679,7 +705,10 @@ pub fn run() {
             write_image_asset,
             reveal_file_in_folder,
             list_system_font_families,
-            get_app_distribution
+            get_app_distribution,
+            get_markdown_file_association_status,
+            register_markdown_file_association,
+            unregister_markdown_file_association
         ])
         .setup(move |app| {
             let policy = FileAccessPolicy::load(app.handle());
@@ -799,7 +828,14 @@ fn normalize_path_for_policy(path: &Path) -> Result<PathBuf, String> {
     Ok(parent.join(file_name))
 }
 
-#[cfg(any(target_os = "macos", target_os = "ios", target_os = "android"))]
+// Called by the Windows single-instance handler below and by `RunEvent::Opened` on macOS, iOS and
+// Android, so the gate matches those call sites exactly.
+#[cfg(any(
+    target_os = "windows",
+    target_os = "macos",
+    target_os = "ios",
+    target_os = "android"
+))]
 fn push_opened_files(app: &AppHandle, files: Vec<PathBuf>) {
     let authorized_files = if let Some(policy) = app.try_state::<FileAccessPolicy>() {
         let authorized = files
@@ -830,6 +866,18 @@ fn push_opened_files(app: &AppHandle, files: Vec<PathBuf>) {
     }
 
     let _ = app.emit("opened-files", payload);
+}
+
+/// Brings the running instance to the foreground when the operating system hands it a file.
+#[cfg(target_os = "windows")]
+fn focus_main_window(app: &AppHandle) {
+    let Some(window) = app.get_webview_window("main") else {
+        return;
+    };
+
+    let _ = window.unminimize();
+    let _ = window.show();
+    let _ = window.set_focus();
 }
 
 #[cfg(test)]

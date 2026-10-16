@@ -16,6 +16,10 @@ type ReadingSettingsDialogProps = {
   onClose: () => void
   onReset: () => void
   onUpdate: (changes: Partial<ReadingPreferences>) => void
+  /** Omitted on platforms that cannot register file associations; the section is then hidden. */
+  fileAssociationBusy?: boolean
+  fileAssociationRegistered?: boolean
+  onToggleFileAssociation?: () => void
   t: Translation
 }
 
@@ -27,6 +31,9 @@ export function ReadingSettingsDialog({
   onClose,
   onReset,
   onUpdate,
+  fileAssociationBusy = false,
+  fileAssociationRegistered = false,
+  onToggleFileAssociation,
   t,
 }: ReadingSettingsDialogProps) {
   const [isFontPickerOpen, setIsFontPickerOpen] = useState(false)
@@ -178,6 +185,23 @@ export function ReadingSettingsDialog({
           <RangeSetting label={t.lineHeight(preferences.lineHeight)} value={preferences.lineHeight} range={READING_LINE_HEIGHT_RANGE} onChange={(lineHeight) => onUpdate({ lineHeight })} />
           <RangeSetting label={t.contentWidth(preferences.contentWidth)} value={preferences.contentWidth} range={READING_CONTENT_WIDTH_RANGE} onChange={(contentWidth) => onUpdate({ contentWidth })} />
         </section>
+
+        {onToggleFileAssociation ? (
+          <section className="reading-settings-section" aria-labelledby="file-association-label">
+            <h3 id="file-association-label">{t.fileAssociationSectionTitle}</h3>
+            <p className="reading-settings-description">{t.fileAssociationDescription}</p>
+            <button
+              type="button"
+              className="reading-settings-action"
+              disabled={fileAssociationBusy}
+              onClick={onToggleFileAssociation}
+            >
+              {fileAssociationRegistered
+                ? t.removeMarkdownAssociation
+                : t.addMarkdownAssociation}
+            </button>
+          </section>
+        ) : null}
 
         <footer className="reading-settings-actions">
           <button type="button" className="reading-settings-reset" onClick={onReset}>

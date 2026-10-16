@@ -2819,7 +2819,8 @@
   opacity: 0.8;
 }
 
-.reading-font-description {
+.reading-font-description,
+.reading-settings-description {
   margin: 8px 0 0;
   color: var(--text-muted);
   font: 12px/1.45 var(--ui-font);
@@ -2969,7 +2970,8 @@
   margin-top: 22px;
 }
 
-.reading-settings-reset {
+.reading-settings-reset,
+.reading-settings-action {
   min-height: 34px;
   display: inline-flex;
   align-items: center;
@@ -2983,15 +2985,27 @@
   cursor: pointer;
 }
 
-.reading-settings-reset:hover {
+.reading-settings-reset:hover,
+.reading-settings-action:hover:not(:disabled) {
   border-color: var(--accent);
   color: var(--accent);
   background: var(--control-hover);
 }
 
-.reading-settings-reset svg {
+.reading-settings-reset svg,
+.reading-settings-action svg {
   width: 15px;
   height: 15px;
+}
+
+/* Follows the section description rather than a footer, so it supplies its own spacing. */
+.reading-settings-action {
+  margin-top: 10px;
+}
+
+.reading-settings-action:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 @media (max-width: 900px) {

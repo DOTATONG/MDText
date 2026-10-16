@@ -44,7 +44,7 @@ MDView 是一款轻量、美观、免费无广告的 Markdown 阅读器。将 AI
 
 **打开文件，随手即来**
 
-把 `.md` 文件拖进 MDView 窗口即可直接打开，拖入图片则会复制到文档的 assets 目录。
+双击 `.md` 文件，或在右键“打开方式”里选择 MDView，都能直接开始阅读；也可以把 `.md` 文件拖进窗口打开。Windows 绿色版无需管理员权限，在“设置”里即可把 MDView 加入 Markdown 文件的“打开方式”列表。已经打开 MDView 时再打开文件，会在现有窗口中加载。
 
 **舒适阅读，自由排版**
 
@@ -82,7 +82,7 @@ Reading comes first. Editing and conversion are close at hand when you need to r
 
 **Open a file in one step**
 
-Drag a `.md` file into the MDView window to open it, and drop images to copy them into the document's assets folder.
+Double-click a `.md` file, or right-click it and choose MDView under "Open with"; you can also drag a `.md` file into the window. The Windows portable build adds MDView to the Markdown "Open with" list from Settings without administrator rights, and a file opened while MDView is already running loads in the window you have.
 
 **A polished reading experience**
 
@@ -141,9 +141,9 @@ The macOS Universal DMG supports Intel and Apple Silicon on macOS 10.15+. It use
 
 **Edge:** enable Developer mode at `edge://extensions`, choose **Load unpacked**, and select the extracted folder containing `manifest.json`.
 
-**Windows：**MSI 默认关联 `.md` 和 `.markdown`，安装时可取消。静默安装时可通过以下参数禁用关联，请替换为实际 MSI 文件名。
+**Windows：**MSI 默认关联 `.md` 和 `.markdown`，安装时可取消。绿色版解压后不注册任何关联，可在 MDView 的“设置”里把 MDView 加入 Markdown 文件的“打开方式”列表；该操作只写入当前用户注册表，无需管理员权限，再次点击同一个按钮即可移除。静默安装时可通过以下参数禁用关联，请替换为实际 MSI 文件名。
 
-**Windows:** Markdown associations are enabled by default and can be deselected. To disable them during unattended installation, replace the example filename below with your MSI:
+**Windows:** Markdown associations are enabled by default and can be deselected. Extracting the portable ZIP registers nothing; use the File association section in MDView Settings to add MDView to the Markdown "Open with" list for the current user, which needs no administrator rights and can be undone from the same button. To disable associations during unattended installation, replace the example filename below with your MSI:
 
 ```powershell
 msiexec /i MDView_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn

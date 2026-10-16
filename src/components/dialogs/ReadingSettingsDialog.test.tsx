@@ -44,4 +44,53 @@ describe('ReadingSettingsDialog', () => {
       customFontFamily: 'Aptos',
     })
   })
+
+  it('adds the file association from the settings dialog', async () => {
+    const user = userEvent.setup()
+    const onToggleFileAssociation = vi.fn()
+    renderDialog({ fileAssociationRegistered: false, onToggleFileAssociation })
+
+    expect(screen.getByRole('heading', { name: 'File association' })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Add to the "Open with" list' }))
+
+    expect(onToggleFileAssociation).toHaveBeenCalledTimes(1)
+  })
+
+  it('offers to remove the file association once it is registered', () => {
+    renderDialog({
+      fileAssociationRegistered: true,
+      fileAssociationBusy: true,
+      onToggleFileAssociation: vi.fn(),
+    })
+
+    const action = screen.getByRole('button', { name: 'Remove from the "Open with" list' })
+    expect(action).toBeInTheDocument()
+    expect(action).toBeDisabled()
+  })
+
+  it('hides the file association section without a platform handler', () => {
+    renderDialog()
+
+    expect(screen.queryByRole('heading', { name: 'File association' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /"Open with" list/ })).not.toBeInTheDocument()
+  })
 })
+
+function renderDialog(props: {
+  fileAssociationBusy?: boolean
+  fileAssociationRegistered?: boolean
+  onToggleFileAssociation?: () => void
+} = {}) {
+  return render(
+    <ReadingSettingsDialog
+      open
+      preferences={DEFAULT_READING_PREFERENCES}
+      onClose={vi.fn()}
+      onReset={vi.fn()}
+      onUpdate={vi.fn()}
+      t={translations.en}
+      {...props}
+    />,
+  )
+}
