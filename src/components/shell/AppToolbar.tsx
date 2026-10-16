@@ -13,10 +13,10 @@ type ViewMode = 'preview' | 'edit' | 'split'
 export function AppToolbar({
   activeMenu, canRevealFiles, documentPath, documentTitle, isSaving, isWelcomeVisible,
   language, menuBarRef, nativeFileTitle, recentFiles, supportsAppUpdates, t, updatePhase,
-  updateActionTitle, viewMode, newTitle, openTitle, saveTitle, saveAsTitle,
+  updateActionTitle, viewMode, closeFileTitle, newTitle, openTitle, saveTitle, saveAsTitle,
   windowFrame,
-  onAbout, onCheckUpdates, onClearRecent, onExportDocx, onExportHtml, onExportPdf, onImportDocx,
-  onLanguage, onNew, onOpen, onOpenRecent, onOpenReadingSettings, onReveal,
+  onAbout, onCheckUpdates, onClearRecent, onCloseDocument, onExportDocx, onExportHtml, onExportPdf,
+  onImportDocx, onLanguage, onNew, onOpen, onOpenRecent, onOpenReadingSettings, onReveal,
   onSave, onSaveAs, onToggleMenu, onViewMode,
 }: {
   activeMenu: AppMenuId | null
@@ -35,6 +35,7 @@ export function AppToolbar({
   updateActionTitle?: string
   viewMode: ViewMode
   windowFrame: AppWindowFrame
+  closeFileTitle: string
   newTitle: string
   openTitle: string
   saveTitle: string
@@ -42,6 +43,7 @@ export function AppToolbar({
   onAbout: () => void
   onCheckUpdates: () => void
   onClearRecent: () => void
+  onCloseDocument: () => void
   onExportDocx: () => void
   onExportHtml: () => void
   onExportPdf: () => void
@@ -89,6 +91,7 @@ export function AppToolbar({
           {onImportDocx ? <button type="button" className="action-menu-item" onClick={onImportDocx} disabled={!nativeFilesEnabled} title={nativeFileTitle} role="menuitem">{t.importDocx}</button> : null}
           <button type="button" className="action-menu-item" onClick={onSave} disabled={isWelcomeVisible || !nativeFilesEnabled || isSaving} title={nativeFileTitle ?? saveTitle} role="menuitem">{t.save}</button>
           <button type="button" className="action-menu-item" onClick={onSaveAs} disabled={isWelcomeVisible || !nativeFilesEnabled || isSaving} title={nativeFileTitle ?? saveAsTitle} role="menuitem">{t.saveAs}</button>
+          <button type="button" className="action-menu-item" onClick={onCloseDocument} disabled={isWelcomeVisible} title={closeFileTitle} role="menuitem">{t.closeFile}</button>
           <div className="action-menu-divider" /><div className="action-menu-section-label">{t.recentFiles}</div>
           {recentFiles.length > 0 ? recentFiles.map((file) => <div className="recent-file-menu-row" key={file.path}>
             <button type="button" className="action-menu-item recent-file-item" onClick={() => onOpenRecent(file.path)} disabled={!nativeFilesEnabled} title={file.path} role="menuitem"><span className="recent-file-title">{file.title}</span></button>

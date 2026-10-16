@@ -118,6 +118,7 @@ describe('App', () => {
       'Open Markdown File',
       'Save',
       'Save As',
+      'Close File',
       'recent.md',
       'Reveal recent.md in folder',
       'Clear recent files',
@@ -183,6 +184,10 @@ describe('App', () => {
 
     fireEvent.keyDown(window, { key: 'o', ctrlKey: true })
     expect(await screen.findByRole('heading', { name: 'Opened' })).toBeInTheDocument()
+
+    fireEvent.keyDown(window, { key: 'w', ctrlKey: true })
+    expect(await screen.findByRole('heading', { name: 'Open a Markdown file' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Opened' })).not.toBeInTheDocument()
   })
 
   it('finds and replaces Markdown source text with Ctrl+F', async () => {
@@ -370,6 +375,59 @@ describe('App', () => {
 
     expect(screen.getByText('没有最近文件')).toBeInTheDocument()
     expect(screen.getByRole('menuitem', { name: '清空最近文件' })).toBeDisabled()
+  })
+
+  it('closes the open document and returns to the welcome workspace', async () => {
+    const user = userEvent.setup()
+    renderApp({ fileAccess: createFileAccess({ openFile: file('/tmp/readme.md', '# Readme') }) })
+
+    await openFileMenu(user)
+    await user.click(screen.getByRole('menuitem', { name: 'Open Markdown File' }))
+    expect(await screen.findByRole('heading', { name: 'Readme' })).toBeInTheDocument()
+
+    await openFileMenu(user)
+    expect(screen.getByRole('menuitem', { name: 'Close File' })).toHaveAttribute(
+      'title',
+      'Close the open markdown file (Ctrl+W)',
+    )
+    await user.click(screen.getByRole('menuitem', { name: 'Close File' }))
+
+    expect(await screen.findByRole('heading', { name: 'Open a Markdown file' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Readme' })).not.toBeInTheDocument()
+    // The closed document stays reachable from the welcome workspace.
+    expect(screen.getByRole('button', { name: 'Open recent file readme.md' })).toBeInTheDocument()
+  })
+
+  it('offers no close action before a file is open', async () => {
+    const user = userEvent.setup()
+    renderWelcomeApp({ fileAccess: createFileAccess() })
+
+    await openFileMenu(user)
+
+    expect(screen.getByRole('menuitem', { name: 'Close File' })).toBeDisabled()
+  })
+
+  it('keeps the document open when discarding changes is declined', async () => {
+    const user = userEvent.setup()
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false)
+    renderApp({ fileAccess: createFileAccess({ openFile: file('/tmp/readme.md', '# Readme') }) })
+
+    await openFileMenu(user)
+    await user.click(screen.getByRole('menuitem', { name: 'Open Markdown File' }))
+    await screen.findByRole('heading', { name: 'Readme' })
+
+    await user.click(screen.getByRole('button', { name: 'Edit markdown source' }))
+    await user.clear(screen.getByRole('textbox', { name: 'Markdown source' }))
+    await user.type(screen.getByRole('textbox', { name: 'Markdown source' }), '# Edited')
+
+    await openFileMenu(user)
+    await user.click(screen.getByRole('menuitem', { name: 'Close File' }))
+
+    expect(confirmSpy).toHaveBeenCalledOnce()
+    expect(screen.queryByRole('heading', { name: 'Open a Markdown file' })).not.toBeInTheDocument()
+    expect(screen.getByRole('textbox', { name: 'Markdown source' })).toHaveValue('# Edited')
+
+    confirmSpy.mockRestore()
   })
 
   it('registers the .md association from the settings dialog', async () => {

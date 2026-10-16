@@ -269,6 +269,21 @@ export function useDocumentController({
     setStatusMessage('saved')
   }, [canDiscardUnsavedChanges, clearCurrentDraft, onCloseMenu, onViewModeChange, startDraftSession])
 
+  const handleCloseDocument = useCallback(() => {
+    if (!canDiscardUnsavedChanges()) {
+      return
+    }
+
+    onCloseMenu()
+    clearCurrentDraft()
+    startDraftSession()
+    setExternalFileState(null)
+    setMarkdownDocument(createInitialDocument())
+    setIsWelcomeVisible(true)
+    onViewModeChange('preview')
+    setStatusMessage('saved')
+  }, [canDiscardUnsavedChanges, clearCurrentDraft, onCloseMenu, onViewModeChange, startDraftSession])
+
   const handleOpenFile = useCallback(async () => {
     if (!canDiscardUnsavedChanges()) {
       return
@@ -506,6 +521,7 @@ export function useDocumentController({
     documentSessionId,
     externalFileState,
     handleClearRecentFiles,
+    handleCloseDocument,
     handleContentChange,
     handleKeepLocalEdits,
     handleNewDocument,

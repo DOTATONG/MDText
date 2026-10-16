@@ -49,6 +49,7 @@ function toolbar(windowFrame: AppWindowFrame) {
     updatePhase="idle"
     viewMode="preview"
     windowFrame={windowFrame}
+    closeFileTitle="Close File"
     newTitle="New"
     openTitle="Open"
     saveTitle="Save"
@@ -56,6 +57,7 @@ function toolbar(windowFrame: AppWindowFrame) {
     onAbout={vi.fn()}
     onCheckUpdates={vi.fn()}
     onClearRecent={vi.fn()}
+    onCloseDocument={vi.fn()}
     onExportDocx={vi.fn()}
     onExportHtml={vi.fn()}
     onExportPdf={vi.fn()}

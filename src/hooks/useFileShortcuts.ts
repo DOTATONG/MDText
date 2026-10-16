@@ -7,6 +7,7 @@ import {
 
 type UseFileShortcutsOptions = {
   supportsNativeFiles: boolean
+  onCloseDocument: () => void
   onCloseMenu: () => void
   onNew: () => void | Promise<void>
   onOpen: () => void | Promise<void>
@@ -22,16 +23,29 @@ export function useFileShortcuts(options: UseFileShortcutsOptions): ShortcutPlat
     const isOpenShortcut = matchesShortcut(event, { key: 'o' }, platform)
     const isSaveShortcut = matchesShortcut(event, { key: 's' }, platform)
     const isSaveAsShortcut = matchesShortcut(event, { key: 's', shiftKey: true }, platform)
+    const isCloseShortcut = matchesShortcut(event, { key: 'w' }, platform)
 
-    if (!isNewShortcut && !isOpenShortcut && !isSaveShortcut && !isSaveAsShortcut) {
+    if (
+      !isNewShortcut
+      && !isOpenShortcut
+      && !isSaveShortcut
+      && !isSaveAsShortcut
+      && !isCloseShortcut
+    ) {
       return
     }
 
+    // Also keeps WebView2 from treating Ctrl+W as "close the window".
     event.preventDefault()
     options.onCloseMenu()
 
     if (isNewShortcut) {
       void options.onNew()
+      return
+    }
+
+    if (isCloseShortcut) {
+      options.onCloseDocument()
       return
     }
 

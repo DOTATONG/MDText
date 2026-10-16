@@ -114,6 +114,7 @@ function App({
   } = useTransientToast()
   const {
     handleClearRecentFiles,
+    handleCloseDocument,
     handleContentChange,
     canDiscardUnsavedChanges,
     handleKeepLocalEdits,
@@ -249,6 +250,7 @@ function App({
   })
   const shortcutPlatform = useFileShortcuts({
     supportsNativeFiles: fileAccess.supportsNativeFiles,
+    onCloseDocument: handleCloseDocument,
     onCloseMenu: closeMenu,
     onNew: handleNewDocumentWithPreviewPreload,
     onOpen: handleOpenFileWithPreviewPreload,
@@ -460,6 +462,7 @@ function App({
     : t.nativeFileUnavailable
   const canRevealFiles = fileAccess.canRevealFile ?? fileAccess.supportsNativeFiles
   const updateActionTitle = distribution === 'unsupported' ? t.updateUnavailable : undefined
+  const closeFileTitle = withShortcutTitle(t.closeFileLabel, { key: 'w' }, shortcutPlatform)
   const newTitle = withShortcutTitle(t.createNewLabel, { key: 'n' }, shortcutPlatform)
   const openTitle = withShortcutTitle(t.openLabel, { key: 'o' }, shortcutPlatform)
   const saveTitle = withShortcutTitle(t.saveLabel, { key: 's' }, shortcutPlatform)
@@ -489,6 +492,7 @@ function App({
       <AppToolbar
         activeMenu={activeMenu}
         canRevealFiles={canRevealFiles}
+        closeFileTitle={closeFileTitle}
         documentPath={markdownDocument.path}
         documentTitle={markdownDocument.title}
         isSaving={isSaving}
@@ -510,6 +514,7 @@ function App({
         onAbout={handleOpenAboutFromAppMenu}
         onCheckUpdates={() => void handleCheckForUpdates()}
         onClearRecent={handleClearRecentFiles}
+        onCloseDocument={handleCloseDocument}
         onExportDocx={() => void handleExportDocx()}
         onExportHtml={() => void handleExportHtml()}
         onExportPdf={() => void handleExportPdf()}
