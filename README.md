@@ -42,6 +42,10 @@ MDView 是一款轻量、美观、免费无广告的 Markdown 阅读器。将 AI
 
 想看看这些功能在实际阅读里是什么感觉？可以读读我写的[《给 Markdown 一个好读的家：我为什么做了 MDView》](docs/articles/MDView-wechat-intro.zh-CN.md)。
 
+**打开文件，随手即来**
+
+把 `.md` 文件拖进 MDView 窗口即可直接打开，拖入图片则会复制到文档的 assets 目录。
+
 **舒适阅读，自由排版**
 
 明暗主题与细致的文字排版，让内容清晰呈现。字体、字号、行距和正文宽度均可调整；Windows 和 macOS 还可直接选择电脑中已安装的字体，找到适合自己的阅读方式。
@@ -75,6 +79,10 @@ MDView 是一款轻量、美观、免费无广告的 Markdown 阅读器。将 AI
 MDView is a lightweight, thoughtfully designed Markdown reader, free and ad-free. Save AI-generated plans, notes, or technical explanations as Markdown files, then read them with clear typography, section navigation, diagrams, and formulas. It opens quickly, needs no account, and works just as well with your existing local documents.
 
 Reading comes first. Editing and conversion are close at hand when you need to revise a passage or share a neatly formatted document.
+
+**Open a file in one step**
+
+Drag a `.md` file into the MDView window to open it, and drop images to copy them into the document's assets folder.
 
 **A polished reading experience**
 

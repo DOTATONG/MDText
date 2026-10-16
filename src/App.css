@@ -1631,6 +1631,16 @@
   height: 28px;
 }
 
+/* A native drop can land anywhere in the window, so the hint covers all of it. Declared after
+   `.image-drop-overlay` so the full-window geometry wins over the editor-relative default. */
+.window-drop-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 12;
+  border-width: 3px;
+  border-radius: 0;
+}
+
 .image-import-notice {
   min-height: 38px;
   display: flex;

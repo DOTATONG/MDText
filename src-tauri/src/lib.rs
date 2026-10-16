@@ -30,6 +30,16 @@ const FILE_ACCESS_DENIED: &str =
     "File access denied. Open or select the file in MDView before accessing it.";
 const MAX_IMAGE_ASSET_BYTES: usize = 10 * 1024 * 1024;
 const MAX_EXPORT_IMAGE_BYTES: usize = 20 * 1024 * 1024;
+/// Image types the editor can copy into `assets/`. SVG is excluded because the frontend keeps
+/// raster formats only.
+const DROPPED_IMAGE_MIME_TYPES: [&str; 6] = [
+    "image/png",
+    "image/jpeg",
+    "image/gif",
+    "image/webp",
+    "image/bmp",
+    "image/avif",
+];
 
 use distribution::get_app_distribution;
 use file_watcher::FileWatcherRegistry;
@@ -95,6 +105,14 @@ struct WrittenImageAssetPayload {
     path: String,
     relative_path: String,
     filename: String,
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct DroppedImageFilePayload {
+    name: String,
+    mime_type: String,
+    data_url: String,
 }
 
 impl FileAccessPolicy {
@@ -476,6 +494,42 @@ fn read_image_file(
     })
 }
 
+/// Reads an image the user dropped onto the window so the editor can copy it into `assets/`.
+///
+/// A dropped file can live anywhere on disk and is therefore outside [`FileAccessPolicy`], so this
+/// command is the one deliberate exception to the approved-file check. It compensates by accepting
+/// only raster image extensions within the same size limit the editor already enforces.
+#[tauri::command]
+fn read_dropped_image_file(path: String) -> Result<DroppedImageFilePayload, String> {
+    let path = PathBuf::from(path);
+    let mime_type = image_mime_type(&path)?;
+    if !DROPPED_IMAGE_MIME_TYPES.contains(&mime_type) {
+        return Err(format!("{mime_type} images cannot be imported."));
+    }
+
+    let length = fs::metadata(&path)
+        .map_err(|error| format!("Failed to inspect the dropped image: {error}"))?
+        .len();
+    if length > MAX_IMAGE_ASSET_BYTES as u64 {
+        return Err("Image files must be 10 MB or smaller.".to_string());
+    }
+
+    let name = path
+        .file_name()
+        .map(|value| value.to_string_lossy().to_string())
+        .ok_or_else(|| "The dropped image does not have a file name.".to_string())?;
+    let bytes = fs::read(&path).map_err(|error| format!("Failed to read the dropped image: {error}"))?;
+
+    Ok(DroppedImageFilePayload {
+        name,
+        mime_type: mime_type.to_string(),
+        data_url: format!(
+            "data:{mime_type};base64,{}",
+            general_purpose::STANDARD.encode(bytes)
+        ),
+    })
+}
+
 #[tauri::command]
 async fn read_remote_image_file(url: String) -> Result<ImageFilePayload, String> {
     let parsed = url::Url::parse(&url).map_err(|_| "The image URL is invalid.".to_string())?;
@@ -620,6 +674,7 @@ pub fn run() {
             import_docx_file,
             cancel_docx_import,
             read_image_file,
+            read_dropped_image_file,
             read_remote_image_file,
             write_image_asset,
             reveal_file_in_folder,

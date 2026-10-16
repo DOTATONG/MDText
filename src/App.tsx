@@ -6,7 +6,7 @@ import {
   useState,
   type CSSProperties,
 } from 'react'
-import { PanelLeftOpen } from 'lucide-react'
+import { FileDown, PanelLeftOpen } from 'lucide-react'
 import './App.css'
 import { SplitScrollControl } from './components/workspace/SplitScrollControl'
 import { Toast } from './components/shell/Toast'
@@ -35,6 +35,7 @@ import { useAppUpdater } from './hooks/useAppUpdater'
 import { useDocumentController } from './hooks/useDocumentController'
 import { useDocumentSearch } from './hooks/useDocumentSearch'
 import { useImageInsertion } from './hooks/useImageInsertion'
+import { useWindowFileDrop } from './hooks/useWindowFileDrop'
 import { usePreviewController } from './hooks/usePreviewController'
 import { useReadingSession } from './hooks/useReadingSession'
 import { useReadingPreferences } from './hooks/useReadingPreferences'
@@ -46,6 +47,8 @@ import type { DocxImportStatus } from './platform/fileAccess'
 import { openExternalLink } from './platform/externalLinks'
 import type { AppUpdateClient } from './platform/appUpdates'
 import { unsupportedAppUpdateClient } from './platform/unsupportedAppUpdates'
+import type { WindowFileDropClient } from './platform/windowFileDrop'
+import { tauriWindowFileDrop } from './platform/windowFileDrop'
 import {
   withShortcutTitle,
 } from './platform/keyboardShortcuts'
@@ -62,6 +65,7 @@ type AppProps = {
   fileAccess: FileAccess
   initialLanguage?: AppLanguage
   supportsAppUpdates?: boolean
+  windowFileDrop?: WindowFileDropClient
   windowFrame?: AppWindowFrame
 }
 
@@ -70,6 +74,7 @@ function App({
   fileAccess,
   initialLanguage,
   supportsAppUpdates = true,
+  windowFileDrop = tauriWindowFileDrop,
   windowFrame = nativeWindowFrame,
 }: AppProps) {
   const [language, setLanguage] = useState<AppLanguage>(() => initialLanguage ?? detectSystemLanguage())
@@ -357,6 +362,18 @@ function App({
     },
     onContentTransform: transformDocumentContent,
     onNotify: showAppToast,
+  })
+
+  const { isDraggingFiles } = useWindowFileDrop({
+    client: windowFileDrop,
+    onImportImages: (files) => {
+      // Images belong to a document, so a drop on the welcome screen is ignored.
+      if (!isWelcomeVisible) {
+        void importImages(files, editorSelectionStore.getSnapshot())
+      }
+    },
+    onNotifyError: (error) => setStatusMessage(getErrorMessage(error)),
+    onOpenMarkdownFile: (path) => void openMarkdownLinkFile(path),
   })
 
   const { exportDocx: handleExportDocx, exportHtml: handleExportHtml, exportPdf: handleExportPdf } = useDocumentExport({
@@ -662,6 +679,12 @@ function App({
         </section>
       </section>
       </>}
+      {isDraggingFiles ? (
+        <div className="image-drop-overlay window-drop-overlay" role="status">
+          <FileDown aria-hidden="true" />
+          <span>{t.windowDropLabel}</span>
+        </div>
+      ) : null}
       {toast ? (
         <Toast
           label={t.toastNotification}

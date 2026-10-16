@@ -12,15 +12,23 @@ test.beforeEach(async ({ page }) => {
     })
 
     const selectedPath = 'C:\\Docs\\E2E Opened.md'
+    const droppedPath = 'C:\\Docs\\E2E Dropped.md'
     const files: Record<string, string> = {
       [selectedPath]: '# E2E Opened\n\nThis file was loaded by Playwright.\n',
+      [droppedPath]: '# E2E Dropped\n\nThis file was dragged into the window.\n',
+    }
+    type DropHandlers = {
+      onDragStateChange: (isDragging: boolean) => void
+      onDrop: (paths: string[]) => void
     }
     const state = {
       savedContent: null as string | null,
       savedPath: null as string | null,
+      dropHandlers: null as DropHandlers | null,
     }
     const win = window as typeof window & {
       __MDVIEW_E2E_FILE_ACCESS__?: unknown
+      __MDVIEW_E2E_WINDOW_FILE_DROP__?: unknown
       __MDVIEW_E2E_STATE__?: typeof state
     }
 
@@ -71,6 +79,14 @@ test.beforeEach(async ({ page }) => {
       readStartupMarkdownFile: async () => null,
       listenForOpenedFiles: async () => null,
     }
+    win.__MDVIEW_E2E_WINDOW_FILE_DROP__ = {
+      listen: async (handlers: DropHandlers) => {
+        state.dropHandlers = handlers
+        return () => undefined
+      },
+      readDroppedImage: async (path: string) =>
+        new File(['image'], path.split(/[\\/]/).pop() ?? 'image.png', { type: 'image/png' }),
+    }
   })
 
   await page.goto('/')
@@ -93,6 +109,23 @@ test('opens a markdown file through the file menu', async ({ page }) => {
 
   await expect(page.getByRole('heading', { level: 1, name: 'E2E Opened' })).toBeVisible()
   await expect(page.getByText('E2E Opened.md', { exact: true })).toBeVisible()
+})
+
+test('opens a markdown document dropped onto the window', async ({ page }) => {
+  await page.waitForFunction(() =>
+    Boolean((window as unknown as { __MDVIEW_E2E_STATE__?: { dropHandlers?: unknown } })
+      .__MDVIEW_E2E_STATE__?.dropHandlers),
+  )
+
+  await page.evaluate(() => {
+    const state = (window as unknown as {
+      __MDVIEW_E2E_STATE__?: { dropHandlers?: { onDrop: (paths: string[]) => void } }
+    }).__MDVIEW_E2E_STATE__
+    state?.dropHandlers?.onDrop(['C:\\Docs\\E2E Dropped.md'])
+  })
+
+  await expect(page.getByRole('heading', { level: 1, name: 'E2E Dropped' })).toBeVisible()
+  await expect(page.getByText('E2E Dropped.md', { exact: true })).toBeVisible()
 })
 
 test('saves edited markdown content', async ({ page }) => {
