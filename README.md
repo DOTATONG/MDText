@@ -50,6 +50,8 @@ MDView 是一款轻量、美观、免费无广告的 Markdown 阅读器。将 AI
 
 明暗主题与细致的文字排版，让内容清晰呈现。字体、字号、行距和正文宽度均可调整；Windows 和 macOS 还可直接选择电脑中已安装的字体，找到适合自己的阅读方式。
 
+界面整体也能缩放，`Ctrl` 配合 `-`、`+`、`0` 分别是缩小、放大和恢复默认；“应用”菜单里同样可以操作，缩放比例会被记住。
+
 **长篇文档，定位自如**
 
 可折叠的多级目录支持章节跳转与当前位置高亮。再次打开文件，恢复阅读进度、缩放和视图设置，接着上次往下读。
@@ -87,6 +89,8 @@ Double-click a `.md` file, or right-click it and choose MDView under "Open with"
 **A polished reading experience**
 
 Light and dark themes pair with carefully styled text. Adjust the font, size, line spacing, and page width; on Windows and macOS, you can also choose any installed font for comfortable reading.
+
+The whole interface zooms as well: `Ctrl` with `-`, `+`, and `0` shrinks, enlarges, and resets it. The same commands sit in the App menu, and the level is remembered.
 
 **Pick up where you left off**
 

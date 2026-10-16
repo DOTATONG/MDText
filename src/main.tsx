@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { loadReadingPreferences, resolveEffectiveReadingTheme } from './domain/readingPreferences.ts'
+import { loadUiZoom } from './domain/uiZoom.ts'
+import { applyUiZoom } from './platform/uiZoom.ts'
 import type { FileAccess } from './platform/fileAccess.ts'
 import { tauriFileAccess } from './platform/fileAccess.ts'
 import type { WindowFileDropClient } from './platform/windowFileDrop.ts'
@@ -24,6 +26,9 @@ declare global {
 bootstrapReadingTheme(loadReadingPreferences, (preferences, systemTheme) =>
   resolveEffectiveReadingTheme(preferences.themeMode, systemTheme),
 )
+
+// Applied before the first render so the interface never flashes at 100%.
+applyUiZoom(loadUiZoom())
 
 window.__MDVIEW_SYNC_NATIVE_THEME__ = setTheme
 window.__MDVIEW_OPEN_EXTERNAL_LINK__ = openUrl

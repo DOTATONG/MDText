@@ -50,6 +50,14 @@
   --reader-font-size: 16px;
   --reader-line-height: 1.8;
   --reader-content-width: 940px;
+
+  /* Interface zoom. `.app-shell` scales itself by this factor, and `scale()` leaves viewport units
+     and percentages untouched, so everything sized against the window inside the shell has to be
+     divided by it. These three are that logical viewport. */
+  --ui-zoom: 1;
+  --ui-vh: calc(100vh / var(--ui-zoom));
+  --ui-dvh: calc(100dvh / var(--ui-zoom));
+  --ui-vw: calc(100vw / var(--ui-zoom));
   --ui-font:
     Inter, 'Segoe UI Variable Text', 'Segoe UI', 'Microsoft YaHei UI', 'Microsoft YaHei',
     'PingFang SC', 'Hiragino Sans GB', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -140,6 +148,13 @@
 
 * {
   box-sizing: border-box;
+}
+
+/* The window-sized clip box for the scaled shell. Zooming out makes the shell's layout box taller
+   than the window on purpose, so the document itself must not scroll. */
+#root {
+  height: 100vh;
+  overflow: hidden;
 }
 
 body {

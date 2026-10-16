@@ -10,11 +10,25 @@ import { WindowControls } from './WindowControls'
 
 type ViewMode = 'preview' | 'edit' | 'split'
 
+export type AppToolbarZoom = {
+  /** Section label including the current percentage. */
+  label: string
+  resetDisabled: boolean
+  resetTitle: string
+  zoomInDisabled: boolean
+  zoomInTitle: string
+  zoomOutDisabled: boolean
+  zoomOutTitle: string
+  onReset: () => void
+  onZoomIn: () => void
+  onZoomOut: () => void
+}
+
 export function AppToolbar({
   activeMenu, canRevealFiles, documentPath, documentTitle, isSaving, isWelcomeVisible,
   language, menuBarRef, nativeFileTitle, recentFiles, supportsAppUpdates, t, updatePhase,
   updateActionTitle, viewMode, closeFileTitle, newTitle, openTitle, saveTitle, saveAsTitle,
-  windowFrame,
+  windowFrame, zoom,
   onAbout, onCheckUpdates, onClearRecent, onCloseDocument, onExportDocx, onExportHtml, onExportPdf,
   onImportDocx, onLanguage, onNew, onOpen, onOpenRecent, onOpenReadingSettings, onReveal,
   onSave, onSaveAs, onToggleMenu, onViewMode,
@@ -35,6 +49,7 @@ export function AppToolbar({
   updateActionTitle?: string
   viewMode: ViewMode
   windowFrame: AppWindowFrame
+  zoom: AppToolbarZoom
   closeFileTitle: string
   newTitle: string
   openTitle: string
@@ -114,6 +129,10 @@ export function AppToolbar({
           <div className="action-menu-section-label">{t.languageLabel}</div>
           <button type="button" className={`action-menu-item ${language === 'en' ? 'active' : ''}`} onClick={() => onLanguage('en')} role="menuitem">{t.languageEnglish}</button>
           <button type="button" className={`action-menu-item ${language === 'zh' ? 'active' : ''}`} onClick={() => onLanguage('zh')} role="menuitem">{t.languageChinese}</button>
+          <div className="action-menu-section-label">{zoom.label}</div>
+          <button type="button" className="action-menu-item" onClick={zoom.onZoomIn} disabled={zoom.zoomInDisabled} title={zoom.zoomInTitle} role="menuitem">{t.uiZoomIn}</button>
+          <button type="button" className="action-menu-item" onClick={zoom.onZoomOut} disabled={zoom.zoomOutDisabled} title={zoom.zoomOutTitle} role="menuitem">{t.uiZoomOut}</button>
+          <button type="button" className="action-menu-item" onClick={zoom.onReset} disabled={zoom.resetDisabled} title={zoom.resetTitle} role="menuitem">{t.uiZoomReset}</button>
           <div className="action-menu-divider" />
           <button type="button" className="action-menu-item" onClick={onOpenReadingSettings} role="menuitem">{t.readingSettings}</button>
           {supportsAppUpdates ? <button type="button" className="action-menu-item" onClick={onCheckUpdates} disabled={updateActionTitle !== undefined || updatePhase === 'checking'} title={updateActionTitle} role="menuitem">{updatePhase === 'checking' ? t.updateChecking : t.checkForUpdates}</button> : null}

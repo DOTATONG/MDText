@@ -41,8 +41,11 @@ import { usePreviewController } from './hooks/usePreviewController'
 import { useReadingSession } from './hooks/useReadingSession'
 import { useReadingPreferences } from './hooks/useReadingPreferences'
 import { useTransientToast } from './hooks/useTransientToast'
+import { useUiZoom } from './hooks/useUiZoom'
+import { useZoomShortcuts } from './hooks/useZoomShortcuts'
 import { useSplitScrollSync } from './hooks/useSplitScrollSync'
 import { useDocumentExport } from './hooks/useDocumentExport'
+import type { AppToolbarZoom } from './components/shell/AppToolbar'
 import type { FileAccess } from './platform/fileAccess'
 import type { DocxImportStatus } from './platform/fileAccess'
 import { openExternalLink } from './platform/externalLinks'
@@ -57,6 +60,7 @@ import {
 } from './platform/keyboardShortcuts'
 import { useFileShortcuts } from './hooks/useFileShortcuts'
 import { getLineStartOffsets } from './domain/documentStatistics'
+import { formatUiZoom } from './domain/uiZoom'
 import { createEditorSelectionStore } from './domain/editorSelectionStore'
 import type { ReadingViewMode } from './domain/readingSessions'
 import { nativeWindowFrame, type AppWindowFrame } from './platform/windowFrame'
@@ -258,6 +262,16 @@ function App({
     onSaveAs: handleSaveFileAs,
     onSaveSuccess: () => showAppToast(t.saved),
   })
+  const {
+    canZoomIn,
+    canZoomOut,
+    isDefaultZoom,
+    resetZoom,
+    uiZoom,
+    zoomIn,
+    zoomOut,
+  } = useUiZoom({ onNotify: showAppToast })
+  useZoomShortcuts({ onZoomIn: zoomIn, onZoomOut: zoomOut, onZoomReset: resetZoom })
   const {
     freezePreview,
     previewContent,
@@ -463,6 +477,19 @@ function App({
   const canRevealFiles = fileAccess.canRevealFile ?? fileAccess.supportsNativeFiles
   const updateActionTitle = distribution === 'unsupported' ? t.updateUnavailable : undefined
   const closeFileTitle = withShortcutTitle(t.closeFileLabel, { key: 'w' }, shortcutPlatform)
+  const zoom: AppToolbarZoom = {
+    label: t.uiZoomLabel(formatUiZoom(uiZoom)),
+    onReset: resetZoom,
+    onZoomIn: zoomIn,
+    onZoomOut: zoomOut,
+    resetDisabled: isDefaultZoom,
+    resetTitle: withShortcutTitle(t.uiZoomReset, { key: '0' }, shortcutPlatform),
+    zoomInDisabled: !canZoomIn,
+    // `+` needs Shift on most layouts, so the conventional `=` binding is what the title shows.
+    zoomInTitle: withShortcutTitle(t.uiZoomIn, { key: '=' }, shortcutPlatform),
+    zoomOutDisabled: !canZoomOut,
+    zoomOutTitle: withShortcutTitle(t.uiZoomOut, { key: '-' }, shortcutPlatform),
+  }
   const newTitle = withShortcutTitle(t.createNewLabel, { key: 'n' }, shortcutPlatform)
   const openTitle = withShortcutTitle(t.openLabel, { key: 'o' }, shortcutPlatform)
   const saveTitle = withShortcutTitle(t.saveLabel, { key: 's' }, shortcutPlatform)
@@ -511,6 +538,7 @@ function App({
         updatePhase={updatePhase}
         viewMode={viewMode}
         windowFrame={windowFrame}
+        zoom={zoom}
         onAbout={handleOpenAboutFromAppMenu}
         onCheckUpdates={() => void handleCheckForUpdates()}
         onClearRecent={handleClearRecentFiles}

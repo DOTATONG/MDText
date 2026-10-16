@@ -377,6 +377,83 @@ describe('App', () => {
     expect(screen.getByRole('menuitem', { name: '清空最近文件' })).toBeDisabled()
   })
 
+  it('zooms the interface from the App menu and reports the level', async () => {
+    const user = userEvent.setup()
+    renderApp({ fileAccess: createFileAccess() })
+
+    await openAppMenu(user)
+    expect(screen.getByText('Zoom (100%)')).toBeInTheDocument()
+    expect(screen.getByRole('menuitem', { name: 'Reset Zoom' })).toBeDisabled()
+
+    await user.click(screen.getByRole('menuitem', { name: 'Zoom In' }))
+
+    expect(document.documentElement.style.getPropertyValue('--ui-zoom')).toBe('1.1')
+    expect(screen.getByText('Zoom (110%)')).toBeInTheDocument()
+    expect(screen.getByRole('status', { name: 'Notification' })).toHaveTextContent('110%')
+    expect(screen.getByRole('menuitem', { name: 'Reset Zoom' })).toBeEnabled()
+
+    await user.click(screen.getByRole('menuitem', { name: 'Reset Zoom' }))
+
+    expect(document.documentElement.style.getPropertyValue('--ui-zoom')).toBe('1')
+    expect(screen.getByText('Zoom (100%)')).toBeInTheDocument()
+  })
+
+  it('stops at both ends of the zoom ladder', async () => {
+    const user = userEvent.setup()
+    renderApp({ fileAccess: createFileAccess() })
+
+    await openAppMenu(user)
+    for (let step = 0; step < 10; step += 1) {
+      await user.click(screen.getByRole('menuitem', { name: 'Zoom In' }))
+    }
+
+    expect(document.documentElement.style.getPropertyValue('--ui-zoom')).toBe('2')
+    expect(screen.getByRole('menuitem', { name: 'Zoom In' })).toBeDisabled()
+
+    for (let step = 0; step < 12; step += 1) {
+      await user.click(screen.getByRole('menuitem', { name: 'Zoom Out' }))
+    }
+
+    expect(document.documentElement.style.getPropertyValue('--ui-zoom')).toBe('0.8')
+    expect(screen.getByRole('menuitem', { name: 'Zoom Out' })).toBeDisabled()
+  })
+
+  it('zooms the interface with Ctrl and the - + 0 keys', async () => {
+    renderApp({ fileAccess: createFileAccess() })
+
+    fireEvent.keyDown(window, { key: '=', ctrlKey: true })
+    expect(document.documentElement.style.getPropertyValue('--ui-zoom')).toBe('1.1')
+
+    // `+` arrives with Shift on most layouts, and unshifted from the numeric keypad.
+    fireEvent.keyDown(window, { key: '+', ctrlKey: true, shiftKey: true })
+    expect(document.documentElement.style.getPropertyValue('--ui-zoom')).toBe('1.25')
+
+    fireEvent.keyDown(window, { key: '+', ctrlKey: true })
+    expect(document.documentElement.style.getPropertyValue('--ui-zoom')).toBe('1.5')
+
+    fireEvent.keyDown(window, { key: '-', ctrlKey: true })
+    expect(document.documentElement.style.getPropertyValue('--ui-zoom')).toBe('1.25')
+
+    fireEvent.keyDown(window, { key: '0', ctrlKey: true })
+    expect(document.documentElement.style.getPropertyValue('--ui-zoom')).toBe('1')
+
+    await waitFor(() => {
+      expect(window.localStorage.getItem('mdview.uiZoom.v1')).toBe('1')
+    })
+  })
+
+  it('leaves the zoom alone for keys that are not zoom shortcuts', async () => {
+    renderApp({ fileAccess: createFileAccess() })
+
+    fireEvent.keyDown(window, { key: '-', ctrlKey: true })
+    expect(document.documentElement.style.getPropertyValue('--ui-zoom')).toBe('0.9')
+
+    // Shift+8 is the editor's bullet-list command, not a zoom reset.
+    fireEvent.keyDown(window, { key: '8', ctrlKey: true, shiftKey: true })
+    fireEvent.keyDown(window, { key: '0' })
+    expect(document.documentElement.style.getPropertyValue('--ui-zoom')).toBe('0.9')
+  })
+
   it('closes the open document and returns to the welcome workspace', async () => {
     const user = userEvent.setup()
     renderApp({ fileAccess: createFileAccess({ openFile: file('/tmp/readme.md', '# Readme') }) })

@@ -49,6 +49,18 @@ function toolbar(windowFrame: AppWindowFrame) {
     updatePhase="idle"
     viewMode="preview"
     windowFrame={windowFrame}
+    zoom={{
+      label: 'Zoom (100%)',
+      onReset: vi.fn(),
+      onZoomIn: vi.fn(),
+      onZoomOut: vi.fn(),
+      resetDisabled: true,
+      resetTitle: 'Reset Zoom',
+      zoomInDisabled: false,
+      zoomInTitle: 'Zoom In',
+      zoomOutDisabled: false,
+      zoomOutTitle: 'Zoom Out',
+    }}
     closeFileTitle="Close File"
     newTitle="New"
     openTitle="Open"

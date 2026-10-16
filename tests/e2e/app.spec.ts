@@ -292,9 +292,73 @@ test('restores a pending unsaved draft', async ({ page }) => {
   await expect(page.locator('.editor-save-state')).toHaveText('Unsaved')
 })
 
+test('zooming the interface keeps the shell filling the window', async ({ page }) => {
+  await zoomTo(page, 8)
+  const largest = await readLayout(page)
+  expect(largest.zoom).toBe('2')
+
+  await zoomTo(page, -12)
+  const smallest = await readLayout(page)
+  expect(smallest.zoom).toBe('0.8')
+
+  for (const layout of [largest, smallest]) {
+    expect(Math.abs(layout.shellHeight - layout.innerHeight)).toBeLessThanOrEqual(1)
+    expect(Math.abs(layout.shellWidth - layout.innerWidth)).toBeLessThanOrEqual(1)
+    expect(layout.scrollHeight).toBeLessThanOrEqual(layout.clientHeight)
+    expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth)
+  }
+})
+
+test('keeps the settings dialog inside the window at maximum zoom', async ({ page }) => {
+  await zoomTo(page, 8)
+
+  await page.getByRole('button', { name: 'App' }).click()
+  await page.getByRole('menuitem', { name: 'Settings' }).click()
+
+  const dialog = page.getByRole('dialog', { name: 'Settings' })
+  await expect(dialog).toBeVisible()
+
+  const box = await dialog.boundingBox()
+  const viewport = page.viewportSize()
+  expect(box).not.toBeNull()
+  expect(viewport).not.toBeNull()
+  if (!box || !viewport) {
+    return
+  }
+
+  expect(box.x).toBeGreaterThanOrEqual(0)
+  expect(box.y).toBeGreaterThanOrEqual(0)
+  expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 1)
+  expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1)
+})
+
 async function openMarkdownFile(page: Page) {
   await page.getByRole('button', { exact: true, name: 'File' }).click()
   await page.getByRole('menuitem', { name: 'Open Markdown File' }).click()
+}
+
+
+async function zoomTo(page: Page, steps: number) {
+  for (let step = 0; step < Math.abs(steps); step += 1) {
+    await page.keyboard.press(steps > 0 ? 'Control+=' : 'Control+-')
+  }
+}
+
+async function readLayout(page: Page) {
+  return page.evaluate(() => {
+    const shell = document.querySelector('.app-shell')?.getBoundingClientRect()
+    return {
+      shellHeight: shell?.height ?? 0,
+      shellWidth: shell?.width ?? 0,
+      innerHeight: window.innerHeight,
+      innerWidth: window.innerWidth,
+      scrollHeight: document.documentElement.scrollHeight,
+      scrollWidth: document.documentElement.scrollWidth,
+      clientHeight: document.documentElement.clientHeight,
+      clientWidth: document.documentElement.clientWidth,
+      zoom: document.documentElement.style.getPropertyValue('--ui-zoom'),
+    }
+  })
 }
 
 async function getSavedContent(page: Page): Promise<string | null> {

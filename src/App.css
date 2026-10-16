@@ -1,5 +1,11 @@
 .app-shell {
-  height: 100vh;
+  /* Interface zoom: lay out in the logical viewport, then scale the result back up to the window.
+     Dividing the size by the same factor is what keeps the shell filling the window, since
+     `scale()` does not affect viewport units or percentages. */
+  width: calc(100% / var(--ui-zoom));
+  height: var(--ui-vh);
+  transform: scale(var(--ui-zoom));
+  transform-origin: 0 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -31,7 +37,7 @@
 
 .external-file-banner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 9px 20px; color: var(--ink-strong); background: color-mix(in srgb, var(--accent-soft) 70%, var(--surface)); border-bottom: 1px solid var(--line); }
 .external-file-banner strong, .external-file-banner span { display: block; }
-.external-file-banner span { margin-top: 2px; font-size: 12px; color: var(--ink-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 56vw; }
+.external-file-banner span { margin-top: 2px; font-size: 12px; color: var(--ink-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: calc(var(--ui-vw) * 0.56); }
 .external-file-banner-actions { display: flex; gap: 8px; flex-shrink: 0; }
 .external-file-banner button { padding: 6px 10px; border: 1px solid var(--line-strong); border-radius: 6px; background: var(--surface); color: var(--ink-strong); font: inherit; cursor: pointer; }
 .external-file-banner button.primary { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }
@@ -177,7 +183,7 @@
   top: calc(100% + 8px);
   left: 0;
   z-index: 10;
-  width: min(320px, 80vw);
+  width: min(320px, calc(var(--ui-vw) * 0.8));
   display: grid;
   gap: 3px;
   padding: 8px;
@@ -188,7 +194,7 @@
 }
 
 .action-menu-panel-compact {
-  width: min(240px, 80vw);
+  width: min(240px, calc(var(--ui-vw) * 0.8));
 }
 
 .toolbar .file-menu-item,
@@ -419,7 +425,7 @@
 
 .toast,
 .app-operation-status {
-  max-width: min(280px, calc(100vw - 48px));
+  max-width: min(280px, calc(var(--ui-vw) - 48px));
   padding: 10px 14px;
   border: 1px solid rgba(15, 118, 110, 0.22);
   border-radius: 8px;
@@ -441,7 +447,7 @@
   right: 24px;
   bottom: 24px;
   z-index: 39;
-  max-width: min(360px, calc(100vw - 48px));
+  max-width: min(360px, calc(var(--ui-vw) - 48px));
   font-size: 13px;
 }
 
@@ -684,7 +690,7 @@
 }
 
 .welcome-recent-list {
-  max-height: min(390px, 46vh);
+  max-height: min(390px, calc(var(--ui-vh) * 0.46));
   overflow: auto;
   margin: 0;
   padding: 0;
@@ -1233,7 +1239,7 @@
   position: relative;
   width: min(400px, 100%);
   padding: 32px 28px 22px;
-  max-height: calc(100dvh - 32px);
+  max-height: calc(var(--ui-dvh) - 32px);
   overflow-y: auto;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -1987,7 +1993,7 @@
 .syntax-dialog {
   position: relative;
   width: min(860px, 100%);
-  height: min(720px, calc(100vh - 48px));
+  height: min(720px, calc(var(--ui-vh) - 48px));
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -2213,7 +2219,7 @@
   zoom: var(--preview-zoom, 1);
   width: min(var(--reader-content-width), calc(100% - 64px));
   margin: 32px auto 72px;
-  padding: clamp(34px, 5vw, 56px) clamp(26px, 5vw, 58px) clamp(48px, 7vw, 76px);
+  padding: clamp(34px, calc(var(--ui-vw) * 0.05), 56px) clamp(26px, calc(var(--ui-vw) * 0.05), 58px) clamp(48px, calc(var(--ui-vw) * 0.07), 76px);
   border: 1px solid var(--preview-paper-border);
   border-radius: 18px;
   color: var(--prose);
@@ -2243,7 +2249,7 @@
   margin: 0 0 28px;
   padding-bottom: 18px;
   border-bottom: 1px solid var(--border);
-  font-size: clamp(30px, 4vw, 42px);
+  font-size: clamp(30px, calc(var(--ui-vw) * 0.04), 42px);
   font-weight: 780;
   letter-spacing: -0.03em;
 }
@@ -2251,7 +2257,7 @@
 .markdown-preview h2 {
   margin: 42px 0 14px;
   padding-top: 4px;
-  font-size: clamp(23px, 2.6vw, 29px);
+  font-size: clamp(23px, calc(var(--ui-vw) * 0.026), 29px);
   font-weight: 760;
   letter-spacing: -0.02em;
 }
@@ -2553,7 +2559,7 @@
 
 .markdown-preview img {
   max-width: 100%;
-  max-height: min(68vh, 760px);
+  max-height: min(calc(var(--ui-vh) * 0.68), 760px);
   height: auto;
   object-fit: contain;
   border: 1px solid rgba(148, 163, 184, 0.28);
@@ -2589,8 +2595,8 @@
 }
 
 .image-preview-image {
-  max-width: min(calc(100vw - 56px), 1200px);
-  max-height: calc(100dvh - 160px);
+  max-width: min(calc(var(--ui-vw) - 56px), 1200px);
+  max-height: calc(var(--ui-dvh) - 160px);
   width: auto;
   height: auto;
   object-fit: contain;
@@ -2720,7 +2726,7 @@
 .reading-settings-dialog {
   position: relative;
   width: min(520px, 100%);
-  max-height: min(720px, calc(100vh - 32px));
+  max-height: min(720px, calc(var(--ui-vh) - 32px));
   overflow: auto;
   padding: 24px;
   border: 1px solid var(--border);
@@ -3059,7 +3065,7 @@
 
   .view-split .workspace {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(260px, 40vh) minmax(0, 1fr);
+    grid-template-rows: minmax(260px, calc(var(--ui-vh) * 0.4)) minmax(0, 1fr);
   }
 
   .view-preview .workspace {
@@ -3140,8 +3146,8 @@
 
 .math-editor-dialog {
   position: relative;
-  width: min(620px, calc(100vw - 32px));
-  max-height: min(720px, calc(100vh - 32px));
+  width: min(620px, calc(var(--ui-vw) - 32px));
+  max-height: min(720px, calc(var(--ui-vh) - 32px));
   padding: 24px;
   overflow: auto;
   border: 1px solid var(--border);
