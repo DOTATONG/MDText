@@ -2,20 +2,26 @@
 
 Free code signing provided by SignPath.io, certificate by SignPath Foundation
 
+> **Fork notice / Fork 说明**
+>
+> This repository is a fork of [isunky/MDView](https://github.com/isunky/MDView). SignPath signing is not configured for this fork by default, so its releases are unsigned unless the fork owner adds the SignPath secrets and variables described in the release workflow.
+>
+> 本仓库是 [isunky/MDView](https://github.com/isunky/MDView) 的 fork。此 fork 默认未配置 SignPath 签名；在仓库维护者添加发布工作流所需的 SignPath secrets 和 variables 之前，发布的安装包不带代码签名。
+
 ## Scope / 适用范围
 
-This policy applies to official Windows MSI installers, the `MDView.exe` executable in official Portable ZIP releases, and macOS Universal DMG releases published from [isunky/MDView](https://github.com/isunky/MDView).
+This policy applies to official Windows MSI installers, the `MDView.exe` executable in official Portable ZIP releases, and macOS Universal DMG releases published from [DOTATONG/MarkdownView](https://github.com/DOTATONG/MarkdownView).
 
-本政策适用于从 [isunky/MDView](https://github.com/isunky/MDView) 发布的官方 Windows MSI 安装包、官方 Portable ZIP 中的 `MDView.exe`，以及 macOS Universal DMG。
+本政策适用于从 [DOTATONG/MarkdownView](https://github.com/DOTATONG/MarkdownView) 发布的官方 Windows MSI 安装包、官方 Portable ZIP 中的 `MDView.exe`，以及 macOS Universal DMG。
 
 ## Release authorization / 发布授权
 
-- `@isunky` is the sole author, reviewer, and approver for signing requests.
-- `@isunky` 是签名请求的唯一作者、审查者和批准者。
+- `@DOTATONG` is the sole author, reviewer, and approver for signing requests.
+- `@DOTATONG` 是签名请求的唯一作者、审查者和批准者。
 - Official builds run only in the repository's GitHub-hosted Actions workflows. The Release workflow submits unsigned artifacts to SignPath and requires manual approval before the signed artifacts are published.
 - 官方构建仅在本仓库的 GitHub 托管 Actions 工作流中执行。Release 工作流提交未签名产物到 SignPath，人工批准后才发布已签名产物。
-- [CODEOWNERS](.github/CODEOWNERS) designates `@isunky` as the owner of SignPath configuration and GitHub workflow changes. Enable required code-owner review in the repository branch ruleset to enforce it.
-- [CODEOWNERS](.github/CODEOWNERS) 将 `@isunky` 指定为 SignPath 配置和 GitHub 工作流变更的所有者；请在仓库分支规则中启用必须的代码所有者审查以强制执行。
+- [CODEOWNERS](.github/CODEOWNERS) designates `@DOTATONG` as the owner of SignPath configuration and GitHub workflow changes. Enable required code-owner review in the repository branch ruleset to enforce it.
+- [CODEOWNERS](.github/CODEOWNERS) 将 `@DOTATONG` 指定为 SignPath 配置和 GitHub 工作流变更的所有者；请在仓库分支规则中启用必须的代码所有者审查以强制执行。
 
 ## Privacy and security / 隐私与安全
 

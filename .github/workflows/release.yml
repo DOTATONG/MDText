@@ -90,7 +90,8 @@ jobs:
 
           if [[ ${#missing_authenticode_values[@]} -eq 0 ]]; then
             authenticode_signing_enabled=true
-            signing_notes=$'## Code signing / 代码签名\n\nWindows release artifacts are signed through SignPath after manual approval. See the [code signing policy](https://github.com/isunky/MDView/blob/main/CODE_SIGNING_POLICY.md).\n\nWindows 发布包经人工审批后由 SignPath 签名。详见[代码签名政策](https://github.com/isunky/MDView/blob/main/CODE_SIGNING_POLICY.md)。'
+            policy_url="https://github.com/${REPOSITORY}/blob/main/CODE_SIGNING_POLICY.md"
+            signing_notes=$'## Code signing / 代码签名\n\nWindows release artifacts are signed through SignPath after manual approval. See the [code signing policy]('"${policy_url}"$').\n\nWindows 发布包经人工审批后由 SignPath 签名。详见[代码签名政策]('"${policy_url}"$')。'
           else
             authenticode_signing_enabled=false
             signing_notes=$'## Code signing / 代码签名\n\nThis release is not Authenticode-signed because optional SignPath configuration is unavailable. Windows may show a security warning.\n\n本版本未进行 Authenticode 代码签名，因为可选的 SignPath 配置尚未完成。Windows 可能显示安全提示。'

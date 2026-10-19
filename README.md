@@ -4,17 +4,17 @@
   <p><strong>面向 AI 场景的轻量 Markdown 阅读器。</strong><br />A lightweight Markdown reader for AI workflows.</p>
   <p>美观易读 · 打开轻快 · 免费无广告<br />Beautifully readable · Quick to open · Free and ad-free</p>
   <p>
-    <a href="https://github.com/isunky/MDView/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/isunky/MDView?style=flat-square&color=0f8f83" /></a>
-    <a href="LICENSE"><img alt="GPL-3.0 license" src="https://img.shields.io/github/license/isunky/MDView?style=flat-square" /></a>
+    <a href="https://github.com/DOTATONG/MarkdownView/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/DOTATONG/MarkdownView?style=flat-square&color=0f8f83" /></a>
+    <a href="LICENSE"><img alt="GPL-3.0 license" src="https://img.shields.io/github/license/DOTATONG/MarkdownView?style=flat-square" /></a>
     <img alt="Windows, macOS, and Edge" src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Edge-334155?style=flat-square" />
   </p>
   <p>
-    <a href="https://github.com/isunky/MDView/releases/latest"><strong>下载 / Download</strong></a>
+    <a href="https://github.com/DOTATONG/MarkdownView/releases/latest"><strong>下载 / Download</strong></a>
     · <a href="#中文">中文</a>
     · <a href="#english">English</a>
     · <a href="#ai-build">AI 辅助编译 / Build with AI</a>
   </p>
-  <p><strong>Version / 版本：</strong>3.6.0 · <a href="https://www.sunky.net">Sunky</a></p>
+  <p><strong>Version / 版本：</strong>3.6.0 · Fork of <a href="https://github.com/isunky/MDView">isunky/MDView</a></p>
 </div>
 
 ## 界面预览 / Preview
@@ -116,7 +116,7 @@ Import Word as a Markdown draft, then edit and save it as a `.md` file. Export n
 
 ## 下载与安装 / Installation
 
-从 [GitHub Releases](https://github.com/isunky/MDView/releases/latest) 选择适合的版本。 / Choose a package from GitHub Releases.
+从 [GitHub Releases](https://github.com/DOTATONG/MarkdownView/releases/latest) 选择适合的版本。 / Choose a package from GitHub Releases.
 
 | 平台 / Platform | 推荐方式 / Recommended option |
 | --- | --- |
@@ -164,7 +164,7 @@ msiexec /i MDView_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
 
 无需先熟悉编译命令，让能操作本地终端的 AI 编程工具协助完成：
 
-1. 从 [Releases](https://github.com/isunky/MDView/releases/latest) 下载 **Source code (zip)** 并解压。
+1. 从 [Releases](https://github.com/DOTATONG/MarkdownView/releases/latest) 下载 **Source code (zip)** 并解压。
 2. 用 AI 编程工具打开解压后的项目文件夹。Mac 版本需在 Mac 上编译，Windows 版本需在 Windows 上编译。
 3. 发送下方对应的提示词，按提示完成必要的环境安装，等待 AI 给出安装包位置。
 
@@ -316,7 +316,7 @@ npm run desktop:dev
 
 版本管理 / Versioning：`npm run version:sync -- <major.minor.patch>`，然后 / then `npm run version:check`。
 
-维护者资料 / Maintainer docs: [`ROADMAP.md`](ROADMAP.md) · [`工程目录说明 / Project structure`](docs/PROJECT_STRUCTURE.md)。
+维护者资料 / Maintainer docs: [`ROADMAP.md`](ROADMAP.md) · [`工程目录说明 / Project structure`](docs/PROJECT_STRUCTURE.md) · [`Fork 发布指南 / Fork release guide`](docs/FORK_RELEASING.md)。
 
 </details>
 

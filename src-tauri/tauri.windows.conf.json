@@ -38,9 +38,9 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDJCRjJFQ0NEN0MwQjVGRjcKUldUM1h3dDh6ZXp5SzVSVVFJa01XbEtyaEdhb2RHM1VNQ3RCN25zMDBjRTNicHNsZkdhcVZaaFMK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDE4RTkyMEI1RTNCRkZDODAKUldTQS9ML2p0U0RwR0VVT0swYVFBNytoa2FzZFc4M0dTL1N1dUJIbkt6ZE9EaXFIK1FVdmhwcE0K",
       "endpoints": [
-        "https://github.com/isunky/MDView/releases/latest/download/latest.json"
+        "https://github.com/DOTATONG/MarkdownView/releases/latest/download/latest.json"
       ],
       "windows": {
         "installMode": "passive"
