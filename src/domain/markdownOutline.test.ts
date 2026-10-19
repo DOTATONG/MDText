@@ -51,4 +51,22 @@ describe('extractMarkdownOutline', () => {
       { id: '配置项与旧内容', level: 4, text: '配置项与旧内容' },
     ])
   })
+
+  it('uses the text a reader sees for headings with inline HTML, images and footnotes', () => {
+    expect(
+      extractMarkdownOutline(
+        [
+          '# Hello <span>World</span>',
+          '## Image ![alt text](x.png)',
+          '### Title[^1]',
+          '',
+          '[^1]: note',
+        ].join('\n'),
+      ),
+    ).toEqual([
+      { id: 'hello-world', level: 1, text: 'Hello World' },
+      { id: 'image-alt-text', level: 2, text: 'Image alt text' },
+      { id: 'title', level: 3, text: 'Title' },
+    ])
+  })
 })

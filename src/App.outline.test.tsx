@@ -8,6 +8,7 @@ import * as markdownOutline from './domain/markdownOutline'
 import { DOCUMENT_DRAFT_STORAGE_KEY } from './domain/documentDraft'
 import { RECENT_FILES_STORAGE_KEY, type RecentFile } from './domain/recentFiles'
 import { OUTLINE_PREFERENCES_STORAGE_KEY } from './domain/outlinePreferences'
+import { UI_ZOOM_STORAGE_KEY } from './domain/uiZoom'
 import type { FileAccess, OpenedMarkdownFile } from './platform/fileAccess'
 
 
@@ -57,7 +58,7 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: 'Jump to Scope' }))
 
     await waitFor(() => {
-      expect(scrollTo).toHaveBeenCalledWith({ top: 404, behavior: 'smooth' })
+      expect(scrollTo).toHaveBeenCalledWith({ top: 396, behavior: 'smooth' })
     })
     expect(scrollIntoView).toHaveBeenLastCalledWith({
       block: 'nearest',
@@ -324,6 +325,39 @@ describe('App', () => {
     expect(getStoredOutlinePreferences()).toMatchObject({ maxDepth: 5 })
   })
 
+  it('converts scaled visual coordinates when tracking the active heading under interface zoom', async () => {
+    window.localStorage.setItem(UI_ZOOM_STORAGE_KEY, '1.5')
+    renderApp({
+      fileAccess: createFileAccess({
+        startupFile: file('/tmp/outline.md', '# Intro\n\n## First\n\n## Second'),
+      }),
+    })
+
+    const previewPanel = await screen.findByLabelText('Preview panel')
+    const firstHeading = screen.getByRole('heading', { name: 'First' })
+    const secondHeading = screen.getByRole('heading', { name: 'Second' })
+    previewPanel.scrollTop = 480
+    mockElementTop(previewPanel, 100)
+
+    // In layout pixels First is 400px above the panel and Second is 20px below
+    // its top. At 150% interface zoom that renders as rect tops of -500px and
+    // 130px (panel top 100px), which must be divided by the zoom first.
+    mockElementTop(firstHeading, -500)
+    mockElementTop(secondHeading, 130)
+
+    fireEvent.scroll(previewPanel)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Jump to Second' })).toHaveAttribute(
+        'aria-current',
+        'location',
+      )
+    })
+    expect(screen.getByRole('button', { name: 'Jump to First' })).not.toHaveAttribute(
+      'aria-current',
+    )
+  })
+
   it('syncs the active outline item with preview scrolling', async () => {
     renderApp({
       fileAccess: createFileAccess({
@@ -346,6 +380,65 @@ describe('App', () => {
         'location',
       )
     })
+  })
+
+  it('jumps to a heading that contains inline HTML', async () => {
+    const user = userEvent.setup()
+    renderApp({
+      fileAccess: createFileAccess({
+        startupFile: file('/tmp/outline.md', '# Hello <span>World</span>'),
+      }),
+    })
+
+    const previewPanel = await screen.findByLabelText('Preview panel')
+    const scrollTo = vi.fn()
+    previewPanel.scrollTo = scrollTo
+    mockElementTop(previewPanel, 100)
+    mockElementTop(await screen.findByRole('heading', { name: 'Hello World' }), 180)
+
+    await user.click(screen.getByRole('button', { name: 'Jump to Hello World' }))
+
+    await waitFor(() => {
+      expect(scrollTo).toHaveBeenCalledWith({ top: 56, behavior: 'smooth' })
+    })
+    expect(screen.getByRole('button', { name: 'Jump to Hello World' })).toHaveAttribute(
+      'aria-current',
+      'location',
+    )
+  })
+
+  it('keeps the clicked outline item after scrolling settles, then resumes tracking on the next scroll', async () => {
+    const user = userEvent.setup()
+    renderApp({
+      fileAccess: createFileAccess({
+        startupFile: file('/tmp/outline.md', '# Intro\n\n## First\n\n## Second'),
+      }),
+    })
+
+    const previewPanel = await screen.findByLabelText('Preview panel')
+    previewPanel.scrollTo = vi.fn()
+    mockElementTop(previewPanel, 100)
+    mockElementTop(screen.getByRole('heading', { name: 'First' }), 80)
+    mockElementTop(screen.getByRole('heading', { name: 'Second' }), 180)
+    const first = screen.getByRole('button', { name: 'Jump to First' })
+    const second = screen.getByRole('button', { name: 'Jump to Second' })
+
+    await user.click(second)
+    expect(second).toHaveAttribute('aria-current', 'location')
+
+    fireEvent(previewPanel, new Event('scrollend'))
+
+    // The scroll landed where First sits on the reading line, but the reader
+    // clicked Second: the selection stays pinned until the next scroll.
+    expect(second).toHaveAttribute('aria-current', 'location')
+    expect(first).not.toHaveAttribute('aria-current')
+
+    fireEvent.scroll(previewPanel)
+
+    await waitFor(() => {
+      expect(first).toHaveAttribute('aria-current', 'location')
+    })
+    expect(second).not.toHaveAttribute('aria-current')
   })
 
   it('keeps the clicked outline item active while smooth preview scrolling is in progress', async () => {

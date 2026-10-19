@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { findActiveOutlineId, type OutlineHeadingPosition } from './outlineScroll'
+import {
+  findActiveOutlineId,
+  isScrollAtEnd,
+  type OutlineHeadingPosition,
+} from './outlineScroll'
 
 describe('findActiveOutlineId', () => {
   const headings: OutlineHeadingPosition[] = [
@@ -29,5 +33,16 @@ describe('findActiveOutlineId', () => {
     }))
 
     expect(findActiveOutlineId(manyHeadings, 543_226, 24)).toBe('heading-5432')
+  })
+
+  it('selects the last heading at the end of the document', () => {
+    expect(findActiveOutlineId(headings, 500, 24, true)).toBe('usage')
+    expect(findActiveOutlineId(headings, 0, 24, true)).toBe('usage')
+  })
+
+  it('detects when the scroll container reached its end', () => {
+    expect(isScrollAtEnd({ scrollTop: 400, scrollHeight: 1000, clientHeight: 600 })).toBe(true)
+    expect(isScrollAtEnd({ scrollTop: 398, scrollHeight: 1000, clientHeight: 600 })).toBe(false)
+    expect(isScrollAtEnd({ scrollTop: 0, scrollHeight: 400, clientHeight: 600 })).toBe(false)
   })
 })

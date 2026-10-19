@@ -1,20 +1,16 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { DocumentOutline } from './DocumentOutline'
 import type { MarkdownOutlineItem } from '../../domain/markdownOutline'
 import { translations } from '../../i18n'
 
 describe('DocumentOutline', () => {
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
-  it('distinguishes a single-click jump from a double-click collapse and cancels pending jumps on unmount', () => {
-    vi.useFakeTimers()
+  it('jumps on click and toggles branches from the disclosure control', async () => {
+    const user = userEvent.setup()
     const onJump = vi.fn()
     const onToggleBranch = vi.fn()
-    const view = render(<DocumentOutline
+    const { rerender } = render(<DocumentOutline
       items={[
         { id: 'intro', level: 1, text: 'Intro' },
         { id: 'details', level: 2, text: 'Details' },
@@ -26,30 +22,54 @@ describe('DocumentOutline', () => {
       onClose={vi.fn()}
       t={translations.en}
     />)
-    try {
-      const heading = screen.getByRole('button', { name: 'Jump to Intro' })
-      fireEvent.click(heading, { detail: 1 })
-      expect(onJump).not.toHaveBeenCalled()
-      act(() => vi.advanceTimersByTime(300))
-      expect(onJump).toHaveBeenCalledExactlyOnceWith('intro')
 
-      onJump.mockClear()
-      fireEvent.click(heading, { detail: 1 })
-      act(() => vi.advanceTimersByTime(100))
-      fireEvent.click(heading, { detail: 2 })
-      fireEvent.doubleClick(heading, { detail: 2 })
-      act(() => vi.advanceTimersByTime(500))
-      expect(onToggleBranch).toHaveBeenCalledExactlyOnceWith('intro')
-      expect(onJump).not.toHaveBeenCalled()
+    const heading = screen.getByRole('button', { name: 'Jump to Intro' })
+    await user.click(heading)
+    expect(onJump).toHaveBeenCalledExactlyOnceWith('intro')
+    expect(onToggleBranch).not.toHaveBeenCalled()
 
-      fireEvent.click(heading, { detail: 1 })
-      view.unmount()
-      act(() => vi.advanceTimersByTime(500))
-      expect(onJump).not.toHaveBeenCalled()
-    } finally {
-      view.unmount()
-      vi.useRealTimers()
-    }
+    const toggle = screen.getByRole('button', { name: 'Collapse section: Intro' })
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    await user.click(toggle)
+    expect(onToggleBranch).toHaveBeenCalledExactlyOnceWith('intro')
+    expect(onJump).toHaveBeenCalledTimes(1)
+
+    rerender(<DocumentOutline
+      items={[
+        { id: 'intro', level: 1, text: 'Intro' },
+        { id: 'details', level: 2, text: 'Details' },
+      ]}
+      collapsedIds={new Set(['intro'])}
+      maxDepth={5}
+      onJump={onJump}
+      onToggleBranch={onToggleBranch}
+      onMaxDepthChange={vi.fn()}
+      onClose={vi.fn()}
+      t={translations.en}
+    />)
+
+    expect(screen.getByRole('button', { name: 'Expand section: Intro' }))
+      .toHaveAttribute('aria-expanded', 'false')
+    expect(screen.queryByRole('button', { name: 'Jump to Details' })).not.toBeInTheDocument()
+  })
+
+  it('jumps immediately when a heading has children but branching is unavailable', () => {
+    const onJump = vi.fn()
+    render(<DocumentOutline
+      items={[
+        { id: 'intro', level: 1, text: 'Intro' },
+        { id: 'details', level: 2, text: 'Details' },
+      ]}
+      maxDepth={5}
+      onJump={onJump}
+      onMaxDepthChange={vi.fn()}
+      onClose={vi.fn()}
+      t={translations.en}
+    />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Jump to Intro' }))
+    expect(onJump).toHaveBeenCalledExactlyOnceWith('intro')
+    expect(screen.queryByRole('button', { name: 'Collapse section: Intro' })).not.toBeInTheDocument()
   })
 
   it('marks the active heading for visual and accessibility state', () => {

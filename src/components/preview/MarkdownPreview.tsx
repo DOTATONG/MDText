@@ -5,6 +5,7 @@ import rehypeRaw from 'rehype-raw'
 import rehypeSanitize from 'rehype-sanitize'
 import remarkGfm from 'remark-gfm'
 import { remarkCjkStrong } from '../../domain/remarkCjkStrong'
+import { remarkHeadingIds } from '../../domain/markdownOutline'
 import './highlightThemes.css'
 import { resolveLocalMarkdownResource, resolveSameDocumentHeading } from '../../domain/localMarkdownResources'
 import { markdownSanitizeSchema, rehypeSafeHeadingIds, rehypeSourcePositions, rehypeWindowsFileUrls } from '../../domain/markdownSanitize'
@@ -79,6 +80,8 @@ function loadMathPlugins() {
 
 type MarkdownPreviewProps = {
   content: string
+  /** IDs produced by `extractMarkdownOutline` for the same content. */
+  headingIds?: readonly string[]
   previewRef?: Ref<HTMLElement>
   sourcePath?: string | null
   readLocalImageFile?: FileAccess['readLocalImageFile']
@@ -95,6 +98,7 @@ export type { MarkdownPreviewLabels } from './previewTypes'
 
 export const MarkdownPreview = memo(function MarkdownPreview({
   content,
+  headingIds,
   previewRef,
   sourcePath,
   readLocalImageFile,
@@ -148,7 +152,13 @@ export const MarkdownPreview = memo(function MarkdownPreview({
     return () => { active = false }
   }, [hasMath, mathPlugins])
 
-  const remarkPlugins = useMemo<PluggableList>(() => mathPlugins ? [remarkGfm, mathPlugins.remarkMath, remarkCjkStrong] : [remarkGfm, remarkCjkStrong], [mathPlugins])
+  const remarkPlugins = useMemo<PluggableList>(() => {
+    // Assign outline IDs before any other transform touches heading text.
+    const plugins: PluggableList = [[remarkHeadingIds, { headingIds }], remarkGfm]
+    if (mathPlugins) plugins.push(mathPlugins.remarkMath)
+    plugins.push(remarkCjkStrong)
+    return plugins
+  }, [headingIds, mathPlugins])
   const rehypePlugins = useMemo<PluggableList>(() => {
     const plugins: PluggableList = [
       rehypeRaw,
@@ -190,7 +200,7 @@ export const MarkdownPreview = memo(function MarkdownPreview({
         const heading = resolveSameDocumentHeading(href)
         if (heading) {
           event.preventDefault()
-          window.document.getElementById(heading)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          scrollToArticleHeading(articleRef.current, heading)
           return
         }
         const resource = resolveLocalMarkdownResource(href, sourcePath)
@@ -252,6 +262,18 @@ export const MarkdownPreview = memo(function MarkdownPreview({
     </>
   )
 })
+
+function scrollToArticleHeading(article: HTMLElement | null, headingId: string) {
+  if (!article) {
+    return
+  }
+
+  const quotedId = headingId.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+  article.querySelector<HTMLElement>(`[id="${quotedId}"]`)?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+  })
+}
 
 function assignRef(ref: Ref<HTMLElement> | undefined, element: HTMLElement | null) {
   if (typeof ref === 'function') ref(element)

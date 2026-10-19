@@ -56,7 +56,7 @@ export const markdownSanitizeSchema: Schema = {
   allowDoctypes: false,
   tagNames: safeTagNames,
   attributes: {
-    '*': ['align', 'dir', 'lang', 'title'],
+    '*': ['align', 'dataMdviewHeadingId', 'dir', 'lang', 'title'],
     a: ['href', 'title', 'ariaLabel'],
     blockquote: ['cite'],
     code: [['className', /^language-[A-Za-z0-9_-]+$/, 'math-inline', 'math-display']],
@@ -116,18 +116,44 @@ export function rehypeWindowsFileUrls() {
   }
 }
 
+/**
+ * Applies the IDs assigned by the Markdown outline and fills in IDs for
+ * headings the outline does not cover, such as headings written as raw HTML.
+ * Both views therefore always agree on the anchor of every outline entry.
+ */
 export function rehypeSafeHeadingIds() {
   return function transform(tree: Root) {
-    const idCounts = createHeadingIdCounts()
+    const reservedIds = new Set<string>()
+    const headingsWithoutIds: Element[] = []
 
     visitHastNode(tree, (element) => {
-      const match = /^h([1-5])$/.exec(element.tagName)
-      if (!match) {
+      if (!/^h[1-5]$/.test(element.tagName)) {
         return
       }
 
-      element.properties.id = createUniqueHeadingId(getHastText(element), idCounts)
+      const outlineId = element.properties.dataMdviewHeadingId
+      if (typeof outlineId === 'string' && outlineId.length > 0) {
+        delete element.properties.dataMdviewHeadingId
+        element.properties.id = outlineId
+        reservedIds.add(outlineId)
+      } else {
+        headingsWithoutIds.push(element)
+      }
     })
+
+    if (headingsWithoutIds.length === 0) {
+      return
+    }
+
+    const idCounts = createHeadingIdCounts()
+    for (const element of headingsWithoutIds) {
+      let id = createUniqueHeadingId(getHastText(element), idCounts)
+      while (reservedIds.has(id)) {
+        id = createUniqueHeadingId(getHastText(element), idCounts)
+      }
+      reservedIds.add(id)
+      element.properties.id = id
+    }
   }
 }
 

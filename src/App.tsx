@@ -306,6 +306,7 @@ function App({
   const {
     activeOutlineId,
     collapsedOutlineIds,
+    headingIds,
     setOutlineSubtree,
     toggleOutlineBranch,
     setAllOutlineBranches,
@@ -327,6 +328,7 @@ function App({
     isPreview: !isWelcomeVisible && viewMode === 'preview',
     readingFontKey,
     previewZoom,
+    viewportScale: uiZoom,
     previewPanelRef,
     previewRef,
   })
@@ -721,6 +723,7 @@ function App({
           <Suspense fallback={<PreviewLoading label={t.previewLoading} />}>
             <LazyMarkdownPreview
               content={previewContent}
+              headingIds={headingIds}
               theme={effectiveTheme}
               previewRef={previewRef}
               sourcePath={markdownDocument.path}

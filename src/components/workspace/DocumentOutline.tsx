@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
-import { ListTree, PanelLeftClose } from 'lucide-react'
+import { ChevronDown, ChevronRight, ListTree, PanelLeftClose } from 'lucide-react'
 import type { MarkdownOutlineItem } from '../../domain/markdownOutline'
 import type { OutlineDepth } from '../../domain/outlinePreferences'
 import type { Translation } from '../../i18n'
@@ -36,15 +36,9 @@ export function DocumentOutline({
 }: DocumentOutlineProps) {
   const depthPickerRef = useRef<HTMLDetailsElement>(null)
   const activeItemRef = useRef<HTMLButtonElement>(null)
-  const jumpTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const menuTrigger = useRef<HTMLButtonElement | null>(null)
   const [menu, setMenu] = useState<{ id: string; x: number; y: number; hasChildren: boolean } | null>(null)
-  function cancelJump() {
-    if (jumpTimer.current !== null) clearTimeout(jumpTimer.current)
-    jumpTimer.current = null
-  }
-  useEffect(() => () => cancelJump(), [items])
   useEffect(() => {
     if (!menu) return
     menuRef.current?.querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus()
@@ -150,25 +144,38 @@ export function DocumentOutline({
         <ol className="outline-list">
           {visibleItems.map(({ item, hasChildren }) => {
             const isActive = item.id === activeId
+            const isCollapsed = hasChildren && Boolean(collapsedIds?.has(item.id))
 
             return (
-              <li key={item.id}>
+              <li
+                key={item.id}
+                className="outline-item"
+                style={{ '--outline-indent': `${(item.level - 1) * 12}px` } as CSSProperties}
+              >
+                {hasChildren && onToggleBranch ? (
+                  <button
+                    type="button"
+                    className="outline-branch-toggle"
+                    aria-label={isCollapsed
+                      ? t.outlineExpandSection(item.text)
+                      : t.outlineCollapseSection(item.text)}
+                    aria-expanded={!isCollapsed}
+                    onClick={() => onToggleBranch(item.id)}
+                  >
+                    {isCollapsed
+                      ? <ChevronRight aria-hidden="true" />
+                      : <ChevronDown aria-hidden="true" />}
+                  </button>
+                ) : (
+                  <span className="outline-branch-spacer" aria-hidden="true" />
+                )}
                 <button
                   type="button"
                   className={`outline-link depth-${item.level}${isActive ? ' active' : ''}`}
-                  onClick={(event) => {
-                    cancelJump()
-                    if (!hasChildren || !onToggleBranch || event.detail === 0) onJump(item.id)
-                    else if (event.detail === 1) jumpTimer.current = setTimeout(() => onJump(item.id), 300)
-                  }}
-                  onDoubleClick={() => {
-                    cancelJump()
-                    if (hasChildren) onToggleBranch?.(item.id)
-                  }}
+                  onClick={() => onJump(item.id)}
                   onContextMenu={(event) => {
                     if (!onSetSubtree) return
                     event.preventDefault()
-                    cancelJump()
                     menuTrigger.current = event.currentTarget
                     const rect = event.currentTarget.getBoundingClientRect()
                     setMenu({ id: item.id, hasChildren,
@@ -176,7 +183,6 @@ export function DocumentOutline({
                       y: Math.max(8, Math.min(event.clientY || rect.bottom, window.innerHeight - 92)),
                     })
                   }}
-                  aria-expanded={hasChildren ? !collapsedIds?.has(item.id) : undefined}
                   aria-label={t.jumpTo(item.text)}
                   aria-current={isActive ? 'location' : undefined}
                   ref={isActive ? activeItemRef : undefined}

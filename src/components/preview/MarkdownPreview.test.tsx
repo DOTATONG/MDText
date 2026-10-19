@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import mermaid from 'mermaid'
+import { extractMarkdownOutline } from '../../domain/markdownOutline'
 import { savePreviewImage } from '../../platform/previewImageSave'
 import {
   MarkdownPreview,
@@ -208,6 +209,38 @@ describe('MarkdownPreview', () => {
     expect(screen.getAllByRole('heading', { name: 'Scope' })[0]).toHaveAttribute('id', 'scope')
     expect(screen.getAllByRole('heading', { name: 'Scope' })[1]).toHaveAttribute('id', 'scope-2')
     expect(screen.getByRole('heading', { name: 'Appendix' })).toHaveAttribute('id', 'appendix')
+  })
+
+  it('renders the outline heading ids even when headings contain inline HTML, images or footnotes', () => {
+    const content = [
+      '# Hello <span>World</span>',
+      '## Image ![alt text](x.png)',
+      '### Title[^1]',
+      '',
+      '[^1]: note',
+    ].join('\n')
+    const outline = extractMarkdownOutline(content)
+
+    const { container } = render(
+      <MarkdownPreview content={content} headingIds={outline.map((item) => item.id)} />,
+    )
+
+    expect(outline.map((item) => item.id)).toEqual(['hello-world', 'image-alt-text', 'title'])
+    expect(container.querySelectorAll('#hello-world, #image-alt-text, #title')).toHaveLength(3)
+  })
+
+  it('never duplicates an outline id when raw HTML shares a heading slug', () => {
+    const content = '<h2>Scope</h2>\n\n## Scope'
+    const outline = extractMarkdownOutline(content)
+
+    const { container } = render(
+      <MarkdownPreview content={content} headingIds={outline.map((item) => item.id)} />,
+    )
+
+    const ids = Array.from(container.querySelectorAll('h2'), (heading) => heading.id)
+    expect(ids).toHaveLength(2)
+    expect(new Set(ids).size).toBe(2)
+    expect(container.querySelector('[id="scope"]')).toHaveTextContent('Scope')
   })
 
   it('loads local images relative to the current markdown file and previews them', async () => {

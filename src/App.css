@@ -1157,8 +1157,51 @@
   outline-offset: 1px;
 }
 
+.outline-item {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-left: var(--outline-indent, 0px);
+}
+
+.outline-branch-toggle,
+.outline-branch-spacer {
+  flex: none;
+  width: 20px;
+  height: 24px;
+}
+
+.outline-branch-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.outline-branch-toggle:hover {
+  color: var(--text);
+  background: var(--control-hover);
+}
+
+.outline-branch-toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.outline-branch-toggle svg,
+.outline-branch-spacer svg {
+  width: 14px;
+  height: 14px;
+}
+
 .outline-link {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   min-height: 30px;
   display: block;
   overflow: hidden;
@@ -1194,22 +1237,19 @@
 }
 
 .outline-link.depth-2 {
-  padding-left: 20px;
+  font-weight: 560;
 }
 
 .outline-link.depth-3 {
-  padding-left: 32px;
   color: var(--text-muted);
 }
 
 .outline-link.depth-4 {
-  padding-left: 44px;
   color: var(--text-muted);
   font-weight: 520;
 }
 
 .outline-link.depth-5 {
-  padding-left: 56px;
   color: var(--text-muted);
   font-weight: 500;
 }
