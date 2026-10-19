@@ -33,8 +33,6 @@
   </tr>
 </table>
 
-<sub>截图来自上游版本，仅用于展示界面布局。 / Screenshots are from the upstream version and show the layout only.</sub>
-
 ## 中文
 
 **让 AI 生成的内容，也有舒适的阅读体验。**
