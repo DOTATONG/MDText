@@ -1,41 +1,66 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#14a99b"/>
-      <stop offset="1" stop-color="#07544f"/>
+      <stop offset="0" stop-color="#19b8a6"/>
+      <stop offset="0.55" stop-color="#0e8f82"/>
+      <stop offset="1" stop-color="#064c47"/>
     </linearGradient>
-    <linearGradient id="paper" x1="0" y1="0" x2="0.3" y2="1">
+    <radialGradient id="glow" cx="0.28" cy="0.18" r="0.75">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="0.55" stop-color="#ffffff" stop-opacity="0.04"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="0.35" y2="1">
       <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#d9f0eb"/>
+      <stop offset="0.6" stop-color="#f4fbf9"/>
+      <stop offset="1" stop-color="#dcf2ed"/>
     </linearGradient>
     <linearGradient id="fold" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#bfe6df"/>
-      <stop offset="1" stop-color="#8fcfc4"/>
+      <stop offset="0" stop-color="#c9ebe5"/>
+      <stop offset="1" stop-color="#93d2c7"/>
     </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="26" stdDeviation="26" flood-color="#033a36" flood-opacity="0.38"/>
+    <linearGradient id="accent" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffc978"/>
+      <stop offset="1" stop-color="#e9963c"/>
+    </linearGradient>
+    <filter id="shadow" x="-25%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="24" stdDeviation="26" flood-color="#022f2b" flood-opacity="0.42"/>
+    </filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10"/>
     </filter>
   </defs>
 
   <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <rect width="1024" height="1024" rx="224" fill="url(#glow)"/>
 
+  <!-- subtle background fold -->
+  <path d="M0 760 L1024 420 L1024 1024 L0 1024 Z" fill="#ffffff" opacity="0.045"/>
+  <path d="M0 0 L420 0 L0 420 Z" fill="#ffffff" opacity="0.05"/>
+
+  <!-- paper stack: back sheet -->
+  <path d="M286 210 L742 210 L806 274 L806 782 L286 806 Z" fill="#bfe4dd" opacity="0.55" filter="url(#soft)"/>
+
+  <!-- main sheet with folded top-right corner -->
   <g filter="url(#shadow)">
-    <!-- Back page -->
-    <polygon points="238,214 786,150 838,782 286,858" fill="url(#paper)"/>
-    <!-- Left folded facet -->
-    <polygon points="238,214 512,302 512,790 286,858" fill="url(#fold)"/>
-    <!-- Right facet -->
-    <polygon points="512,302 786,150 838,782 512,790" fill="#f8fcfb"/>
-    <!-- Top fold -->
-    <polygon points="238,214 786,150 512,302" fill="#e4f4f0"/>
-    <!-- Crease -->
-    <line x1="512" y1="302" x2="512" y2="790" stroke="#0f8f83" stroke-width="10" stroke-linecap="round" opacity="0.28"/>
-    <!-- Folded corner highlight -->
-    <polygon points="786,150 838,782 690,796 714,164" fill="#ffffff" opacity="0.55"/>
-    <!-- Bookmark ribbon -->
-    <polygon points="612,176 732,160 732,330 672,282 612,306" fill="#f0ad4e"/>
-    <polygon points="612,176 732,160 732,214 612,230" fill="#d9902f" opacity="0.65"/>
-    <!-- Subtle page edge -->
-    <polyline points="286,858 838,782" fill="none" stroke="#0f8f83" stroke-width="8" opacity="0.18"/>
+    <path d="M250 230 L640 230 L754 344 L754 794 L250 794 Z" fill="url(#paper)"/>
+    <!-- folded corner -->
+    <path d="M640 230 L754 344 L640 344 Z" fill="url(#fold)"/>
+    <path d="M640 230 L754 344" stroke="#ffffff" stroke-width="6" opacity="0.7"/>
+    <!-- vertical paper crease -->
+    <path d="M470 230 L470 794" stroke="#0e8f82" stroke-width="5" opacity="0.10"/>
+    <path d="M470 230 L470 794" stroke="#ffffff" stroke-width="3" opacity="0.35"/>
+
+    <!-- text lines -->
+    <rect x="318" y="386" width="356" height="34" rx="17" fill="#0e8f82" opacity="0.82"/>
+    <rect x="318" y="468" width="286" height="34" rx="17" fill="#0e8f82" opacity="0.58"/>
+    <rect x="318" y="550" width="322" height="34" rx="17" fill="#0e8f82" opacity="0.70"/>
+    <rect x="318" y="632" width="214" height="34" rx="17" fill="#0e8f82" opacity="0.46"/>
+
+    <!-- text cursor -->
+    <rect x="632" y="454" width="30" height="62" rx="8" fill="url(#accent)"/>
+
+    <!-- bottom edge highlight -->
+    <path d="M250 780 L754 780" stroke="#0e8f82" stroke-width="8" opacity="0.10"/>
   </g>
 </svg>
