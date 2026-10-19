@@ -1,7 +1,7 @@
 {
   "name": "mdtext",
   "private": true,
-  "version": "3.6.0",
+  "version": "4.0.0",
   "license": "GPL-3.0",
   "type": "module",
   "engines": {

@@ -1,6 +1,6 @@
 export const appInfo = {
   name: 'MDText',
-  version: '3.6.0',
+  version: '4.0.0',
   author: 'DOTATONG',
   originalAuthor: 'Sunky',
   originalProject: 'isunky/MDView',
