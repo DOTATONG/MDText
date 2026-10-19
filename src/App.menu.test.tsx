@@ -112,7 +112,7 @@ describe('App', () => {
     expect(
       screen
         .getAllByRole('menuitem')
-        .map((item) => item.getAttribute('aria-label') ?? item.textContent),
+        .map((item) => item.getAttribute('aria-label') ?? item.firstChild?.textContent),
     ).toEqual([
       'New',
       'Open Markdown File',
@@ -123,6 +123,29 @@ describe('App', () => {
       'Reveal recent.md in folder',
       'Clear recent files',
     ])
+  })
+
+  it('shows keyboard shortcuts beside the menu items that have them', async () => {
+    const user = userEvent.setup()
+    renderApp({ fileAccess: createFileAccess() })
+
+    await openFileMenu(user)
+
+    expect(shortcutOf(screen.getByRole('menuitem', { name: 'New' }))).toBe('Ctrl+N')
+    expect(shortcutOf(screen.getByRole('menuitem', { name: 'Open Markdown File' }))).toBe('Ctrl+O')
+    expect(shortcutOf(screen.getByRole('menuitem', { name: 'Save' }))).toBe('Ctrl+S')
+    expect(shortcutOf(screen.getByRole('menuitem', { name: 'Save As' }))).toBe('Ctrl+Shift+S')
+    expect(shortcutOf(screen.getByRole('menuitem', { name: 'Close File' }))).toBe('Ctrl+W')
+    expect(screen.getByRole('menuitem', { name: 'Save' })).toHaveAttribute(
+      'aria-keyshortcuts',
+      'Control+S',
+    )
+
+    await openAppMenu(user)
+
+    expect(shortcutOf(screen.getByRole('menuitem', { name: 'Zoom In' }))).toBe('Ctrl+=')
+    expect(shortcutOf(screen.getByRole('menuitem', { name: 'Zoom Out' }))).toBe('Ctrl+-')
+    expect(shortcutOf(screen.getByRole('menuitem', { name: 'Reset Zoom' }))).toBe('Ctrl+0')
   })
 
   it('shows export actions together in the Export menu', async () => {
@@ -558,6 +581,10 @@ describe('App', () => {
   })
 
 })
+
+function shortcutOf(item: HTMLElement) {
+  return item.querySelector('.action-menu-shortcut')?.textContent
+}
 
 function renderApp(props: ComponentProps<typeof App>) {
   const result = renderWelcomeApp(props)

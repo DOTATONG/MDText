@@ -58,6 +58,10 @@ import { tauriWindowFileDrop } from './platform/windowFileDrop'
 import {
   withShortcutTitle,
 } from './platform/keyboardShortcuts'
+import {
+  APP_SHORTCUTS,
+  createAppShortcutHints,
+} from './platform/appShortcuts'
 import { useFileShortcuts } from './hooks/useFileShortcuts'
 import { getLineStartOffsets } from './domain/documentStatistics'
 import { formatUiZoom } from './domain/uiZoom'
@@ -478,24 +482,32 @@ function App({
     : t.nativeFileUnavailable
   const canRevealFiles = fileAccess.canRevealFile ?? fileAccess.supportsNativeFiles
   const updateActionTitle = distribution === 'unsupported' ? t.updateUnavailable : undefined
-  const closeFileTitle = withShortcutTitle(t.closeFileLabel, { key: 'w' }, shortcutPlatform)
+  const shortcuts = useMemo(
+    () => createAppShortcutHints(shortcutPlatform),
+    [shortcutPlatform],
+  )
+  const closeFileTitle = withShortcutTitle(t.closeFileLabel, APP_SHORTCUTS.close, shortcutPlatform)
   const zoom: AppToolbarZoom = {
     label: t.uiZoomLabel(formatUiZoom(uiZoom)),
     onReset: resetZoom,
     onZoomIn: zoomIn,
     onZoomOut: zoomOut,
     resetDisabled: isDefaultZoom,
-    resetTitle: withShortcutTitle(t.uiZoomReset, { key: '0' }, shortcutPlatform),
+    resetTitle: withShortcutTitle(t.uiZoomReset, APP_SHORTCUTS.zoomReset, shortcutPlatform),
     zoomInDisabled: !canZoomIn,
     // `+` needs Shift on most layouts, so the conventional `=` binding is what the title shows.
-    zoomInTitle: withShortcutTitle(t.uiZoomIn, { key: '=' }, shortcutPlatform),
+    zoomInTitle: withShortcutTitle(t.uiZoomIn, APP_SHORTCUTS.zoomIn, shortcutPlatform),
     zoomOutDisabled: !canZoomOut,
-    zoomOutTitle: withShortcutTitle(t.uiZoomOut, { key: '-' }, shortcutPlatform),
+    zoomOutTitle: withShortcutTitle(t.uiZoomOut, APP_SHORTCUTS.zoomOut, shortcutPlatform),
   }
-  const newTitle = withShortcutTitle(t.createNewLabel, { key: 'n' }, shortcutPlatform)
-  const openTitle = withShortcutTitle(t.openLabel, { key: 'o' }, shortcutPlatform)
-  const saveTitle = withShortcutTitle(t.saveLabel, { key: 's' }, shortcutPlatform)
-  const saveAsTitle = withShortcutTitle(t.saveAsLabel, { key: 's', shiftKey: true }, shortcutPlatform)
+  const newTitle = withShortcutTitle(t.createNewLabel, APP_SHORTCUTS.new, shortcutPlatform)
+  const openTitle = withShortcutTitle(t.openLabel, APP_SHORTCUTS.open, shortcutPlatform)
+  const saveTitle = withShortcutTitle(t.saveLabel, APP_SHORTCUTS.save, shortcutPlatform)
+  const saveAsTitle = withShortcutTitle(
+    t.saveAsLabel,
+    APP_SHORTCUTS.saveAs,
+    shortcutPlatform,
+  )
   const previewPanelStyle = { '--preview-zoom': previewZoom } as CSSProperties
   const lineStartOffsets = useMemo(
     () => getLineStartOffsets(markdownDocument.content),
@@ -534,6 +546,7 @@ function App({
         recentFiles={recentFiles}
         saveAsTitle={saveAsTitle}
         saveTitle={saveTitle}
+        shortcuts={shortcuts}
         supportsAppUpdates={supportsAppUpdates}
         t={t}
         updateActionTitle={updateActionTitle}

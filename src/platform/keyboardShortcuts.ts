@@ -68,6 +68,20 @@ export function withShortcutTitle(
   return `${label} (${formatShortcut(shortcut, platform)})`
 }
 
+/** ARIA uses `Control`/`Meta` rather than the short `Ctrl`/`Command` labels. */
+export function formatShortcutAria(
+  shortcut: ShortcutDefinition,
+  platform: ShortcutPlatform = detectShortcutPlatform(),
+): string {
+  return [
+    platform === 'macos' ? 'Meta' : 'Control',
+    shortcut.shiftKey ? 'Shift' : null,
+    formatShortcutKey(shortcut.key),
+  ]
+    .filter(Boolean)
+    .join('+')
+}
+
 function matchesShortcutKey(event: ShortcutKeyboardEvent, key: string): boolean {
   const normalizedKey = key.toLowerCase()
   const eventKey = event.key.toLowerCase()

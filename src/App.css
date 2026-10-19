@@ -209,6 +209,20 @@
   text-align: left;
 }
 
+.action-menu-shortcut {
+  flex: 0 0 auto;
+  margin-left: auto;
+  padding-left: 18px;
+  color: var(--text-muted);
+  font: 500 11px/1 var(--ui-font);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.toolbar .action-menu-item:disabled .action-menu-shortcut {
+  color: var(--disabled);
+}
+
 .toolbar .recent-file-item {
   min-width: 0;
   max-width: 100%;

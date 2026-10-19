@@ -4,6 +4,7 @@ import type { RecentFile } from '../../domain/recentFiles'
 import type { AppMenuId } from '../../hooks/useAppMenu'
 import type { AppLanguage, Translation } from '../../i18n'
 import type { AppUpdatePhase } from '../../hooks/useAppUpdater'
+import type { AppShortcutHints, ShortcutHint } from '../../platform/appShortcuts'
 import type { AppWindowFrame } from '../../platform/windowFrame'
 import { AppLogo } from './AppLogo'
 import { WindowControls } from './WindowControls'
@@ -26,7 +27,7 @@ export type AppToolbarZoom = {
 
 export function AppToolbar({
   activeMenu, canRevealFiles, documentPath, documentTitle, isSaving, isWelcomeVisible,
-  language, menuBarRef, nativeFileTitle, recentFiles, supportsAppUpdates, t, updatePhase,
+  language, menuBarRef, nativeFileTitle, recentFiles, shortcuts, supportsAppUpdates, t, updatePhase,
   updateActionTitle, viewMode, closeFileTitle, newTitle, openTitle, saveTitle, saveAsTitle,
   windowFrame, zoom,
   onAbout, onCheckUpdates, onClearRecent, onCloseDocument, onExportDocx, onExportHtml, onExportPdf,
@@ -43,6 +44,7 @@ export function AppToolbar({
   menuBarRef: RefObject<HTMLElement | null>
   nativeFileTitle?: string
   recentFiles: RecentFile[]
+  shortcuts: AppShortcutHints
   supportsAppUpdates: boolean
   t: Translation
   updatePhase: AppUpdatePhase
@@ -101,12 +103,12 @@ export function AppToolbar({
           <FolderOpen aria-hidden="true" /><span>{t.fileMenu}</span><ChevronDown aria-hidden="true" />
         </button>
         {activeMenu === 'file' ? <div className="action-menu-panel" role="menu">
-          <button type="button" className="action-menu-item" onClick={onNew} title={newTitle} role="menuitem">{t.createNew}</button>
-          <button type="button" className="action-menu-item" onClick={onOpen} disabled={!nativeFilesEnabled} title={nativeFileTitle ?? openTitle} role="menuitem">{t.openMarkdownFile}</button>
+          <button type="button" className="action-menu-item" onClick={onNew} title={newTitle} aria-keyshortcuts={shortcuts.new.aria} role="menuitem">{t.createNew}<MenuShortcut hint={shortcuts.new} /></button>
+          <button type="button" className="action-menu-item" onClick={onOpen} disabled={!nativeFilesEnabled} title={nativeFileTitle ?? openTitle} aria-keyshortcuts={shortcuts.open.aria} role="menuitem">{t.openMarkdownFile}<MenuShortcut hint={shortcuts.open} /></button>
           {onImportDocx ? <button type="button" className="action-menu-item" onClick={onImportDocx} disabled={!nativeFilesEnabled} title={nativeFileTitle} role="menuitem">{t.importDocx}</button> : null}
-          <button type="button" className="action-menu-item" onClick={onSave} disabled={isWelcomeVisible || !nativeFilesEnabled || isSaving} title={nativeFileTitle ?? saveTitle} role="menuitem">{t.save}</button>
-          <button type="button" className="action-menu-item" onClick={onSaveAs} disabled={isWelcomeVisible || !nativeFilesEnabled || isSaving} title={nativeFileTitle ?? saveAsTitle} role="menuitem">{t.saveAs}</button>
-          <button type="button" className="action-menu-item" onClick={onCloseDocument} disabled={isWelcomeVisible} title={closeFileTitle} role="menuitem">{t.closeFile}</button>
+          <button type="button" className="action-menu-item" onClick={onSave} disabled={isWelcomeVisible || !nativeFilesEnabled || isSaving} title={nativeFileTitle ?? saveTitle} aria-keyshortcuts={shortcuts.save.aria} role="menuitem">{t.save}<MenuShortcut hint={shortcuts.save} /></button>
+          <button type="button" className="action-menu-item" onClick={onSaveAs} disabled={isWelcomeVisible || !nativeFilesEnabled || isSaving} title={nativeFileTitle ?? saveAsTitle} aria-keyshortcuts={shortcuts.saveAs.aria} role="menuitem">{t.saveAs}<MenuShortcut hint={shortcuts.saveAs} /></button>
+          <button type="button" className="action-menu-item" onClick={onCloseDocument} disabled={isWelcomeVisible} title={closeFileTitle} aria-keyshortcuts={shortcuts.close.aria} role="menuitem">{t.closeFile}<MenuShortcut hint={shortcuts.close} /></button>
           <div className="action-menu-divider" /><div className="action-menu-section-label">{t.recentFiles}</div>
           {recentFiles.length > 0 ? recentFiles.map((file) => <div className="recent-file-menu-row" key={file.path}>
             <button type="button" className="action-menu-item recent-file-item" onClick={() => onOpenRecent(file.path)} disabled={!nativeFilesEnabled} title={file.path} role="menuitem"><span className="recent-file-title">{file.title}</span></button>
@@ -130,9 +132,9 @@ export function AppToolbar({
           <button type="button" className={`action-menu-item ${language === 'en' ? 'active' : ''}`} onClick={() => onLanguage('en')} role="menuitem">{t.languageEnglish}</button>
           <button type="button" className={`action-menu-item ${language === 'zh' ? 'active' : ''}`} onClick={() => onLanguage('zh')} role="menuitem">{t.languageChinese}</button>
           <div className="action-menu-section-label">{zoom.label}</div>
-          <button type="button" className="action-menu-item" onClick={zoom.onZoomIn} disabled={zoom.zoomInDisabled} title={zoom.zoomInTitle} role="menuitem">{t.uiZoomIn}</button>
-          <button type="button" className="action-menu-item" onClick={zoom.onZoomOut} disabled={zoom.zoomOutDisabled} title={zoom.zoomOutTitle} role="menuitem">{t.uiZoomOut}</button>
-          <button type="button" className="action-menu-item" onClick={zoom.onReset} disabled={zoom.resetDisabled} title={zoom.resetTitle} role="menuitem">{t.uiZoomReset}</button>
+          <button type="button" className="action-menu-item" onClick={zoom.onZoomIn} disabled={zoom.zoomInDisabled} title={zoom.zoomInTitle} aria-keyshortcuts={shortcuts.zoomIn.aria} role="menuitem">{t.uiZoomIn}<MenuShortcut hint={shortcuts.zoomIn} /></button>
+          <button type="button" className="action-menu-item" onClick={zoom.onZoomOut} disabled={zoom.zoomOutDisabled} title={zoom.zoomOutTitle} aria-keyshortcuts={shortcuts.zoomOut.aria} role="menuitem">{t.uiZoomOut}<MenuShortcut hint={shortcuts.zoomOut} /></button>
+          <button type="button" className="action-menu-item" onClick={zoom.onReset} disabled={zoom.resetDisabled} title={zoom.resetTitle} aria-keyshortcuts={shortcuts.zoomReset.aria} role="menuitem">{t.uiZoomReset}<MenuShortcut hint={shortcuts.zoomReset} /></button>
           <div className="action-menu-divider" />
           <button type="button" className="action-menu-item" onClick={onOpenReadingSettings} role="menuitem">{t.readingSettings}</button>
           {supportsAppUpdates ? <button type="button" className="action-menu-item" onClick={onCheckUpdates} disabled={updateActionTitle !== undefined || updatePhase === 'checking'} title={updateActionTitle} role="menuitem">{updatePhase === 'checking' ? t.updateChecking : t.checkForUpdates}</button> : null}
@@ -155,4 +157,12 @@ export function AppToolbar({
       }}
     /> : null}
   </header>
+}
+
+/**
+ * Visual hint at the trailing edge of a menu item. Hidden from assistive
+ * technology because the menu item already exposes `aria-keyshortcuts`.
+ */
+function MenuShortcut({ hint }: { hint: ShortcutHint }) {
+  return <span className="action-menu-shortcut" aria-hidden="true">{hint.label}</span>
 }

@@ -2,6 +2,7 @@ import { createRef } from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { translations } from '../../i18n'
+import { createAppShortcutHints } from '../../platform/appShortcuts'
 import type { AppWindowFrame } from '../../platform/windowFrame'
 import { AppToolbar } from './AppToolbar'
 
@@ -44,6 +45,7 @@ function toolbar(windowFrame: AppWindowFrame) {
     language="en"
     menuBarRef={createRef<HTMLElement>()}
     recentFiles={[]}
+    shortcuts={createAppShortcutHints('windows')}
     supportsAppUpdates={false}
     t={translations.en}
     updatePhase="idle"
