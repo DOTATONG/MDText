@@ -23,12 +23,12 @@
 <table>
   <tr>
     <td width="50%" align="center">
-      <a href="docs/assets/screenshots/main2.png"><img src="docs/assets/screenshots/main2.png" alt="MDText 阅读工作区与目录导航 / Reading workspace and outline" width="100%" /></a>
-      <br /><sub>阅读工作区 / Reading workspace</sub>
-    </td>
-    <td width="50%" align="center">
       <a href="docs/assets/screenshots/main.png"><img src="docs/assets/screenshots/main.png" alt="MDText 欢迎页与最近文件 / Welcome screen and recent files" width="100%" /></a>
       <br /><sub>欢迎页 / Welcome screen</sub>
+    </td>
+    <td width="50%" align="center">
+      <a href="docs/assets/screenshots/main2.png"><img src="docs/assets/screenshots/main2.png" alt="MDText 阅读工作区与目录导航 / Reading workspace and outline" width="100%" /></a>
+      <br /><sub>阅读工作区 / Reading workspace</sub>
     </td>
   </tr>
 </table>
