@@ -59,7 +59,7 @@ export function AboutDialog({ open, onClose, t }: AboutDialogProps) {
             <AppLogo />
           </div>
           <div>
-            <h2 id="about-title" aria-label={t.aboutTitle}>MDView</h2>
+            <h2 id="about-title" aria-label={t.aboutTitle}>{appInfo.name}</h2>
             <p>{t.aboutSubtitle}</p>
             <span className="about-version">{t.versionValue(appInfo.version)}</span>
           </div>
@@ -69,6 +69,15 @@ export function AboutDialog({ open, onClose, t }: AboutDialogProps) {
           <div className="about-row">
             <dt>{t.authorLabel}</dt>
             <dd>{appInfo.author}</dd>
+          </div>
+          <div className="about-row">
+            <dt>{t.originalAuthorLabel}</dt>
+            <dd>
+              <a href={appInfo.originalProjectUrl} target="_blank" rel="noreferrer">
+                {appInfo.originalAuthor} / {appInfo.originalProject}
+                <ExternalLink aria-hidden="true" />
+              </a>
+            </dd>
           </div>
           <div className="about-row">
             <dt>{t.websiteLabel}</dt>

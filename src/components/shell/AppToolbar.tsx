@@ -95,7 +95,7 @@ export function AppToolbar({
   >
     <div className="brand-block">
       <div className="app-mark" aria-hidden="true"><AppLogo /></div>
-      <div className="brand-text"><h1>MDView</h1><p title={isWelcomeVisible ? t.welcomeBrand : documentPath ?? documentTitle}>{isWelcomeVisible ? t.welcomeBrand : documentTitle}</p></div>
+      <div className="brand-text"><h1>MarkLite</h1><p title={isWelcomeVisible ? t.welcomeBrand : documentPath ?? documentTitle}>{isWelcomeVisible ? t.welcomeBrand : documentTitle}</p></div>
     </div>
     <nav className="toolbar" aria-label={t.documentActions} ref={menuBarRef}>
       <div className="action-menu">

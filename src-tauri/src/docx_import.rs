@@ -18,7 +18,7 @@ const MARKITDOWN_VERSION: &str = "0.1.6";
 const MAX_DOCX_BYTES: u64 = 50 * 1024 * 1024;
 const MAX_MARKDOWN_BYTES: u64 = 50 * 1024 * 1024;
 const SETTINGS_FILENAME: &str = "docx-import.json";
-const READY_FILENAME: &str = ".mdview-ready";
+const READY_FILENAME: &str = ".marklite-ready";
 const BRIDGE: &str = include_str!("../resources/markitdown_bridge.py");
 
 #[derive(Default)]
@@ -247,7 +247,7 @@ pub fn install(app: &AppHandle, registry: &DocxImportRegistry) -> Result<Status,
             find_python(app)?
                 .filter(|python| is_supported_version(&python.version))
                 .ok_or_else(|| {
-                    "Python was installed but is not available yet. Restart MDView, then try again."
+                    "Python was installed but is not available yet. Restart MarkLite, then try again."
                         .to_string()
                 })?
         }

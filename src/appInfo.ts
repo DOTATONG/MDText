@@ -1,7 +1,10 @@
 export const appInfo = {
-  name: 'MDView',
+  name: 'MarkLite',
   version: '3.6.0',
-  author: 'Sunky',
-  website: 'github.com/isunky/MDView',
-  websiteUrl: 'https://github.com/isunky/MDView',
+  author: 'DOTATONG',
+  originalAuthor: 'Sunky',
+  originalProject: 'isunky/MDView',
+  originalProjectUrl: 'https://github.com/isunky/MDView',
+  website: 'github.com/DOTATONG/MarkdownView',
+  websiteUrl: 'https://github.com/DOTATONG/MarkdownView',
 } as const

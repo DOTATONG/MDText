@@ -4,7 +4,7 @@ import { printHtmlInBrowser } from './printHtml'
 describe('browser HTML printing', () => {
   afterEach(() => {
     vi.restoreAllMocks()
-    document.querySelectorAll('.mdview-print-root, .mdview-print-styles').forEach((element) => element.remove())
+    document.querySelectorAll('.marklite-print-root, .marklite-print-styles').forEach((element) => element.remove())
   })
 
   it('prints from the current window with the exported content and styles', async () => {
@@ -20,16 +20,16 @@ describe('browser HTML printing', () => {
       'Ready',
     )
 
-    expect(document.querySelector('.mdview-print-root')?.textContent).toBe('Ready')
-    expect(document.querySelector('.mdview-print-styles')?.textContent).toContain('.markdown-preview{color:red}')
-    expect(document.querySelector('.mdview-print-styles')?.textContent).toContain('content: "Ready"')
-    expect(document.querySelector('.mdview-print-styles')?.textContent).toContain('content: counter(page)')
+    expect(document.querySelector('.marklite-print-root')?.textContent).toBe('Ready')
+    expect(document.querySelector('.marklite-print-styles')?.textContent).toContain('.markdown-preview{color:red}')
+    expect(document.querySelector('.marklite-print-styles')?.textContent).toContain('content: "Ready"')
+    expect(document.querySelector('.marklite-print-styles')?.textContent).toContain('content: counter(page)')
     expect(focus).toHaveBeenCalledOnce()
     expect(print).toHaveBeenCalledOnce()
 
     window.dispatchEvent(new Event('afterprint'))
-    expect(document.querySelector('.mdview-print-root')).toBeNull()
-    expect(document.querySelector('.mdview-print-styles')).toBeNull()
+    expect(document.querySelector('.marklite-print-root')).toBeNull()
+    expect(document.querySelector('.marklite-print-styles')).toBeNull()
   })
 
   it('replaces an unfinished print layer before starting another print', async () => {
@@ -43,7 +43,7 @@ describe('browser HTML printing', () => {
     await printHtmlInBrowser('<body><article>First</article></body>', 'First')
     await printHtmlInBrowser('<body><article>Second</article></body>', 'Second')
 
-    expect(document.querySelectorAll('.mdview-print-root')).toHaveLength(1)
-    expect(document.querySelector('.mdview-print-root')?.textContent).toBe('Second')
+    expect(document.querySelectorAll('.marklite-print-root')).toHaveLength(1)
+    expect(document.querySelector('.marklite-print-root')?.textContent).toBe('Second')
   })
 })

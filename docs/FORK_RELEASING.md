@@ -46,8 +46,8 @@ https://github.com/DOTATONG/MarkdownView/releases/latest/download/latest.json
 
 本仓库已生成独立的 Tauri 更新签名密钥，公钥已配置在
 `src-tauri/tauri.windows.conf.json` 的 `plugins.updater.pubkey`。私钥保存在仓库之外
-（本机为 `%USERPROFILE%\.tauri\mdview-fork.key`），密码保存在同目录的
-`mdview-fork.key.password.txt`。
+（本机为 `%USERPROFILE%\.tauri\marklite-fork.key`），密码保存在同目录的
+`marklite-fork.key.password.txt`。
 
 在 GitHub 仓库添加以下 Secrets 即可启用自动更新：
 
@@ -60,7 +60,7 @@ Secret，工作流会跳过更新清单，发布仍然成功，但应用内自�
 切勿提交私钥或密码文件。若需要重新生成密钥：
 
 ```bash
-npm run tauri -- signer generate -w ~/.tauri/mdview-fork.key
+npm run tauri -- signer generate -w ~/.tauri/marklite-fork.key
 ```
 
 重新生成后必须同步更新 `plugins.updater.pubkey`，并在 GitHub Secrets 中更新私钥和密码。

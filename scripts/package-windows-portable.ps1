@@ -30,13 +30,13 @@ if ($Version -notmatch "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$") {
 
 $releasePath = (Resolve-Path -LiteralPath $ReleaseDir).Path
 $outputPath = Resolve-OrCreateDirectory -Path $OutputDir
-$exePath = Join-Path $releasePath "MDView.exe"
+$exePath = Join-Path $releasePath "MarkLite.exe"
 
 if (-not (Test-Path -LiteralPath $exePath)) {
-  throw "MDView.exe was not found at $exePath. Run npm run desktop:build -- --bundles msi first."
+  throw "MarkLite.exe was not found at $exePath. Run npm run desktop:build -- --bundles msi first."
 }
 
-$portableName = "MDView_$Version`_windows_x64_portable"
+$portableName = "MarkLite_$Version`_windows_x64_portable"
 $stagingPath = Join-Path $outputPath $portableName
 $zipPath = Join-Path $outputPath "${portableName}.zip"
 
@@ -55,8 +55,8 @@ if (Test-Path -LiteralPath $zipPath) {
 
 New-Item -ItemType Directory -Path $stagingPath | Out-Null
 
-Copy-Item -LiteralPath $exePath -Destination (Join-Path $stagingPath "MDView.exe")
-Set-Content -LiteralPath (Join-Path $stagingPath "MDView.portable") -Value "MDView portable distribution" -Encoding ASCII
+Copy-Item -LiteralPath $exePath -Destination (Join-Path $stagingPath "MarkLite.exe")
+Set-Content -LiteralPath (Join-Path $stagingPath "MarkLite.portable") -Value "MarkLite portable distribution" -Encoding ASCII
 
 $filePatterns = @("*.dll", "*.pak", "*.bin", "*.dat")
 foreach ($pattern in $filePatterns) {
@@ -78,14 +78,14 @@ if (Test-Path -LiteralPath "LICENSE") {
 }
 
 @"
-MDView Windows Portable
+MarkLite Windows Portable
 Version: $Version
 
-Run MDView.exe directly after extracting this ZIP archive.
+Run MarkLite.exe directly after extracting this ZIP archive.
 
 Notes:
-- This portable package does not install MDView.
-- Extracting it registers nothing. Open Settings in MDView and add MDView to the Markdown
+- This portable package does not install MarkLite.
+- Extracting it registers nothing. Open Settings in MarkLite and add MarkLite to the Markdown
   "Open with" list to associate files for the current user.
 - Updates open GitHub Releases so this package remains portable.
 - WebView2 Runtime is still required on Windows.

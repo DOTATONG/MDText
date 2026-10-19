@@ -47,8 +47,8 @@ jobs:
       - name: Upload Edge extension ZIP
         uses: actions/upload-artifact@v6
         with:
-          name: mdview-edge-extension
-          path: dist/MDView-edge.zip
+          name: marklite-edge-extension
+          path: dist/MarkLite-edge.zip
           if-no-files-found: error
           retention-days: 14
 
@@ -119,7 +119,7 @@ jobs:
             -H 'Content-Type: application/zip' \
             --dump-header "$upload_headers" \
             --output /dev/null \
-            --upload-file dist/MDView-edge.zip \
+            --upload-file dist/MarkLite-edge.zip \
             "${base_url}/draft/package"
 
           upload_operation_id="$(read_operation_id "$upload_headers")"
@@ -137,7 +137,7 @@ jobs:
             -H 'Content-Type: application/json' \
             --dump-header "$publish_headers" \
             --output /dev/null \
-            --data "{\"notes\":\"MDView ${RELEASE_VERSION} automated release.\"}" \
+            --data "{\"notes\":\"MarkLite ${RELEASE_VERSION} automated release.\"}" \
             "${base_url}"
 
           publish_operation_id="$(read_operation_id "$publish_headers")"

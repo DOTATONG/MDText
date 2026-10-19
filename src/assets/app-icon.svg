@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#14a99b"/>
+      <stop offset="1" stop-color="#07544f"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d9f0eb"/>
+    </linearGradient>
+    <linearGradient id="fold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#bfe6df"/>
+      <stop offset="1" stop-color="#8fcfc4"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="26" stdDeviation="26" flood-color="#033a36" flood-opacity="0.38"/>
+    </filter>
+  </defs>
+
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+
+  <g filter="url(#shadow)">
+    <!-- Back page -->
+    <polygon points="238,214 786,150 838,782 286,858" fill="url(#paper)"/>
+    <!-- Left folded facet -->
+    <polygon points="238,214 512,302 512,790 286,858" fill="url(#fold)"/>
+    <!-- Right facet -->
+    <polygon points="512,302 786,150 838,782 512,790" fill="#f8fcfb"/>
+    <!-- Top fold -->
+    <polygon points="238,214 786,150 512,302" fill="#e4f4f0"/>
+    <!-- Crease -->
+    <line x1="512" y1="302" x2="512" y2="790" stroke="#0f8f83" stroke-width="10" stroke-linecap="round" opacity="0.28"/>
+    <!-- Folded corner highlight -->
+    <polygon points="786,150 838,782 690,796 714,164" fill="#ffffff" opacity="0.55"/>
+    <!-- Bookmark ribbon -->
+    <polygon points="612,176 732,160 732,330 672,282 612,306" fill="#f0ad4e"/>
+    <polygon points="612,176 732,160 732,214 612,230" fill="#d9902f" opacity="0.65"/>
+    <!-- Subtle page edge -->
+    <polyline points="286,858 838,782" fill="none" stroke="#0f8f83" stroke-width="8" opacity="0.18"/>
+  </g>
+</svg>

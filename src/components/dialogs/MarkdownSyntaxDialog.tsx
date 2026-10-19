@@ -82,7 +82,7 @@ export function MarkdownSyntaxDialog({ open, title, intro, categoriesLabel, safe
           const copied = copyStatus?.itemId === item.id && copyStatus.state === 'copied'
           return <div className="syntax-reference-row" key={item.id}><div className="syntax-reference-example"><strong>{item.name}</strong><code>{item.syntax}</code></div><p>{item.description}</p><button type="button" className="syntax-copy-button" aria-label={copied ? copiedLabel(item.name) : copyLabel(item.name)} title={copied ? copiedLabel(item.name) : copyLabel(item.name)} onClick={() => void handleCopy(item.id, item.name, item.syntax)}>{copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}</button></div>
         })}</div>
-      </section> : null}{activeSection?.id === 'mdview-enhancements' ? <p className="syntax-safety-note">{safetyNote}</p> : null}</div>
+      </section> : null}{activeSection?.id === 'marklite-enhancements' ? <p className="syntax-safety-note">{safetyNote}</p> : null}</div>
     </section>
   </div>
 }

@@ -186,19 +186,23 @@ describe('App', () => {
     await openAppMenu(user)
     await user.click(screen.getByRole('menuitem', { name: 'About' }))
 
-    const dialog = screen.getByRole('dialog', { name: 'About MDView' })
+    const dialog = screen.getByRole('dialog', { name: 'About MarkLite' })
     expect(dialog).toBeInTheDocument()
     expect(screen.getByText(`Version ${appInfo.version}`)).toBeInTheDocument()
-    expect(screen.getByText('Sunky')).toBeInTheDocument()
-    expect(screen.queryByText('Author Sunky')).not.toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'github.com/isunky/MDView' })).toHaveAttribute(
+    expect(screen.getByText('DOTATONG')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Sunky / isunky/MDView' })).toHaveAttribute(
       'href',
       'https://github.com/isunky/MDView',
+    )
+    expect(screen.queryByText('Author DOTATONG')).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'github.com/DOTATONG/MarkdownView' })).toHaveAttribute(
+      'href',
+      'https://github.com/DOTATONG/MarkdownView',
     )
 
     await user.click(screen.getByRole('button', { name: 'Close about dialog' }))
 
-    expect(screen.queryByRole('dialog', { name: 'About MDView' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('dialog', { name: 'About MarkLite' })).not.toBeInTheDocument()
   })
 
   it('opens an App menu with about and language actions', async () => {

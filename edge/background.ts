@@ -1,23 +1,23 @@
-const IMPORTED_PAGE_KEY = 'mdviewImportedPage'
+const IMPORTED_PAGE_KEY = 'markliteImportedPage'
 const WORKSPACE_PATH = 'index.html'
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
-    id: 'open-in-mdview',
-    title: 'Open current page in MDView',
+    id: 'open-in-marklite',
+    title: 'Open current page in MarkLite',
     contexts: ['page'],
   })
 })
 
 chrome.action.onClicked.addListener((tab) => {
-  void openTabInMdView(tab)
+  void openTabInMarkLite(tab)
 })
 
 chrome.contextMenus.onClicked.addListener((_info, tab) => {
-  if (tab) void openTabInMdView(tab)
+  if (tab) void openTabInMarkLite(tab)
 })
 
-async function openTabInMdView(tab: { id?: number; url?: string }) {
+async function openTabInMarkLite(tab: { id?: number; url?: string }) {
   if (!tab.id) {
     await openWorkspace()
     return

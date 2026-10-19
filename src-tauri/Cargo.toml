@@ -1,8 +1,8 @@
 [package]
-name = "mdview"
+name = "marklite"
 version = "3.6.0"
-description = "A lightweight Markdown viewer and source editor."
-authors = ["MDView"]
+description = "MarkLite — a lightweight Markdown viewer and source editor."
+authors = ["MarkLite contributors"]
 license = "GPL-3.0"
 repository = "https://github.com/DOTATONG/MarkdownView"
 edition = "2021"

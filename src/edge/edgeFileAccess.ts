@@ -8,7 +8,7 @@ import type {
 } from '../platform/fileAccess'
 import { printHtmlInBrowser } from '../platform/printHtml'
 
-const DATABASE_NAME = 'mdview.edge.files.v1'
+const DATABASE_NAME = 'marklite.edge.files.v1'
 const STORE_NAME = 'handles'
 const EDGE_FILE_PREFIX = 'edge-file://'
 const markdownPickerTypes = [{
@@ -115,9 +115,9 @@ export const edgeFileAccess: FileAccess = {
   },
 
   async readStartupMarkdownFile() {
-    const payload = await chrome.storage.session.get('mdviewImportedPage')
-    const imported = payload.mdviewImportedPage
-    await chrome.storage.session.remove('mdviewImportedPage')
+    const payload = await chrome.storage.session.get('markliteImportedPage')
+    const imported = payload.markliteImportedPage
+    await chrome.storage.session.remove('markliteImportedPage')
     if (!isImportedPage(imported)) return null
     return {
       path: `edge-page://${imported.id}/${imported.title || 'webpage.md'}`,

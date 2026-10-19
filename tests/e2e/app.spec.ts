@@ -159,7 +159,7 @@ test('opens the About dialog from the App menu', async ({ page }) => {
   await page.getByRole('button', { name: 'App' }).click()
   await page.getByRole('menuitem', { name: 'About' }).click()
 
-  await expect(page.getByRole('dialog', { name: 'About MDView' })).toBeVisible()
+  await expect(page.getByRole('dialog', { name: 'About MarkLite' })).toBeVisible()
   await expect(page.getByText(/^Version [0-9]+\.[0-9]+\.[0-9]+$/)).toBeVisible()
 })
 

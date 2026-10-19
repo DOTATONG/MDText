@@ -31,8 +31,8 @@ describe('extractMarkdownOutline', () => {
   })
 
   it('keeps unicode words and removes punctuation from ids', () => {
-    expect(extractMarkdownOutline('# 你好，MDView!')).toEqual([
-      { id: '你好mdview', level: 1, text: '你好，MDView!' },
+    expect(extractMarkdownOutline('# 你好，MarkLite!')).toEqual([
+      { id: '你好marklite', level: 1, text: '你好，MarkLite!' },
     ])
   })
 

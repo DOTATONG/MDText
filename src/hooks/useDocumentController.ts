@@ -223,7 +223,7 @@ export function useDocumentController({
   })
 
   useEffect(() => {
-    window.document.title = `${markdownDocument.isDirty ? '* ' : ''}${markdownDocument.title} - MDView`
+    window.document.title = `${markdownDocument.isDirty ? '* ' : ''}${markdownDocument.title} - MarkLite`
   }, [markdownDocument.isDirty, markdownDocument.title])
 
   useEffect(() => {

@@ -12,6 +12,6 @@ export const unsupportedAppUpdateClient: AppUpdateClient = {
     throw new Error('Application updates are only available in the desktop app.')
   },
   async openLatestRelease() {
-    window.open('https://github.com/isunky/MDView/releases/latest', '_blank', 'noopener,noreferrer')
+    window.open('https://github.com/DOTATONG/MarkdownView/releases/latest', '_blank', 'noopener,noreferrer')
   },
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
-    <UI Id="MDViewUI_InstallDir">
+    <UI Id="MarkLiteUI_InstallDir">
       <TextStyle Id="WixUI_Font_Normal" FaceName="Segoe UI" Size="9" />
       <TextStyle Id="WixUI_Font_Bigger" FaceName="Segoe UI" Size="15" />
       <TextStyle Id="WixUI_Font_Title" FaceName="Segoe UI" Size="11" Bold="yes" />

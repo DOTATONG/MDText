@@ -2,7 +2,7 @@
 //!
 //! The MSI installer registers machine-wide associations. Portable and development builds have no
 //! installer at all, so this module writes the same ProgIDs under the current user instead, which
-//! needs no elevation. It deliberately only adds MDView to the "Open with" list; it never writes
+//! needs no elevation. It deliberately only adds MarkLite to the "Open with" list; it never writes
 //! the default handler of `.md`, because Windows 10 and later pin that choice to a per-user hash
 //! that applications cannot legitimately replace.
 
@@ -15,16 +15,16 @@ use winreg::{enums::HKEY_CURRENT_USER, RegKey};
 
 /// ProgID for `.md`. Mirrors `src-tauri/windows/file-associations.wxs` so both entry points agree.
 #[cfg(target_os = "windows")]
-const MARKDOWN_PROG_ID: &str = "MDView.md";
+const MARKDOWN_PROG_ID: &str = "MarkLite.md";
 /// ProgID for `.markdown`.
 #[cfg(target_os = "windows")]
-const MARKDOWN_LONG_PROG_ID: &str = "MDView.markdown";
+const MARKDOWN_LONG_PROG_ID: &str = "MarkLite.markdown";
 #[cfg(target_os = "windows")]
-const FRIENDLY_NAME: &str = "MDView";
+const FRIENDLY_NAME: &str = "MarkLite";
 #[cfg(target_os = "windows")]
 const TYPE_DESCRIPTION: &str = "Markdown text document";
 #[cfg(target_os = "windows")]
-const CAPABILITIES_KEY: &str = r"Software\MDView\Capabilities";
+const CAPABILITIES_KEY: &str = r"Software\MarkLite\Capabilities";
 #[cfg(target_os = "windows")]
 const REGISTERED_APPLICATIONS_KEY: &str = r"Software\RegisteredApplications";
 #[cfg(target_os = "windows")]
@@ -188,11 +188,11 @@ fn unsupported_status() -> FileAssociationStatus {
 #[cfg(target_os = "windows")]
 fn executable_information() -> Result<(PathBuf, String), String> {
     let path = std::env::current_exe()
-        .map_err(|error| format!("Failed to locate the MDView executable: {error}"))?;
+        .map_err(|error| format!("Failed to locate the MarkLite executable: {error}"))?;
     let name = path
         .file_name()
         .map(|value| value.to_string_lossy().to_string())
-        .ok_or_else(|| "The MDView executable has no file name.".to_string())?;
+        .ok_or_else(|| "The MarkLite executable has no file name.".to_string())?;
 
     Ok((path, name))
 }
@@ -221,7 +221,7 @@ fn association_values(executable_path: &str, executable_name: &str) -> Vec<Assoc
     let mut values = vec![
         AssociationValue::new(&application, "FriendlyAppName", FRIENDLY_NAME),
         AssociationValue::new(&application, "ApplicationIcon", &icon),
-        AssociationValue::new(&format!(r"{application}\shell\open"), "", "Open with MDView"),
+        AssociationValue::new(&format!(r"{application}\shell\open"), "", "Open with MarkLite"),
         AssociationValue::new(&format!(r"{application}\shell\open\command"), "", &command),
         // `SupportedTypes` is what makes a bare executable appear in the "Open with" chooser.
         AssociationValue::new(&format!(r"{application}\SupportedTypes"), ".md", ""),
@@ -243,7 +243,7 @@ fn association_values(executable_path: &str, executable_name: &str) -> Vec<Assoc
         values.push(AssociationValue::new(
             &format!(r"{key}\shell\open"),
             "",
-            "Open with MDView",
+            "Open with MarkLite",
         ));
         values.push(AssociationValue::new(
             &format!(r"{key}\shell\open\command"),
@@ -288,18 +288,18 @@ fn association_values(executable_path: &str, executable_name: &str) -> Vec<Assoc
     values
 }
 
-/// Keys created exclusively by MDView, safe to delete whole.
+/// Keys created exclusively by MarkLite, safe to delete whole.
 #[cfg(target_os = "windows")]
 fn owned_keys(executable_name: &str) -> Vec<String> {
     vec![
         application_key(executable_name),
         prog_id_key(MARKDOWN_PROG_ID),
         prog_id_key(MARKDOWN_LONG_PROG_ID),
-        r"Software\MDView".to_string(),
+        r"Software\MarkLite".to_string(),
     ]
 }
 
-/// Shared keys where only MDView's own value may be removed.
+/// Shared keys where only MarkLite's own value may be removed.
 #[cfg(target_os = "windows")]
 fn borrowed_values() -> Vec<BorrowedValue> {
     vec![
@@ -341,8 +341,8 @@ fn describe(key: &str, name: &str) -> String {
 mod tests {
     use super::*;
 
-    const EXECUTABLE: &str = r"C:\Tools\MDView.exe";
-    const EXECUTABLE_NAME: &str = "MDView.exe";
+    const EXECUTABLE: &str = r"C:\Tools\MarkLite.exe";
+    const EXECUTABLE_NAME: &str = "MarkLite.exe";
 
     fn values() -> Vec<AssociationValue> {
         association_values(EXECUTABLE, EXECUTABLE_NAME)
@@ -359,7 +359,7 @@ mod tests {
     fn quotes_the_executable_and_the_file_placeholder() {
         assert_eq!(
             open_command(EXECUTABLE),
-            "\"C:\\Tools\\MDView.exe\" \"%1\"".to_string()
+            "\"C:\\Tools\\MarkLite.exe\" \"%1\"".to_string()
         );
     }
 

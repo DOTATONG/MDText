@@ -1,4 +1,4 @@
-"""Minimal offline bridge for MDView's DOCX-to-Markdown import."""
+"""Minimal offline bridge for MarkLite's DOCX-to-Markdown import."""
 
 import os
 import sys
@@ -21,7 +21,7 @@ def main() -> None:
 
     from markitdown import MarkItDown
 
-    # Plugins stay disabled. MDView only supplies a user-selected .docx path.
+    # Plugins stay disabled. MarkLite only supplies a user-selected .docx path.
     converter = MarkItDown(enable_plugins=False)
     result = converter.convert_local(source_path, keep_data_uris=True)
 

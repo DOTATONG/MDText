@@ -2,7 +2,7 @@ import { invoke } from '@tauri-apps/api/core'
 import type { DownloadEvent, Update } from '@tauri-apps/plugin-updater'
 import { openExternalLink } from './externalLinks'
 
-export const LATEST_RELEASE_URL = 'https://github.com/isunky/MDView/releases/latest'
+export const LATEST_RELEASE_URL = 'https://github.com/DOTATONG/MarkdownView/releases/latest'
 
 export type AppDistribution = 'windows-installed' | 'windows-portable' | 'unsupported'
 

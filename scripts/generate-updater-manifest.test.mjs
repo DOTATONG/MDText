@@ -16,7 +16,7 @@ afterEach(async () => {
 describe('generate-updater-manifest', () => {
   it('writes a Windows updater manifest from a matching MSI signature', async () => {
     const directory = await createTemporaryDirectory()
-    const msi = join(directory, 'MDView_1.9.4_x64_en-US.msi')
+    const msi = join(directory, 'MarkLite_1.9.4_x64_en-US.msi')
     const signature = `${msi}.sig`
     const output = join(directory, 'latest.json')
     await writeFile(msi, 'msi', 'utf8')
@@ -26,7 +26,7 @@ describe('generate-updater-manifest', () => {
       scriptPath,
       '--version', '1.9.4',
       '--tag', 'v1.9.4',
-      '--repository', 'isunky/MDView',
+      '--repository', 'DOTATONG/MarkdownView',
       '--msi', msi,
       '--signature', signature,
       '--output', output,
@@ -35,12 +35,12 @@ describe('generate-updater-manifest', () => {
     const manifest = JSON.parse(await readFile(output, 'utf8'))
     expect(manifest.version).toBe('1.9.4')
     expect(manifest.platforms['windows-x86_64'].signature).toBe('signed-update')
-    expect(manifest.platforms['windows-x86_64'].url).toContain('/v1.9.4/MDView_1.9.4_x64_en-US.msi')
+    expect(manifest.platforms['windows-x86_64'].url).toContain('/v1.9.4/MarkLite_1.9.4_x64_en-US.msi')
   })
 
   it('rejects a signature that does not match the MSI asset name', async () => {
     const directory = await createTemporaryDirectory()
-    const msi = join(directory, 'MDView.msi')
+    const msi = join(directory, 'MarkLite.msi')
     const signature = join(directory, 'other.msi.sig')
     await writeFile(msi, 'msi', 'utf8')
     await writeFile(signature, 'signed-update', 'utf8')
@@ -49,7 +49,7 @@ describe('generate-updater-manifest', () => {
       scriptPath,
       '--version', '1.9.4',
       '--tag', 'v1.9.4',
-      '--repository', 'isunky/MDView',
+      '--repository', 'DOTATONG/MarkdownView',
       '--msi', msi,
       '--signature', signature,
       '--output', join(directory, 'latest.json'),
@@ -58,7 +58,7 @@ describe('generate-updater-manifest', () => {
 })
 
 async function createTemporaryDirectory() {
-  const directory = await mkdtemp(join(tmpdir(), 'mdview-updater-'))
+  const directory = await mkdtemp(join(tmpdir(), 'marklite-updater-'))
   temporaryDirectories.push(directory)
   return directory
 }

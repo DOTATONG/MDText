@@ -8,7 +8,7 @@ const run = promisify(execFile)
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const sourceDirectory = resolve(projectRoot, 'dist-edge')
 const outputDirectory = resolve(projectRoot, 'dist')
-const output = resolve(outputDirectory, 'MDView-edge.zip')
+const output = resolve(outputDirectory, 'MarkLite-edge.zip')
 
 const [packageJson, extensionManifest] = await Promise.all([
   readJson(resolve(projectRoot, 'package.json')),
