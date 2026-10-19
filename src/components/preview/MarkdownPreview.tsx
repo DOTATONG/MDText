@@ -209,6 +209,14 @@ export const MarkdownPreview = memo(function MarkdownPreview({
           onOpenMarkdownLink?.(resource.path, resource.headingId)
           return
         }
+        if (resource?.kind === 'image') {
+          // README-style image links would otherwise navigate the WebView to the raw image,
+          // replacing the app with a native viewer that has no close affordance.
+          event.preventDefault()
+          const image = event.currentTarget.querySelector<HTMLImageElement>('img')
+          if (image && event.target !== image) openMediaPreview(image)
+          return
+        }
         if (isExternalWebUrl(href)) {
           event.preventDefault()
           void Promise.resolve(onOpenExternalLink(href)).catch((error) => console.error('Failed to open external link', error))

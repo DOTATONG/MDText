@@ -1,5 +1,5 @@
 import { StrictMode } from 'react'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { createEvent, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import mermaid from 'mermaid'
 import { extractMarkdownOutline } from '../../domain/markdownOutline'
@@ -572,6 +572,20 @@ describe('MarkdownPreview', () => {
     expect(screen.getByText('2 / 3')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Previous image or diagram' }))
     expect(screen.getByRole('img', { name: 'First preview' })).toBeInTheDocument()
+  })
+
+  it('keeps linked preview images inside the app dialog instead of navigating away', () => {
+    render(<MarkdownPreview content={'[![Shot](shot.png)](shot.png)'} sourcePath="C:/docs/README.md" />)
+    const image = screen.getByRole('img', { name: 'Shot' })
+    expect(image.closest('a')).toHaveAttribute('href', 'shot.png')
+
+    const click = createEvent.click(image, { bubbles: true, cancelable: true })
+    fireEvent(image, click)
+
+    expect(click.defaultPrevented).toBe(true)
+    expect(screen.getByRole('dialog', { name: 'Image preview' })).toBeInTheDocument()
+    fireEvent.keyDown(window, { key: 'Escape' })
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
   it('keeps galleries scoped to one document and excludes failed Mermaid diagrams', async () => {
