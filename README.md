@@ -79,13 +79,15 @@ MDText 是一款轻量、美观、免费无广告的 Markdown 阅读器。将 AI
 
 **Give AI-generated content a better place to be read.**
 
-MDText is a lightweight, thoughtfully designed Markdown reader, free and ad-free. Save AI-generated plans, notes, or technical explanations as Markdown files, then read them with clear typography, section navigation, diagrams, and formulas. It opens quickly, needs no account, and works just as well with your existing local documents.
+MDText is a lightweight, thoughtfully designed Markdown reader, free and ad-free. Save AI-generated plans, notes, or technical explanations as Markdown files, then read them with clear typography, section navigation, diagrams, and formulas. It opens
+quickly, needs no account, and works just as well with your existing local documents.
 
 Reading comes first. Editing and conversion are close at hand when you need to revise a passage or share a neatly formatted document.
 
 **Open a file in one step**
 
-Double-click a `.md` file, or right-click it and choose MDText under "Open with"; you can also drag a `.md` file into the window. The Windows portable build adds MDText to the Markdown "Open with" list from Settings without administrator rights, and a file opened while MDText is already running loads in the window you have.
+Double-click a `.md` file, or right-click it and choose MDText under "Open with"; you can also drag a `.md` file into the window. The Windows portable build adds MDText to the Markdown "Open with" list from Settings without administrator rights, and
+a file opened while MDText is already running loads in the window you have.
 
 **A polished reading experience**
 
@@ -119,12 +121,12 @@ Import Word as a Markdown draft, then edit and save it as a `.md` file. Export n
 
 从 [GitHub Releases](https://github.com/DOTATONG/MDText/releases/latest) 选择适合的版本。 / Choose a package from GitHub Releases.
 
-| 平台 / Platform | 推荐方式 / Recommended option |
-| --- | --- |
-| Windows | **MSI**：安装、文件关联与更新检查 / Installer, file associations, and update checks |
-| Windows 绿色版 / Portable | **ZIP**：解压后运行 / Extract and run |
-| macOS | **[本机源码编译 / Local build](#macos-build)**：推荐使用 AI 编程工具辅助 / AI-assisted build recommended |
-| Microsoft Edge | **Extension ZIP**：解压后加载 / Extract and load unpacked |
+| 平台 / Platform           | 推荐方式 / Recommended option                                                                            |
+|---------------------------|----------------------------------------------------------------------------------------------------------|
+| Windows                   | **MSI**：安装、文件关联与更新检查 / Installer, file associations, and update checks                      |
+| Windows 绿色版 / Portable | **ZIP**：解压后运行 / Extract and run                                                                    |
+| macOS                     | **[本机源码编译 / Local build](#macos-build)**：推荐使用 AI 编程工具辅助 / AI-assisted build recommended |
+| Microsoft Edge            | **Extension ZIP**：解压后加载 / Extract and load unpacked                                                |
 
 **Windows：**需要预先安装 [WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)，MDText 不附带或下载运行时。MSI 安装界面为英文，应用支持中英文。
 
@@ -146,9 +148,11 @@ The macOS Universal DMG supports Intel and Apple Silicon on macOS 10.15+. It use
 
 **Edge:** enable Developer mode at `edge://extensions`, choose **Load unpacked**, and select the extracted folder containing `manifest.json`.
 
-**Windows：**MSI 默认关联 `.md` 和 `.markdown`，安装时可取消。绿色版解压后不注册任何关联，可在 MDText 的“设置”里把 MDText 加入 Markdown 文件的“打开方式”列表；该操作只写入当前用户注册表，无需管理员权限，再次点击同一个按钮即可移除。静默安装时可通过以下参数禁用关联，请替换为实际 MSI 文件名。
+**Windows：**MSI 默认关联 `.md` 和 `.markdown`，安装时可取消。绿色版解压后不注册任何关联，可在 MDText 的“设置”里把 MDText 加入 Markdown 文件的“打开方式”列表；该操作只写入当前用户注册表，无需管理员权限，再次点击同一个按钮即可移除。静默安装时可通过以下参数禁用关联，请替换为实际
+MSI 文件名。
 
-**Windows:** Markdown associations are enabled by default and can be deselected. Extracting the portable ZIP registers nothing; use the File association section in MDText Settings to add MDText to the Markdown "Open with" list for the current user, which needs no administrator rights and can be undone from the same button. To disable associations during unattended installation, replace the example filename below with your MSI:
+**Windows:** Markdown associations are enabled by default and can be deselected. Extracting the portable ZIP registers nothing; use the File association section in MDText Settings to add MDText to the Markdown "Open with" list for the current user,
+which needs no administrator rights and can be undone from the same button. To disable associations during unattended installation, replace the example filename below with your MSI:
 
 ```powershell
 msiexec /i MDText_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
@@ -199,7 +203,8 @@ msiexec /i MDText_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
 <details>
 <summary>English instructions and ready-to-use prompts</summary>
 
-Download a release's **Source code (zip)** and extract it. Open the project folder in an AI coding tool with local terminal access, then send the appropriate prompt below. Build on the target platform: macOS on a Mac, Windows on Windows. Initial setup requires internet access; follow any dependency installation steps the tool presents.
+Download a release's **Source code (zip)** and extract it. Open the project folder in an AI coding tool with local terminal access, then send the appropriate prompt below. Build on the target platform: macOS on a Mac, Windows on Windows. Initial
+setup requires internet access; follow any dependency installation steps the tool presents.
 
 **macOS**
 
@@ -260,19 +265,19 @@ Find the DMG in `src-tauri/target/release/bundle/dmg/`, open it, and drag MDText
 <details>
 <summary>常用快捷键 / Keyboard shortcuts</summary>
 
-| 操作 / Action | Windows | macOS |
-| --- | --- | --- |
-| 新建 / New | `Ctrl+N` | `Command+N` |
-| 打开 / Open | `Ctrl+O` | `Command+O` |
-| 保存 / Save | `Ctrl+S` | `Command+S` |
-| 另存为 / Save As | `Ctrl+Shift+S` | `Command+Shift+S` |
-| 查找 / Find | `Ctrl+F` | `Command+F` |
-| 撤销 / Undo | `Ctrl+Z` | `Command+Z` |
-| 重做 / Redo | `Ctrl+Y` / `Ctrl+Shift+Z` | `Command+Shift+Z` |
-| 粗体 / Bold | `Ctrl+B` | `Command+B` |
-| 斜体 / Italic | `Ctrl+I` | `Command+I` |
-| 插入链接 / Insert link | `Ctrl+K` | `Command+K` |
-| 缩进 / 反向缩进 / Indent / Outdent | `Tab` / `Shift+Tab` | `Tab` / `Shift+Tab` |
+| 操作 / Action                      | Windows                   | macOS               |
+|------------------------------------|---------------------------|---------------------|
+| 新建 / New                         | `Ctrl+N`                  | `Command+N`         |
+| 打开 / Open                        | `Ctrl+O`                  | `Command+O`         |
+| 保存 / Save                        | `Ctrl+S`                  | `Command+S`         |
+| 另存为 / Save As                   | `Ctrl+Shift+S`            | `Command+Shift+S`   |
+| 查找 / Find                        | `Ctrl+F`                  | `Command+F`         |
+| 撤销 / Undo                        | `Ctrl+Z`                  | `Command+Z`         |
+| 重做 / Redo                        | `Ctrl+Y` / `Ctrl+Shift+Z` | `Command+Shift+Z`   |
+| 粗体 / Bold                        | `Ctrl+B`                  | `Command+B`         |
+| 斜体 / Italic                      | `Ctrl+I`                  | `Command+I`         |
+| 插入链接 / Insert link             | `Ctrl+K`                  | `Command+K`         |
+| 缩进 / 反向缩进 / Indent / Outdent | `Tab` / `Shift+Tab`       | `Tab` / `Shift+Tab` |
 
 </details>
 
@@ -306,12 +311,12 @@ npm ci
 npm run desktop:dev
 ```
 
-| 目标 / Target | 命令 / Command |
-| --- | --- |
-| Windows MSI | `npm run desktop:build -- --bundles msi` |
-| Windows MSI + Portable ZIP + SHA-256 | `npm run package:windows` |
-| macOS DMG | `npm run desktop:build -- --bundles dmg` |
-| Edge ZIP | `npm run edge:package` |
+| 目标 / Target                        | 命令 / Command                           |
+|--------------------------------------|------------------------------------------|
+| Windows MSI                          | `npm run desktop:build -- --bundles msi` |
+| Windows MSI + Portable ZIP + SHA-256 | `npm run package:windows`                |
+| macOS DMG                            | `npm run desktop:build -- --bundles dmg` |
+| Edge ZIP                             | `npm run edge:package`                   |
 
 验证命令 / Verification：`npm test` · `npm run lint` · `npm run build` · `npm run test:e2e`。
 
@@ -328,11 +333,11 @@ npm run desktop:dev
 
 Pushes and PRs run quality checks; manual CI runs also build desktop installers. A `v*` tag or the Release workflow publishes a GitHub Release.
 
-| 集成 / Integration | 配置 / Configuration |
-| --- | --- |
-| Windows SignPath | Secret: `SIGNPATH_API_TOKEN`；Variable: `SIGNPATH_ORGANIZATION_ID` |
-| Tauri updater | Secrets: `TAURI_SIGNING_PRIVATE_KEY`、`TAURI_SIGNING_PRIVATE_KEY_PASSWORD` |
-| Edge Add-ons | Secret: `EDGE_ADDONS_API_KEY`；Variables: `EDGE_ADDONS_CLIENT_ID`、`EDGE_ADDONS_PRODUCT_ID` |
+| 集成 / Integration | 配置 / Configuration                                                                        |
+|--------------------|---------------------------------------------------------------------------------------------|
+| Windows SignPath   | Secret: `SIGNPATH_API_TOKEN`；Variable: `SIGNPATH_ORGANIZATION_ID`                          |
+| Tauri updater      | Secrets: `TAURI_SIGNING_PRIVATE_KEY`、`TAURI_SIGNING_PRIVATE_KEY_PASSWORD`                  |
+| Edge Add-ons       | Secret: `EDGE_ADDONS_API_KEY`；Variables: `EDGE_ADDONS_CLIENT_ID`、`EDGE_ADDONS_PRODUCT_ID` |
 
 SignPath 签名仅用于 Release，需完成配置与审批；Edge 首次发布需在 Microsoft Partner Center 创建产品。macOS Developer ID 签名与公证尚未配置。
 
@@ -342,13 +347,12 @@ SignPath signing applies to releases after configuration and approval. Create th
 
 ## 项目信息 / Project
 
-| 项目 / Item | 内容 / Value |
-| --- | --- |
-| 当前版本 | 4.0.0 |
-| Version | 4.0.0 |
-| 作者 / Author | [DOTATONG](https://github.com/DOTATONG)（fork 维护者 / fork maintainer） |
+| 项目 / Item              | 内容 / Value                                                                       |
+|--------------------------|------------------------------------------------------------------------------------|
+| 版本 / Version           | 4.0.0                                                                              |
+| 作者 / Author            | [DOTATONG](https://github.com/DOTATONG)（fork 维护者 / fork maintainer）           |
 | 原作者 / Original author | [Sunky](https://www.sunky.net) / [isunky/MDView](https://github.com/isunky/MDView) |
-| 许可证 / License | [GPL-3.0](LICENSE) |
+| 许可证 / License         | [GPL-3.0](LICENSE)                                                                 |
 
 MDText 是 [MDView](https://github.com/isunky/MDView) 的非官方分支，保留原项目的 GPL-3.0 许可证与原作者署名。 / MDText is an unofficial fork of [MDView](https://github.com/isunky/MDView) and retains the original GPL-3.0 license and author attribution.
 

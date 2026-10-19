@@ -10,8 +10,7 @@ const versions = await Promise.all([
   readTextVersion('src/appInfo.ts', /version:\s*'([^']+)'/, 'src/appInfo.ts version'),
   readJsonVersion('edge/public/manifest.json', 'edge/public/manifest.json version'),
   readTextVersion('README.md', /<strong>Version \/ 版本：<\/strong>([0-9]+\.[0-9]+\.[0-9]+)/, 'README.md header version'),
-  readTextVersion('README.md', /\| 当前版本 \| ([0-9]+\.[0-9]+\.[0-9]+) \|/, 'README.md Chinese version row'),
-  readTextVersion('README.md', /\| (?:Current version|Version) \| ([0-9]+\.[0-9]+\.[0-9]+) \|/, 'README.md English version row'),
+  readTextVersion('README.md', /\| 版本 \/ Version[^|]+\| ([0-9]+\.[0-9]+\.[0-9]+)[^|]+\|/, 'README.md Project version row'),
 ])
 
 const mismatches = versions.filter(({ version }) => version !== expectedVersion)

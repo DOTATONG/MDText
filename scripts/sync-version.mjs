@@ -64,15 +64,9 @@ const files = [
     )
     nextContent = replaceRequired(
       nextContent,
-      /(\| 当前版本 \| )[0-9]+\.[0-9]+\.[0-9]+( \|)/,
+      /(\| 版本 \/ Version[^|]+\| )[0-9]+\.[0-9]+\.[0-9]+([^|]+\|)/,
       `$1${version}$2`,
-      'README Chinese version row',
-    )
-    nextContent = replaceRequired(
-      nextContent,
-      /(\| (?:Current version|Version) \| )[0-9]+\.[0-9]+\.[0-9]+( \|)/,
-      `$1${version}$2`,
-      'README English version row',
+      'README Project version row',
     )
     return nextContent
   }),
