@@ -6,13 +6,13 @@ import { useFileAssociation } from './useFileAssociation'
 const registered: FileAssociationStatus = {
   supported: true,
   registered: true,
-  executablePath: 'C:\\Tools\\MarkLite.exe',
+  executablePath: 'C:\\Tools\\MDText.exe',
 }
 
 const unregistered: FileAssociationStatus = {
   supported: true,
   registered: false,
-  executablePath: 'C:\\Tools\\MarkLite.exe',
+  executablePath: 'C:\\Tools\\MDText.exe',
 }
 
 describe('useFileAssociation', () => {

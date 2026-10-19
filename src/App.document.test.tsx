@@ -186,7 +186,7 @@ describe('App', () => {
     await openAppMenu(user)
     await user.click(screen.getByRole('menuitem', { name: 'About' }))
 
-    const dialog = screen.getByRole('dialog', { name: 'About MarkLite' })
+    const dialog = screen.getByRole('dialog', { name: 'About MDText' })
     expect(dialog).toBeInTheDocument()
     expect(screen.getByText(`Version ${appInfo.version}`)).toBeInTheDocument()
     expect(screen.getByText('DOTATONG')).toBeInTheDocument()
@@ -195,14 +195,14 @@ describe('App', () => {
       'https://github.com/isunky/MDView',
     )
     expect(screen.queryByText('Author DOTATONG')).not.toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'github.com/DOTATONG/MarkdownView' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'github.com/DOTATONG/MDText' })).toHaveAttribute(
       'href',
-      'https://github.com/DOTATONG/MarkdownView',
+      'https://github.com/DOTATONG/MDText',
     )
 
     await user.click(screen.getByRole('button', { name: 'Close about dialog' }))
 
-    expect(screen.queryByRole('dialog', { name: 'About MarkLite' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('dialog', { name: 'About MDText' })).not.toBeInTheDocument()
   })
 
   it('opens an App menu with about and language actions', async () => {

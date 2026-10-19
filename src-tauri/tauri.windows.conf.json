@@ -3,7 +3,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "MarkLite",
+        "title": "MDText",
         "width": 1120,
         "height": 760,
         "minWidth": 760,
@@ -40,7 +40,7 @@
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDE4RTkyMEI1RTNCRkZDODAKUldTQS9ML2p0U0RwR0VVT0swYVFBNytoa2FzZFc4M0dTL1N1dUJIbkt6ZE9EaXFIK1FVdmhwcE0K",
       "endpoints": [
-        "https://github.com/DOTATONG/MarkdownView/releases/latest/download/latest.json"
+        "https://github.com/DOTATONG/MDText/releases/latest/download/latest.json"
       ],
       "windows": {
         "installMode": "passive"

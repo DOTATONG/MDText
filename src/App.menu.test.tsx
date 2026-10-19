@@ -546,7 +546,7 @@ describe('App', () => {
 
     expect(setRegistered).toHaveBeenCalledWith(true)
     expect(await screen.findByText(
-      'MarkLite has been added to the "Open with" list for .md and .markdown files.',
+      'MDText has been added to the "Open with" list for .md and .markdown files.',
     )).toBeInTheDocument()
   })
 
@@ -615,7 +615,7 @@ async function openSettings(user: ReturnType<typeof userEvent.setup>) {
 }
 
 function associationStatus(registered: boolean) {
-  return { supported: true, registered, executablePath: 'C:\\Tools\\MarkLite.exe' }
+  return { supported: true, registered, executablePath: 'C:\\Tools\\MDText.exe' }
 }
 
 function file(path: string, content: string): OpenedMarkdownFile {

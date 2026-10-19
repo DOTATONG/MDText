@@ -111,7 +111,7 @@
             {{/unless}}
         </UI>
 
-        <UIRef Id="MarkLiteUI_InstallDir" />
+        <UIRef Id="MDTextUI_InstallDir" />
 
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Directory Id="DesktopFolder" Name="Desktop">

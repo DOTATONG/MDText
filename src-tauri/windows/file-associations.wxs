@@ -1,97 +1,97 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <?if $(sys.BUILDARCH)="x86"?>
-    <?define MarkLiteWin64 = "no"?>
+    <?define MDTextWin64 = "no"?>
   <?else?>
-    <?define MarkLiteWin64 = "yes"?>
+    <?define MDTextWin64 = "yes"?>
   <?endif?>
 
   <Fragment>
     <DirectoryRef Id="INSTALLDIR">
-      <Component Id="FileAssociationRegistry" Guid="317cbd41-c098-4694-9ad6-38a170fc7b04" Win64="$(var.MarkLiteWin64)">
+      <Component Id="FileAssociationRegistry" Guid="bf7cc866-bb4c-4d9c-b35d-63360fc9fbaa" Win64="$(var.MDTextWin64)">
         <RegistryValue
           Root="HKLM"
-          Key="Software\Classes\Applications\marklite.exe"
-          Name="MarkLiteFileAssociation"
+          Key="Software\Classes\Applications\mdtext.exe"
+          Name="MDTextFileAssociation"
           Type="integer"
           Value="1"
           KeyPath="yes" />
 
-        <RegistryValue Root="HKLM" Key="Software\Classes\.md" Type="string" Value="MarkLite.md" />
-        <RegistryValue Root="HKLM" Key="Software\Classes\.markdown" Type="string" Value="MarkLite.markdown" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.md" Type="string" Value="MDText.md" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.markdown" Type="string" Value="MDText.markdown" />
         <!-- Joins the right-click "Open with" list even when the user picks a different default. -->
-        <RegistryValue Root="HKLM" Key="Software\Classes\.md\OpenWithProgids" Name="MarkLite.md" Type="string" Value="" />
-        <RegistryValue Root="HKLM" Key="Software\Classes\.markdown\OpenWithProgids" Name="MarkLite.markdown" Type="string" Value="" />
-        <RegistryValue Root="HKLM" Key="Software\Classes\MarkLite.md" Type="string" Value="Markdown text document" />
-        <RegistryValue Root="HKLM" Key="Software\Classes\MarkLite.md" Name="FriendlyTypeName" Type="string" Value="Markdown text document" />
-        <RegistryValue Root="HKLM" Key="Software\Classes\MarkLite.md\DefaultIcon" Type="string" Value="&quot;[INSTALLDIR]marklite.exe&quot;,0" />
-        <RegistryValue Root="HKLM" Key="Software\Classes\MarkLite.md\shell\open" Type="string" Value="Open with MarkLite" />
-        <RegistryValue Root="HKLM" Key="Software\Classes\MarkLite.md\shell\open\command" Type="string" Value="&quot;[INSTALLDIR]marklite.exe&quot; &quot;%1&quot;" />
-        <RegistryValue Root="HKLM" Key="Software\Classes\MarkLite.markdown" Type="string" Value="Markdown text document" />
-        <RegistryValue Root="HKLM" Key="Software\Classes\MarkLite.markdown" Name="FriendlyTypeName" Type="string" Value="Markdown text document" />
-        <RegistryValue Root="HKLM" Key="Software\Classes\MarkLite.markdown\DefaultIcon" Type="string" Value="&quot;[INSTALLDIR]marklite.exe&quot;,0" />
-        <RegistryValue Root="HKLM" Key="Software\Classes\MarkLite.markdown\shell\open" Type="string" Value="Open with MarkLite" />
-        <RegistryValue Root="HKLM" Key="Software\Classes\MarkLite.markdown\shell\open\command" Type="string" Value="&quot;[INSTALLDIR]marklite.exe&quot; &quot;%1&quot;" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.md\OpenWithProgids" Name="MDText.md" Type="string" Value="" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.markdown\OpenWithProgids" Name="MDText.markdown" Type="string" Value="" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\MDText.md" Type="string" Value="Markdown text document" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\MDText.md" Name="FriendlyTypeName" Type="string" Value="Markdown text document" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\MDText.md\DefaultIcon" Type="string" Value="&quot;[INSTALLDIR]mdtext.exe&quot;,0" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\MDText.md\shell\open" Type="string" Value="Open with MDText" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\MDText.md\shell\open\command" Type="string" Value="&quot;[INSTALLDIR]mdtext.exe&quot; &quot;%1&quot;" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\MDText.markdown" Type="string" Value="Markdown text document" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\MDText.markdown" Name="FriendlyTypeName" Type="string" Value="Markdown text document" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\MDText.markdown\DefaultIcon" Type="string" Value="&quot;[INSTALLDIR]mdtext.exe&quot;,0" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\MDText.markdown\shell\open" Type="string" Value="Open with MDText" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\MDText.markdown\shell\open\command" Type="string" Value="&quot;[INSTALLDIR]mdtext.exe&quot; &quot;%1&quot;" />
 
         <RegistryValue
           Root="HKLM"
-          Key="Software\Classes\Applications\marklite.exe"
+          Key="Software\Classes\Applications\mdtext.exe"
           Name="FriendlyAppName"
           Type="string"
-          Value="MarkLite" />
+          Value="MDText" />
         <RegistryValue
           Root="HKLM"
-          Key="Software\Classes\Applications\marklite.exe"
+          Key="Software\Classes\Applications\mdtext.exe"
           Name="ApplicationIcon"
           Type="string"
-          Value="[INSTALLDIR]marklite.exe,0" />
+          Value="[INSTALLDIR]mdtext.exe,0" />
         <RegistryValue
           Root="HKLM"
-          Key="Software\Classes\Applications\marklite.exe\shell\open\command"
+          Key="Software\Classes\Applications\mdtext.exe\shell\open\command"
           Type="string"
-          Value="&quot;[INSTALLDIR]marklite.exe&quot; &quot;%1&quot;" />
+          Value="&quot;[INSTALLDIR]mdtext.exe&quot; &quot;%1&quot;" />
         <RegistryValue
           Root="HKLM"
-          Key="Software\Classes\Applications\marklite.exe\SupportedTypes"
+          Key="Software\Classes\Applications\mdtext.exe\SupportedTypes"
           Name=".md"
           Type="string"
           Value="" />
         <RegistryValue
           Root="HKLM"
-          Key="Software\Classes\Applications\marklite.exe\SupportedTypes"
+          Key="Software\Classes\Applications\mdtext.exe\SupportedTypes"
           Name=".markdown"
           Type="string"
           Value="" />
 
         <RegistryValue
           Root="HKLM"
-          Key="Software\MarkLite\Capabilities"
+          Key="Software\MDText\Capabilities"
           Name="ApplicationName"
           Type="string"
-          Value="MarkLite" />
+          Value="MDText" />
         <RegistryValue
           Root="HKLM"
-          Key="Software\MarkLite\Capabilities"
+          Key="Software\MDText\Capabilities"
           Name="ApplicationDescription"
           Type="string"
           Value="Lightweight Markdown viewer and source editor." />
         <RegistryValue
           Root="HKLM"
-          Key="Software\MarkLite\Capabilities\FileAssociations"
+          Key="Software\MDText\Capabilities\FileAssociations"
           Name=".md"
           Type="string"
-          Value="MarkLite.md" />
+          Value="MDText.md" />
         <RegistryValue
           Root="HKLM"
-          Key="Software\MarkLite\Capabilities\FileAssociations"
+          Key="Software\MDText\Capabilities\FileAssociations"
           Name=".markdown"
           Type="string"
-          Value="MarkLite.markdown" />
+          Value="MDText.markdown" />
         <RegistryValue
           Root="HKLM"
           Key="Software\RegisteredApplications"
-          Name="MarkLite"
+          Name="MDText"
           Type="string"
-          Value="Software\MarkLite\Capabilities" />
+          Value="Software\MDText\Capabilities" />
       </Component>
     </DirectoryRef>
   </Fragment>

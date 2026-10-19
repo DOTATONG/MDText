@@ -5,7 +5,7 @@ const versions = await Promise.all([
   readJsonVersion('package-lock.json', 'package-lock.json root version'),
   readPackageLockWorkspaceVersion(),
   readTextVersion('src-tauri/Cargo.toml', /\[package\][\s\S]*?\nversion\s*=\s*"([^"]+)"/, 'src-tauri/Cargo.toml package version'),
-  readTextVersion('src-tauri/Cargo.lock', /\[\[package\]\]\r?\nname = "marklite"\r?\nversion = "([^"]+)"/, 'src-tauri/Cargo.lock marklite version'),
+  readTextVersion('src-tauri/Cargo.lock', /\[\[package\]\]\r?\nname = "mdtext"\r?\nversion = "([^"]+)"/, 'src-tauri/Cargo.lock mdtext version'),
   readJsonVersion('src-tauri/tauri.conf.json', 'src-tauri/tauri.conf.json version'),
   readTextVersion('src/appInfo.ts', /version:\s*'([^']+)'/, 'src/appInfo.ts version'),
   readJsonVersion('edge/public/manifest.json', 'edge/public/manifest.json version'),
@@ -22,7 +22,7 @@ if (mismatches.length > 0) {
   process.exit(1)
 }
 
-console.log(`Version check passed: all MarkLite version files use ${expectedVersion}.`)
+console.log(`Version check passed: all MDText version files use ${expectedVersion}.`)
 
 async function readJsonVersion(path, label = `${path} version`) {
   const json = JSON.parse(await readFile(path, 'utf8'))

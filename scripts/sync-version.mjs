@@ -30,7 +30,7 @@ const files = [
   updateText('src-tauri/Cargo.lock', (content) =>
     replaceRequired(
       content,
-      /(\[\[package\]\]\r?\nname = "marklite"\r?\nversion = )"[^"]+"/,
+      /(\[\[package\]\]\r?\nname = "mdtext"\r?\nversion = )"[^"]+"/,
       `$1"${version}"`,
       'src-tauri/Cargo.lock package version',
     ),
@@ -80,7 +80,7 @@ const files = [
 
 await Promise.all(files)
 
-console.log(`Synchronized MarkLite version to ${version}`)
+console.log(`Synchronized MDText version to ${version}`)
 
 async function updateJson(path, mutate) {
   const content = await readFile(path, 'utf8')

@@ -10,9 +10,9 @@ Free code signing provided by SignPath.io, certificate by SignPath Foundation
 
 ## Scope / 适用范围
 
-This policy applies to official Windows MSI installers, the `MarkLite.exe` executable in official Portable ZIP releases, and macOS Universal DMG releases published from [DOTATONG/MarkdownView](https://github.com/DOTATONG/MarkdownView).
+This policy applies to official Windows MSI installers, the `MDText.exe` executable in official Portable ZIP releases, and macOS Universal DMG releases published from [DOTATONG/MDText](https://github.com/DOTATONG/MDText).
 
-本政策适用于从 [DOTATONG/MarkdownView](https://github.com/DOTATONG/MarkdownView) 发布的官方 Windows MSI 安装包、官方 Portable ZIP 中的 `MarkLite.exe`，以及 macOS Universal DMG。
+本政策适用于从 [DOTATONG/MDText](https://github.com/DOTATONG/MDText) 发布的官方 Windows MSI 安装包、官方 Portable ZIP 中的 `MDText.exe`，以及 macOS Universal DMG。
 
 ## Release authorization / 发布授权
 
@@ -25,8 +25,8 @@ This policy applies to official Windows MSI installers, the `MarkLite.exe` execu
 
 ## Privacy and security / 隐私与安全
 
-- MarkLite does not include telemetry and does not automatically upload local Markdown content.
-- MarkLite 不包含遥测功能，也不会自动上传本地 Markdown 内容。
+- MDText does not include telemetry and does not automatically upload local Markdown content.
+- MDText 不包含遥测功能，也不会自动上传本地 Markdown 内容。
 - Network access occurs when a user checks or downloads an update, opens an external link or remote document resource, or chooses to install the conversion components required for first-time Word import.
 - 应用仅在用户检查或下载更新、打开外部链接或远程文档资源，或主动安装首次导入 Word 所需的转换组件时访问网络。
 - Security concerns should be reported through the repository's GitHub security reporting channel when available, or by opening an issue without disclosing exploit details.
@@ -46,6 +46,6 @@ The current ad-hoc signature prevents the damaged-app error for downloads from G
 
 ## License / 许可证
 
-MarkLite is distributed under the [GNU General Public License v3.0](LICENSE).
+MDText is distributed under the [GNU General Public License v3.0](LICENSE).
 
-MarkLite 使用 [GNU General Public License v3.0](LICENSE) 发布。
+MDText 使用 [GNU General Public License v3.0](LICENSE) 发布。

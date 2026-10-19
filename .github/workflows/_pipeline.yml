@@ -77,8 +77,8 @@ jobs:
       - name: Upload Edge extension package
         uses: actions/upload-artifact@v6
         with:
-          name: marklite-edge-extension
-          path: dist/MarkLite-edge.zip
+          name: mdtext-edge-extension
+          path: dist/MDText-edge.zip
           if-no-files-found: error
           retention-days: ${{ inputs.retention_days }}
 
@@ -98,7 +98,7 @@ jobs:
       CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
       SIGNPATH_API_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN }}
       SIGNPATH_ORGANIZATION_ID: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
-      SIGNPATH_PROJECT_SLUG: marklite
+      SIGNPATH_PROJECT_SLUG: mdtext
       SIGNPATH_SIGNING_POLICY_SLUG: release-signing
       SIGNPATH_ARTIFACT_CONFIGURATION_SLUG: windows-release
       TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
@@ -177,26 +177,26 @@ jobs:
         if: ${{ inputs.sign_windows_artifacts }}
         shell: pwsh
         run: |
-          $stagingPath = Join-Path $env:RUNNER_TEMP 'marklite-signpath-input'
+          $stagingPath = Join-Path $env:RUNNER_TEMP 'mdtext-signpath-input'
           Remove-Item -LiteralPath $stagingPath -Recurse -Force -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Path $stagingPath | Out-Null
 
           $msiFiles = @(Get-ChildItem -Path src-tauri\target\release\bundle\msi -Filter '*_en-US.msi' -File)
-          $exe = Get-Item -LiteralPath src-tauri\target\release\MarkLite.exe
+          $exe = Get-Item -LiteralPath src-tauri\target\release\MDText.exe
           if ($msiFiles.Count -ne 1 -or -not $exe) {
-            throw 'Expected one en-US MSI plus MarkLite.exe.'
+            throw 'Expected one en-US MSI plus MDText.exe.'
           }
 
           $msiFiles | Copy-Item -Destination $stagingPath
-          Copy-Item -LiteralPath $exe.FullName -Destination (Join-Path $stagingPath 'MarkLite.exe')
+          Copy-Item -LiteralPath $exe.FullName -Destination (Join-Path $stagingPath 'MDText.exe')
 
       - name: Upload unsigned Windows artifacts
         if: ${{ inputs.sign_windows_artifacts }}
         id: upload-signpath-input
         uses: actions/upload-artifact@v6
         with:
-          name: marklite-signpath-input-${{ github.run_id }}
-          path: ${{ runner.temp }}/marklite-signpath-input
+          name: mdtext-signpath-input-${{ github.run_id }}
+          path: ${{ runner.temp }}/mdtext-signpath-input
           if-no-files-found: error
           retention-days: 1
 
@@ -206,13 +206,13 @@ jobs:
         with:
           api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
           organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
-          project-slug: marklite
+          project-slug: mdtext
           signing-policy-slug: release-signing
           artifact-configuration-slug: windows-release
           github-artifact-id: ${{ steps.upload-signpath-input.outputs.artifact-id }}
           wait-for-completion: true
           wait-for-completion-timeout-in-seconds: 4800
-          output-artifact-directory: ${{ runner.temp }}/marklite-signpath-output
+          output-artifact-directory: ${{ runner.temp }}/mdtext-signpath-output
           parameters: |
             version: ${{ toJSON(steps.package-version.outputs.value) }}
 
@@ -220,11 +220,11 @@ jobs:
         if: ${{ inputs.sign_windows_artifacts }}
         shell: pwsh
         run: |
-          $signedRoot = Join-Path $env:RUNNER_TEMP 'marklite-signpath-output'
+          $signedRoot = Join-Path $env:RUNNER_TEMP 'mdtext-signpath-output'
           $signedMsiFiles = @(Get-ChildItem -Path $signedRoot -Recurse -Filter '*.msi' -File)
-          $signedExe = Get-ChildItem -Path $signedRoot -Recurse -Filter 'MarkLite.exe' -File | Select-Object -First 1
+          $signedExe = Get-ChildItem -Path $signedRoot -Recurse -Filter 'MDText.exe' -File | Select-Object -First 1
           if ($signedMsiFiles.Count -ne 1 -or -not $signedExe) {
-            throw 'SignPath did not return the en-US MSI and signed MarkLite.exe.'
+            throw 'SignPath did not return the en-US MSI and signed MDText.exe.'
           }
 
           foreach ($artifact in @($signedMsiFiles) + @($signedExe)) {
@@ -238,7 +238,7 @@ jobs:
           $signedMsiFiles | ForEach-Object {
             Copy-Item -LiteralPath $_.FullName -Destination (Join-Path $msiOutput $_.Name) -Force
           }
-          Copy-Item -LiteralPath $signedExe.FullName -Destination 'src-tauri\target\release\MarkLite.exe' -Force
+          Copy-Item -LiteralPath $signedExe.FullName -Destination 'src-tauri\target\release\MDText.exe' -Force
 
       - name: Create updater signature
         if: ${{ inputs.sign_updater_artifacts }}
@@ -277,7 +277,7 @@ jobs:
       - name: Upload MSI artifact
         uses: actions/upload-artifact@v6
         with:
-          name: marklite-windows-msi
+          name: mdtext-windows-msi
           path: src-tauri/target/release/bundle/msi/*.msi
           if-no-files-found: error
           retention-days: ${{ inputs.retention_days }}
@@ -286,7 +286,7 @@ jobs:
         if: ${{ inputs.sign_updater_artifacts }}
         uses: actions/upload-artifact@v6
         with:
-          name: marklite-windows-updater-signature
+          name: mdtext-windows-updater-signature
           path: src-tauri/target/release/bundle/msi/*.msi.sig
           if-no-files-found: error
           retention-days: ${{ inputs.retention_days }}
@@ -294,7 +294,7 @@ jobs:
       - name: Upload portable ZIP artifact
         uses: actions/upload-artifact@v6
         with:
-          name: marklite-windows-portable
+          name: mdtext-windows-portable
           path: src-tauri/target/release/bundle/portable/*.zip
           if-no-files-found: error
           retention-days: ${{ inputs.retention_days }}
@@ -302,7 +302,7 @@ jobs:
       - name: Upload Windows checksums
         uses: actions/upload-artifact@v6
         with:
-          name: marklite-windows-checksums
+          name: mdtext-windows-checksums
           path: src-tauri/target/release/bundle/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: ${{ inputs.retention_days }}
@@ -381,14 +381,14 @@ jobs:
           printf '%s\n' "$codesign_details"
           grep -q 'Signature=adhoc' <<< "$codesign_details"
 
-          architectures="$(lipo -archs "$mounted_app_path/Contents/MacOS/marklite")"
+          architectures="$(lipo -archs "$mounted_app_path/Contents/MacOS/mdtext")"
           printf 'Universal architectures: %s\n' "$architectures"
           [[ "$architectures" == *"arm64"* && "$architectures" == *"x86_64"* ]]
 
       - name: Upload DMG artifact
         uses: actions/upload-artifact@v6
         with:
-          name: marklite-macos-universal-dmg
+          name: mdtext-macos-universal-dmg
           path: src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg
           if-no-files-found: error
           retention-days: ${{ inputs.retention_days }}

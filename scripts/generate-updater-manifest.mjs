@@ -26,7 +26,7 @@ if (!signature) {
 const msiName = basename(options.msi)
 const manifest = {
   version: options.version,
-  notes: `MarkLite ${options.version}. See the GitHub release for details.`,
+  notes: `MDText ${options.version}. See the GitHub release for details.`,
   pub_date: new Date().toISOString(),
   platforms: {
     'windows-x86_64': {

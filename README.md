@@ -1,21 +1,21 @@
 <div align="center">
-  <img src="src/assets/app-icon.png" alt="MarkLite logo" width="96" height="96" />
-  <h1>MarkLite</h1>
+  <img src="src/assets/app-icon.png" alt="MDText logo" width="96" height="96" />
+  <h1>MDText</h1>
   <p><strong>面向 AI 场景的轻量 Markdown 阅读器。</strong><br />A lightweight Markdown reader for AI workflows.</p>
   <p>美观易读 · 打开轻快 · 免费无广告<br />Beautifully readable · Quick to open · Free and ad-free</p>
   <p>
-    <a href="https://github.com/DOTATONG/MarkdownView/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/DOTATONG/MarkdownView?style=flat-square&color=0f8f83" /></a>
-    <a href="LICENSE"><img alt="GPL-3.0 license" src="https://img.shields.io/github/license/DOTATONG/MarkdownView?style=flat-square" /></a>
+    <a href="https://github.com/DOTATONG/MDText/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/DOTATONG/MDText?style=flat-square&color=0f8f83" /></a>
+    <a href="LICENSE"><img alt="GPL-3.0 license" src="https://img.shields.io/github/license/DOTATONG/MDText?style=flat-square" /></a>
     <img alt="Windows, macOS, and Edge" src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Edge-334155?style=flat-square" />
   </p>
   <p>
-    <a href="https://github.com/DOTATONG/MarkdownView/releases/latest"><strong>下载 / Download</strong></a>
+    <a href="https://github.com/DOTATONG/MDText/releases/latest"><strong>下载 / Download</strong></a>
     · <a href="#中文">中文</a>
     · <a href="#english">English</a>
     · <a href="#ai-build">AI 辅助编译 / Build with AI</a>
   </p>
   <p><strong>Version / 版本：</strong>3.6.0 · Unofficial fork of <a href="https://github.com/isunky/MDView">isunky/MDView</a></p>
-  <p><sub>MarkLite 是 MDView 的非官方分支，原作者为 Sunky。/ MarkLite is an unofficial fork of MDView by Sunky.</sub></p>
+  <p><sub>MDText 是 MDView 的非官方分支，原作者为 Sunky。/ MDText is an unofficial fork of MDView by Sunky.</sub></p>
 </div>
 
 ## 界面预览 / Preview
@@ -23,11 +23,11 @@
 <table>
   <tr>
     <td width="50%" align="center">
-      <a href="docs/assets/screenshots/main2.png"><img src="docs/assets/screenshots/main2.png" alt="MarkLite 阅读工作区与目录导航 / Reading workspace and outline" width="100%" /></a>
+      <a href="docs/assets/screenshots/main2.png"><img src="docs/assets/screenshots/main2.png" alt="MDText 阅读工作区与目录导航 / Reading workspace and outline" width="100%" /></a>
       <br /><sub>阅读工作区 / Reading workspace</sub>
     </td>
     <td width="50%" align="center">
-      <a href="docs/assets/screenshots/main.png"><img src="docs/assets/screenshots/main.png" alt="MarkLite 欢迎页与最近文件 / Welcome screen and recent files" width="100%" /></a>
+      <a href="docs/assets/screenshots/main.png"><img src="docs/assets/screenshots/main.png" alt="MDText 欢迎页与最近文件 / Welcome screen and recent files" width="100%" /></a>
       <br /><sub>欢迎页 / Welcome screen</sub>
     </td>
   </tr>
@@ -39,7 +39,7 @@
 
 **让 AI 生成的内容，也有舒适的阅读体验。**
 
-MarkLite 是一款轻量、美观、免费无广告的 Markdown 阅读器。将 AI 生成的方案、笔记或技术说明保存为 Markdown 文件，即可在清晰的排版中阅读，用目录浏览长文，查看其中的图表与公式。打开轻快，无需注册，也适合你已有的本地文档。
+MDText 是一款轻量、美观、免费无广告的 Markdown 阅读器。将 AI 生成的方案、笔记或技术说明保存为 Markdown 文件，即可在清晰的排版中阅读，用目录浏览长文，查看其中的图表与公式。打开轻快，无需注册，也适合你已有的本地文档。
 
 阅读是核心，编辑与转换随手可用：需要时修改几处内容，或导出一份排版整洁的文档，与他人分享。
 
@@ -47,7 +47,7 @@ MarkLite 是一款轻量、美观、免费无广告的 Markdown 阅读器。将 
 
 **打开文件，随手即来**
 
-双击 `.md` 文件，或在右键“打开方式”里选择 MarkLite，都能直接开始阅读；也可以把 `.md` 文件拖进窗口打开。Windows 绿色版无需管理员权限，在“设置”里即可把 MarkLite 加入 Markdown 文件的“打开方式”列表。已经打开 MarkLite 时再打开文件，会在现有窗口中加载。
+双击 `.md` 文件，或在右键“打开方式”里选择 MDText，都能直接开始阅读；也可以把 `.md` 文件拖进窗口打开。Windows 绿色版无需管理员权限，在“设置”里即可把 MDText 加入 Markdown 文件的“打开方式”列表。已经打开 MDText 时再打开文件，会在现有窗口中加载。
 
 **舒适阅读，自由排版**
 
@@ -81,13 +81,13 @@ MarkLite 是一款轻量、美观、免费无广告的 Markdown 阅读器。将 
 
 **Give AI-generated content a better place to be read.**
 
-MarkLite is a lightweight, thoughtfully designed Markdown reader, free and ad-free. Save AI-generated plans, notes, or technical explanations as Markdown files, then read them with clear typography, section navigation, diagrams, and formulas. It opens quickly, needs no account, and works just as well with your existing local documents.
+MDText is a lightweight, thoughtfully designed Markdown reader, free and ad-free. Save AI-generated plans, notes, or technical explanations as Markdown files, then read them with clear typography, section navigation, diagrams, and formulas. It opens quickly, needs no account, and works just as well with your existing local documents.
 
 Reading comes first. Editing and conversion are close at hand when you need to revise a passage or share a neatly formatted document.
 
 **Open a file in one step**
 
-Double-click a `.md` file, or right-click it and choose MarkLite under "Open with"; you can also drag a `.md` file into the window. The Windows portable build adds MarkLite to the Markdown "Open with" list from Settings without administrator rights, and a file opened while MarkLite is already running loads in the window you have.
+Double-click a `.md` file, or right-click it and choose MDText under "Open with"; you can also drag a `.md` file into the window. The Windows portable build adds MDText to the Markdown "Open with" list from Settings without administrator rights, and a file opened while MDText is already running loads in the window you have.
 
 **A polished reading experience**
 
@@ -119,7 +119,7 @@ Import Word as a Markdown draft, then edit and save it as a `.md` file. Export n
 
 ## 下载与安装 / Installation
 
-从 [GitHub Releases](https://github.com/DOTATONG/MarkdownView/releases/latest) 选择适合的版本。 / Choose a package from GitHub Releases.
+从 [GitHub Releases](https://github.com/DOTATONG/MDText/releases/latest) 选择适合的版本。 / Choose a package from GitHub Releases.
 
 | 平台 / Platform | 推荐方式 / Recommended option |
 | --- | --- |
@@ -128,14 +128,14 @@ Import Word as a Markdown draft, then edit and save it as a `.md` file. Export n
 | macOS | **[本机源码编译 / Local build](#macos-build)**：推荐使用 AI 编程工具辅助 / AI-assisted build recommended |
 | Microsoft Edge | **Extension ZIP**：解压后加载 / Extract and load unpacked |
 
-**Windows：**需要预先安装 [WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)，MarkLite 不附带或下载运行时。MSI 安装界面为英文，应用支持中英文。
+**Windows：**需要预先安装 [WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)，MDText 不附带或下载运行时。MSI 安装界面为英文，应用支持中英文。
 
 **macOS：**因发布包尚未完成 Apple 签名与公证，建议在自己的 Mac 上[通过 AI 辅助编译](#ai-build)。本地构建仍可能出现系统安全提示。
 
 <details>
 <summary>English installation notes</summary>
 
-Windows requires WebView2 Runtime to be installed separately; MarkLite does not bundle or download it. The MSI uses an English installer; the app supports Chinese and English.
+Windows requires WebView2 Runtime to be installed separately; MDText does not bundle or download it. The MSI uses an English installer; the app supports Chinese and English.
 
 The macOS Universal DMG supports Intel and Apple Silicon on macOS 10.15+. It uses ad-hoc signing without Developer ID signing or Apple notarization and may be blocked by macOS. We recommend building from source on your own Mac.
 
@@ -148,12 +148,12 @@ The macOS Universal DMG supports Intel and Apple Silicon on macOS 10.15+. It use
 
 **Edge:** enable Developer mode at `edge://extensions`, choose **Load unpacked**, and select the extracted folder containing `manifest.json`.
 
-**Windows：**MSI 默认关联 `.md` 和 `.markdown`，安装时可取消。绿色版解压后不注册任何关联，可在 MarkLite 的“设置”里把 MarkLite 加入 Markdown 文件的“打开方式”列表；该操作只写入当前用户注册表，无需管理员权限，再次点击同一个按钮即可移除。静默安装时可通过以下参数禁用关联，请替换为实际 MSI 文件名。
+**Windows：**MSI 默认关联 `.md` 和 `.markdown`，安装时可取消。绿色版解压后不注册任何关联，可在 MDText 的“设置”里把 MDText 加入 Markdown 文件的“打开方式”列表；该操作只写入当前用户注册表，无需管理员权限，再次点击同一个按钮即可移除。静默安装时可通过以下参数禁用关联，请替换为实际 MSI 文件名。
 
-**Windows:** Markdown associations are enabled by default and can be deselected. Extracting the portable ZIP registers nothing; use the File association section in MarkLite Settings to add MarkLite to the Markdown "Open with" list for the current user, which needs no administrator rights and can be undone from the same button. To disable associations during unattended installation, replace the example filename below with your MSI:
+**Windows:** Markdown associations are enabled by default and can be deselected. Extracting the portable ZIP registers nothing; use the File association section in MDText Settings to add MDText to the Markdown "Open with" list for the current user, which needs no administrator rights and can be undone from the same button. To disable associations during unattended installation, replace the example filename below with your MSI:
 
 ```powershell
-msiexec /i MarkLite_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
+msiexec /i MDText_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
 ```
 
 签名状态以各版本发布说明为准；详见[代码签名政策](CODE_SIGNING_POLICY.md)。 / See each release's signing status and the [code signing policy](CODE_SIGNING_POLICY.md).
@@ -167,7 +167,7 @@ msiexec /i MarkLite_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
 
 无需先熟悉编译命令，让能操作本地终端的 AI 编程工具协助完成：
 
-1. 从 [Releases](https://github.com/DOTATONG/MarkdownView/releases/latest) 下载 **Source code (zip)** 并解压。
+1. 从 [Releases](https://github.com/DOTATONG/MDText/releases/latest) 下载 **Source code (zip)** 并解压。
 2. 用 AI 编程工具打开解压后的项目文件夹。Mac 版本需在 Mac 上编译，Windows 版本需在 Windows 上编译。
 3. 发送下方对应的提示词，按提示完成必要的环境安装，等待 AI 给出安装包位置。
 
@@ -176,7 +176,7 @@ msiexec /i MarkLite_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
 **Mac 提示词**
 
 ```text
-请帮我将当前文件夹中的 MarkLite 源码编译为这台 Mac 可安装的版本。
+请帮我将当前文件夹中的 MDText 源码编译为这台 Mac 可安装的版本。
 
 先阅读项目构建说明，检查本机环境，说明缺失的依赖并协助安装。
 使用项目现有构建配置生成适合这台 Mac 的 DMG 安装包。
@@ -188,7 +188,7 @@ msiexec /i MarkLite_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
 **Windows 提示词**
 
 ```text
-请帮我将当前文件夹中的 MarkLite 源码编译为 Windows 安装版和绿色版。
+请帮我将当前文件夹中的 MDText 源码编译为 Windows 安装版和绿色版。
 
 先阅读项目构建说明，检查本机环境，说明缺失的依赖并协助安装。
 优先使用项目现有的一键打包入口，生成 MSI、Portable ZIP 和校验文件。
@@ -206,7 +206,7 @@ Download a release's **Source code (zip)** and extract it. Open the project fold
 **macOS**
 
 ```text
-Build the MarkLite source in this folder into an installable app for this Mac.
+Build the MDText source in this folder into an installable app for this Mac.
 
 Read the project's build instructions, check the environment, and help install missing prerequisites.
 Use the existing build configuration to create a DMG for this Mac's architecture.
@@ -219,7 +219,7 @@ If the build cannot finish, explain the specific blocker.
 **Windows**
 
 ```text
-Build the MarkLite source in this folder into Windows installer and portable packages.
+Build the MDText source in this folder into Windows installer and portable packages.
 
 Read the project's build instructions, check the environment, and help install missing prerequisites.
 Use the existing one-step packaging entry point to create an MSI, Portable ZIP, and checksums.
@@ -251,9 +251,9 @@ npm run desktop:build -- --bundles dmg
 
 The default build targets your Mac's architecture. See the Tauri macOS signing guide above for signing details.
 
-默认产物位于 `src-tauri/target/release/bundle/dmg/`，打开 DMG 后将 MarkLite 拖入“应用程序”。本地构建使用 ad-hoc 签名，不等于 Apple 公证，也不保证消除所有安全提示。
+默认产物位于 `src-tauri/target/release/bundle/dmg/`，打开 DMG 后将 MDText 拖入“应用程序”。本地构建使用 ad-hoc 签名，不等于 Apple 公证，也不保证消除所有安全提示。
 
-Find the DMG in `src-tauri/target/release/bundle/dmg/`, open it, and drag MarkLite into Applications. Local builds use ad-hoc signing, are not Apple-notarized, and may still show security prompts.
+Find the DMG in `src-tauri/target/release/bundle/dmg/`, open it, and drag MDText into Applications. Local builds use ad-hoc signing, are not Apple-notarized, and may still show security prompts.
 
 </details>
 
@@ -352,6 +352,6 @@ SignPath signing applies to releases after configuration and approval. Create th
 | 原作者 / Original author | [Sunky](https://www.sunky.net) / [isunky/MDView](https://github.com/isunky/MDView) |
 | 许可证 / License | [GPL-3.0](LICENSE) |
 
-MarkLite 是 [MDView](https://github.com/isunky/MDView) 的非官方分支，保留原项目的 GPL-3.0 许可证与原作者署名。 / MarkLite is an unofficial fork of [MDView](https://github.com/isunky/MDView) and retains the original GPL-3.0 license and author attribution.
+MDText 是 [MDView](https://github.com/isunky/MDView) 的非官方分支，保留原项目的 GPL-3.0 许可证与原作者署名。 / MDText is an unofficial fork of [MDView](https://github.com/isunky/MDView) and retains the original GPL-3.0 license and author attribution.
 
 第三方依赖保留原许可证。 / Third-party dependencies retain their original licenses.

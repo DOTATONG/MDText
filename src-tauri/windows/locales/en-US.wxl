@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="en-US" Codepage="1252" xmlns="http://schemas.microsoft.com/wix/2006/localization">
-  <String Id="LaunchApp">Launch MarkLite</String>
-  <String Id="DowngradeErrorMessage">A newer version of MarkLite is already installed.</String>
-  <String Id="PathEnvVarFeature">Add MarkLite to the system PATH.</String>
-  <String Id="InstallAppFeature">Install MarkLite.</String>
+  <String Id="LaunchApp">Launch MDText</String>
+  <String Id="DowngradeErrorMessage">A newer version of MDText is already installed.</String>
+  <String Id="PathEnvVarFeature">Add MDText to the system PATH.</String>
+  <String Id="InstallAppFeature">Install MDText.</String>
   <String Id="SetupTitle">[ProductName] Setup</String>
-  <String Id="FileAssociationTitle">Open Markdown files with MarkLite</String>
-  <String Id="FileAssociationDescription">Choose whether MarkLite should be your Markdown app.</String>
-  <String Id="FileAssociationCheckbox">Open .md and .markdown files with MarkLite</String>
+  <String Id="FileAssociationTitle">Open Markdown files with MDText</String>
+  <String Id="FileAssociationDescription">Choose whether MDText should be your Markdown app.</String>
+  <String Id="FileAssociationCheckbox">Open .md and .markdown files with MDText</String>
   <String Id="FileAssociationHelp">Recommended. You can change the default app later in Windows Settings.</String>
   <String Id="FileAssociationFeatureTitle">Markdown file associations</String>
-  <String Id="FileAssociationFeatureDescription">Associate .md and .markdown files with MarkLite</String>
+  <String Id="FileAssociationFeatureDescription">Associate .md and .markdown files with MDText</String>
 </WixLocalization>

@@ -1,11 +1,11 @@
 {
   "extensionName": {
-    "message": "MarkLite"
+    "message": "MDText"
   },
   "extensionDescription": {
     "message": "简洁专注的 Markdown 阅读与编辑工具。"
   },
   "actionTitle": {
-    "message": "使用 MarkLite 打开"
+    "message": "使用 MDText 打开"
   }
 }

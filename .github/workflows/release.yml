@@ -198,7 +198,7 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
-          echo "Prepared MarkLite $version from $sha"
+          echo "Prepared MDText $version from $sha"
 
   pipeline:
     name: Verify and build release artifacts
@@ -265,7 +265,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.prepare.outputs.tag }}
-          name: MarkLite ${{ needs.prepare.outputs.version }}
+          name: MDText ${{ needs.prepare.outputs.version }}
           target_commitish: ${{ needs.prepare.outputs.sha }}
           files: |
             release-assets/*

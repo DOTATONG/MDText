@@ -361,7 +361,7 @@ const highlightStyles = `
 `
 
 export function buildExportHtml({ title, lang, contentHtml, mathStyles = '' }: BuildExportHtmlOptions): string {
-  const safeTitle = escapeHtml(title || 'MarkLite Export')
+  const safeTitle = escapeHtml(title || 'MDText Export')
 
   return [
     '<!doctype html>',

@@ -112,7 +112,7 @@ try {
     $whiteBrush = [System.Drawing.SolidBrush]::new([System.Drawing.Color]::White)
     $softBrush = [System.Drawing.SolidBrush]::new([System.Drawing.Color]::FromArgb(220, 255, 255, 255))
     try {
-      $graphics.DrawString("MarkLite", $nameFont, $whiteBrush, 27, 172)
+      $graphics.DrawString("MDText", $nameFont, $whiteBrush, 27, 172)
       $graphics.DrawString("Markdown, made clear.", $taglineFont, $softBrush, 28, 205)
       $graphics.DrawString("Read  |  Edit  |  Export", $taglineFont, $softBrush, 28, 224)
     } finally {

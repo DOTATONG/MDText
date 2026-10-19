@@ -81,7 +81,7 @@ type TextStyle = {
   link?: boolean
 }
 
-const orderedListReference = 'marklite-numbered-list'
+const orderedListReference = 'mdtext-numbered-list'
 const maxListLevel = 5
 const bodyFont = {
   ascii: 'SimSun',
@@ -126,12 +126,12 @@ export async function buildExportDocx({
     nextOrderedListInstance: 1,
   }
   const children = await convertBlocks(tree.children, context)
-  const documentTitle = title || 'MarkLite Export'
+  const documentTitle = title || 'MDText Export'
   const headerTitle = createExportDisplayTitle(documentTitle)
   const document = new Document({
     title: documentTitle,
-    creator: 'MarkLite',
-    description: 'Exported from MarkLite',
+    creator: 'MDText',
+    description: 'Exported from MDText',
     styles: {
       default: {
         document: {

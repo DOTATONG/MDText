@@ -3,14 +3,14 @@
     <parameter name="version" required="true" />
   </parameters>
   <zip-file>
-    <msi-file path="MarkLite_${version}_x64_en-US.msi" subject="MarkLite" author="marklite">
-      <pe-file path="marklite.exe" product-name="MarkLite" product-version="${version}" file-version="${version}" company-name="marklite">
-        <authenticode-sign description="MarkLite" description-url="https://github.com/DOTATONG/MarkdownView" />
+    <msi-file path="MDText_${version}_x64_en-US.msi" subject="MDText" author="mdtext">
+      <pe-file path="mdtext.exe" product-name="MDText" product-version="${version}" file-version="${version}" company-name="mdtext">
+        <authenticode-sign description="MDText" description-url="https://github.com/DOTATONG/MDText" />
       </pe-file>
-      <authenticode-sign description="MarkLite" description-url="https://github.com/DOTATONG/MarkdownView" />
+      <authenticode-sign description="MDText" description-url="https://github.com/DOTATONG/MDText" />
     </msi-file>
-    <pe-file path="MarkLite.exe" product-name="MarkLite" product-version="${version}" file-version="${version}" company-name="marklite">
-      <authenticode-sign description="MarkLite" description-url="https://github.com/DOTATONG/MarkdownView" />
+    <pe-file path="MDText.exe" product-name="MDText" product-version="${version}" file-version="${version}" company-name="mdtext">
+      <authenticode-sign description="MDText" description-url="https://github.com/DOTATONG/MDText" />
     </pe-file>
   </zip-file>
 </artifact-configuration>

@@ -1,7 +1,7 @@
 # Fork 发布指南 / Fork release guide
 
 本仓库是 [isunky/MDView](https://github.com/isunky/MDView) 的 fork，发布仓库为
-[DOTATONG/MarkdownView](https://github.com/DOTATONG/MarkdownView)。
+[DOTATONG/MDText](https://github.com/DOTATONG/MDText)。
 
 ## 版本策略
 
@@ -41,13 +41,13 @@ Fork 使用独立的 `4.x.y` 版本线：
 `src-tauri/tauri.windows.conf.json` 中的更新端点已指向本 fork：
 
 ```text
-https://github.com/DOTATONG/MarkdownView/releases/latest/download/latest.json
+https://github.com/DOTATONG/MDText/releases/latest/download/latest.json
 ```
 
 本仓库已生成独立的 Tauri 更新签名密钥，公钥已配置在
 `src-tauri/tauri.windows.conf.json` 的 `plugins.updater.pubkey`。私钥保存在仓库之外
-（本机为 `%USERPROFILE%\.tauri\marklite-fork.key`），密码保存在同目录的
-`marklite-fork.key.password.txt`。
+（本机为 `%USERPROFILE%\.tauri\mdtext-fork.key`），密码保存在同目录的
+`mdtext-fork.key.password.txt`。
 
 在 GitHub 仓库添加以下 Secrets 即可启用自动更新：
 
@@ -60,7 +60,7 @@ Secret，工作流会跳过更新清单，发布仍然成功，但应用内自�
 切勿提交私钥或密码文件。若需要重新生成密钥：
 
 ```bash
-npm run tauri -- signer generate -w ~/.tauri/marklite-fork.key
+npm run tauri -- signer generate -w ~/.tauri/mdtext-fork.key
 ```
 
 重新生成后必须同步更新 `plugins.updater.pubkey`，并在 GitHub Secrets 中更新私钥和密码。

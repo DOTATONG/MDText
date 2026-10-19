@@ -10,7 +10,7 @@ export async function printHtmlInBrowser(html: string, title: string): Promise<v
 
   const exportDocument = new DOMParser().parseFromString(html, 'text/html')
   const printLayer = document.createElement('div')
-  printLayer.className = 'marklite-print-root'
+  printLayer.className = 'mdtext-print-root'
   printLayer.setAttribute('aria-hidden', 'true')
   printLayer.innerHTML = exportDocument.body.innerHTML
   Object.assign(printLayer.style, {
@@ -23,7 +23,7 @@ export async function printHtmlInBrowser(html: string, title: string): Promise<v
   })
 
   const printStyles = document.createElement('style')
-  printStyles.className = 'marklite-print-styles'
+  printStyles.className = 'mdtext-print-styles'
   printStyles.media = 'print'
   printStyles.textContent = [
     ...Array.from(exportDocument.querySelectorAll('style'), (style) => style.textContent ?? ''),
@@ -67,7 +67,7 @@ export async function printHtmlInBrowser(html: string, title: string): Promise<v
 }
 
 function createPrintOverrideStyles(title: string): string {
-  const safeTitle = escapeCssString(title || 'MarkLite')
+  const safeTitle = escapeCssString(title || 'MDText')
 
   return `
 @page {
@@ -99,11 +99,11 @@ function createPrintOverrideStyles(title: string): string {
     background: #fff !important;
   }
 
-  body > *:not(.marklite-print-root) {
+  body > *:not(.mdtext-print-root) {
     display: none !important;
   }
 
-  body > .marklite-print-root {
+  body > .mdtext-print-root {
     display: block !important;
     position: static !important;
     left: auto !important;
@@ -113,7 +113,7 @@ function createPrintOverrideStyles(title: string): string {
     pointer-events: auto !important;
   }
 
-  .marklite-print-root .markdown-preview {
+  .mdtext-print-root .markdown-preview {
     width: auto;
     margin: 0;
     padding: 0;
@@ -122,26 +122,26 @@ function createPrintOverrideStyles(title: string): string {
     box-shadow: none;
   }
 
-  .marklite-print-root h1,
-  .marklite-print-root h2,
-  .marklite-print-root h3,
-  .marklite-print-root h4,
-  .marklite-print-root h5,
-  .marklite-print-root h6 {
+  .mdtext-print-root h1,
+  .mdtext-print-root h2,
+  .mdtext-print-root h3,
+  .mdtext-print-root h4,
+  .mdtext-print-root h5,
+  .mdtext-print-root h6 {
     break-after: avoid-page;
   }
 
-  .marklite-print-root p,
-  .marklite-print-root li,
-  .marklite-print-root blockquote {
+  .mdtext-print-root p,
+  .mdtext-print-root li,
+  .mdtext-print-root blockquote {
     orphans: 3;
     widows: 3;
   }
 
-  .marklite-print-root pre,
-  .marklite-print-root blockquote,
-  .marklite-print-root figure,
-  .marklite-print-root img {
+  .mdtext-print-root pre,
+  .mdtext-print-root blockquote,
+  .mdtext-print-root figure,
+  .mdtext-print-root img {
     break-inside: avoid-page;
   }
 }
