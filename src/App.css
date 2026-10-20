@@ -1173,7 +1173,7 @@
 
 .outline-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 2px;
   padding-left: var(--outline-indent, 0px);
 }
@@ -1183,6 +1183,8 @@
   flex: none;
   width: 20px;
   height: 24px;
+  /* Align the chevron with the first text line of a wrapped item. */
+  margin-top: 5px;
 }
 
 .outline-branch-toggle {
@@ -1225,10 +1227,10 @@
   border-radius: 7px;
   color: var(--control-text);
   background: transparent;
-  font: 600 13px/1.25 var(--ui-font);
+  font: 600 13px/1.35 var(--ui-font);
   text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
   cursor: pointer;
 }
 
