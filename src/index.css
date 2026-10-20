@@ -8,23 +8,23 @@
   --preview-paper-shadow: 0 18px 54px rgba(31, 41, 55, 0.08);
   --segmented-bg: #eef2f4;
   --control-hover: #eef4f6;
-  --brand-bg: #0f766e;
-  --accent: #0f766e;
-  --focus: #2f80ed;
+  --brand-bg: #c2540a;
+  --accent: #c2540a;
+  --focus: #d9660a;
   --border: #d9e0e5;
   --text: #344054;
   --text-strong: #111827;
   --text-muted: #667085;
   --control-text: #26323f;
   --disabled: #a7b0ba;
-  --saved: #0f766e;
-  --saved-bg: #e7f6f3;
+  --saved: #c2540a;
+  --saved-bg: #fcefe3;
   --dirty: #b45309;
   --dirty-bg: #fff7ed;
   --prose: #26323f;
   --editor-text: #1f2937;
   --link: #1d4ed8;
-  --quote-bg: #edf7f6;
+  --quote-bg: #fdf2e9;
   --table-head: #eef4f6;
   --table-row-alt: #fbfdfe;
   --code-block-bg: #f6f8fa;
@@ -38,12 +38,12 @@
   --search-match-bg: #fef3c7;
   --search-match-active-bg: #fbbf24;
   --search-match-active-ring: rgba(146, 64, 14, 0.28);
-  --accent-soft: #e7f6f3;
+  --accent-soft: #fcefe3;
   --accent-contrast: #ffffff;
   --error-text: #991b1b;
   --error-bg: #fef2f2;
   --preview-panel-bg:
-    radial-gradient(circle at 20% 0, rgba(15, 118, 110, 0.06), transparent 34%),
+    radial-gradient(circle at 20% 0, rgba(194, 84, 10, 0.06), transparent 34%),
     linear-gradient(180deg, #fbfcfd 0, var(--preview-bg) 220px);
   --reader-font-family: var(--content-font);
   --reader-custom-font-family: initial;
@@ -87,23 +87,23 @@
   --preview-panel-bg: linear-gradient(180deg, #1c2223 0, var(--preview-bg) 220px);
   --segmented-bg: #2a3132;
   --control-hover: #30393a;
-  --brand-bg: #14867c;
-  --accent: #36a99d;
-  --focus: #76adff;
+  --brand-bg: #d9660a;
+  --accent: #f08a3c;
+  --focus: #ffa94d;
   --border: #3c4748;
   --text: #d4dddc;
   --text-strong: #f1f6f5;
   --text-muted: #a3b0af;
   --control-text: #e3ebea;
   --disabled: #73807f;
-  --saved: #51c4b6;
-  --saved-bg: #173a36;
+  --saved: #f4a261;
+  --saved-bg: #3a2413;
   --dirty: #f8b56b;
   --dirty-bg: #442d16;
   --prose: #d4dddc;
   --editor-text: #ecf2f1;
   --link: #91bbff;
-  --quote-bg: #18322f;
+  --quote-bg: #34210f;
   --table-head: #2a3636;
   --table-row-alt: #222a2a;
   --code-block-bg: #151b1c;
@@ -117,7 +117,8 @@
   --search-match-bg: #66531a;
   --search-match-active-bg: #a46e11;
   --search-match-active-ring: rgba(251, 191, 36, 0.52);
-  --accent-soft: #173c38;
+  --accent-soft: #3b2512;
+  --accent-contrast: #241204;
   --error-text: #fca5a5;
   --error-bg: #4a2024;
 
@@ -126,7 +127,7 @@
 
 :root[data-mdview-color-theme='light'] {
   --preview-panel-bg:
-    radial-gradient(circle at 20% 0, rgba(15, 118, 110, 0.06), transparent 34%),
+    radial-gradient(circle at 20% 0, rgba(194, 84, 10, 0.06), transparent 34%),
     linear-gradient(180deg, #fbfcfd 0, var(--preview-bg) 220px);
 }
 

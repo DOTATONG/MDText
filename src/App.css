@@ -277,7 +277,7 @@
 }
 
 .recent-file-reveal:hover {
-  border-color: #8aa9a6;
+  border-color: #b49a83;
   background: var(--control-hover);
 }
 
@@ -441,7 +441,7 @@
 .app-operation-status {
   max-width: min(280px, calc(var(--ui-vw) - 48px));
   padding: 10px 14px;
-  border: 1px solid rgba(15, 118, 110, 0.22);
+  border: 1px solid rgba(194, 84, 10, 0.22);
   border-radius: 8px;
   color: var(--saved);
   background: var(--accent-soft);
@@ -629,13 +629,13 @@
 }
 
 .welcome-action:hover:not(:disabled) {
-  border-color: #8aa9a6;
+  border-color: #b49a83;
   background: var(--control-hover);
 }
 
 .welcome-action.primary:hover:not(:disabled) {
-  border-color: #0b5f59;
-  background: #0b5f59;
+  border-color: #9a3f05;
+  background: #9a3f05;
 }
 
 .welcome-action:disabled,
@@ -923,10 +923,10 @@
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  border: 1px solid rgba(15, 118, 110, 0.18);
+  border: 1px solid rgba(194, 84, 10, 0.18);
   border-radius: 6px;
   color: var(--accent);
-  background: rgba(15, 118, 110, 0.08);
+  background: rgba(194, 84, 10, 0.08);
   cursor: pointer;
   list-style: none;
   transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
@@ -938,9 +938,9 @@
 
 .outline-heading-icon:hover,
 .outline-depth-picker[open] .outline-heading-icon {
-  border-color: rgba(15, 118, 110, 0.38);
-  color: #0b5f59;
-  background: rgba(15, 118, 110, 0.14);
+  border-color: rgba(194, 84, 10, 0.38);
+  color: #9a3f05;
+  background: rgba(194, 84, 10, 0.14);
 }
 
 .outline-heading-icon svg {
@@ -992,14 +992,14 @@
 }
 
 .outline-depth-options button:hover {
-  border-color: #8aa9a6;
+  border-color: #b49a83;
   background: var(--control-hover);
 }
 
 .outline-depth-options button.active {
-  border-color: rgba(15, 118, 110, 0.4);
+  border-color: rgba(194, 84, 10, 0.4);
   color: var(--accent);
-  background: rgba(15, 118, 110, 0.12);
+  background: rgba(194, 84, 10, 0.12);
 }
 
 .outline-depth-options button:focus-visible {
@@ -1251,10 +1251,10 @@
 }
 
 .outline-link.active {
-  border-color: rgba(15, 118, 110, 0.22);
+  border-color: rgba(194, 84, 10, 0.22);
   border-left-color: var(--accent);
   color: var(--text);
-  background: rgba(15, 118, 110, 0.1);
+  background: rgba(194, 84, 10, 0.1);
   font-weight: 740;
 }
 
@@ -1337,7 +1337,7 @@
 }
 
 .docx-import-header { display: flex; gap: 14px; align-items: center; padding-right: 32px; }
-.docx-import-icon { width: 46px; height: 46px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 13px; color: #fff; background: var(--accent); }
+.docx-import-icon { width: 46px; height: 46px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 13px; color: var(--accent-contrast); background: var(--accent); }
 .docx-import-icon svg { width: 23px; height: 23px; }
 .docx-import-header h2 { margin: 0; color: var(--text-strong); font-size: 19px; }
 .docx-import-header p, .docx-import-status, .docx-import-python { margin: 5px 0 0; color: var(--text-muted); font: 13px/1.5 var(--ui-font); }
@@ -1349,8 +1349,8 @@
 .docx-import-steps li strong { color: var(--text); font: 700 13px/1.35 var(--ui-font); }
 .docx-import-steps li small { margin-top: 2px; font: 12px/1.35 var(--ui-font); }
 .docx-import-steps li.active { border-color: color-mix(in srgb, var(--accent) 48%, var(--border)); background: color-mix(in srgb, var(--accent) 8%, var(--surface-raised)); }
-.docx-import-steps li.active > span { color: #fff; background: var(--accent); }
-.docx-import-steps li.complete > span { color: #fff; background: var(--accent); }
+.docx-import-steps li.active > span { color: var(--accent-contrast); background: var(--accent); }
+.docx-import-steps li.complete > span { color: var(--accent-contrast); background: var(--accent); }
 .docx-import-status { margin-top: 16px; color: var(--text); }
 .docx-import-python { font-family: var(--mono-font); font-size: 12px; }
 .docx-import-error { margin: 12px 0 0; padding: 10px 12px; border-radius: 8px; color: var(--danger-text); background: var(--dirty-bg); font: 12px/1.45 var(--mono-font); white-space: pre-wrap; }
@@ -1379,7 +1379,7 @@
   place-items: center;
   flex: 0 0 auto;
   border-radius: 8px;
-  color: white;
+  color: var(--accent-contrast);
   background: var(--accent);
 }
 
@@ -1498,12 +1498,12 @@
 
 .update-primary-action {
   border-color: var(--accent);
-  color: white;
+  color: var(--accent-contrast);
   background: var(--accent);
 }
 
 .update-primary-action:hover {
-  background: #0b5f59;
+  background: #9a3f05;
 }
 
 .update-secondary-action:hover {
@@ -2415,7 +2415,7 @@
 
 .markdown-preview blockquote {
   padding: 14px 18px 14px 20px;
-  border: 1px solid rgba(15, 118, 110, 0.18);
+  border: 1px solid rgba(194, 84, 10, 0.18);
   border-left: 4px solid var(--accent);
   border-radius: 0 12px 12px 0;
   color: var(--prose);
@@ -2539,7 +2539,7 @@
 }
 
 .code-block button:hover {
-  border-color: rgba(15, 118, 110, 0.3);
+  border-color: rgba(194, 84, 10, 0.3);
   color: var(--accent);
   background: var(--control-hover);
 }
@@ -2907,7 +2907,7 @@
   border-color: var(--accent);
   color: var(--accent);
   background: var(--accent-soft);
-  box-shadow: inset 0 0 0 1px rgba(15, 118, 110, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(194, 84, 10, 0.12);
 }
 
 .reading-theme-modes button:disabled,
@@ -3268,7 +3268,7 @@
   place-items: center;
   border-radius: 6px;
   color: #fff;
-  background: #0f766e;
+  background: #c2540a;
 }
 
 .math-editor-mark svg { width: 18px; height: 18px; }
@@ -3317,7 +3317,7 @@
 
 .math-template-grid { display: flex; flex-wrap: wrap; gap: 6px; }
 .math-template-grid button { min-width: 42px; height: 34px; padding: 0 10px; border: 1px solid var(--border); background: var(--surface-raised); font-size: 14px; }
-.math-template-grid button:hover { border-color: #0f766e; color: #0f766e; }
+.math-template-grid button:hover { border-color: #c2540a; color: #c2540a; }
 
 .math-live-preview {
   display: grid;
@@ -3336,7 +3336,7 @@
 .math-live-preview.invalid { color: var(--error-text); }
 .math-editor-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
 .math-editor-actions button { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 14px; border: 1px solid var(--border); border-radius: 6px; }
-.math-editor-actions button.primary { border-color: #0f766e; color: #fff; background: #0f766e; }
+.math-editor-actions button.primary { border-color: #c2540a; color: #fff; background: #c2540a; }
 .math-editor-actions button.primary:disabled { opacity: 0.48; }
 .math-editor-actions svg { width: 16px; height: 16px; }
 

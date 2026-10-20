@@ -21,7 +21,7 @@ body {
   padding: 32px 24px 72px;
   color: #26323f;
   background:
-    radial-gradient(circle at 20% 0, rgba(15, 118, 110, 0.06), transparent 34%),
+    radial-gradient(circle at 20% 0, rgba(194, 84, 10, 0.06), transparent 34%),
     linear-gradient(180deg, #fbfcfd 0, #f8fafb 220px);
   font: 16px/1.78 'Segoe UI Variable Text', 'Segoe UI', 'Microsoft YaHei UI', 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
@@ -143,11 +143,11 @@ body {
 
 .markdown-preview blockquote {
   padding: 14px 18px 14px 20px;
-  border: 1px solid rgba(15, 118, 110, 0.18);
-  border-left: 4px solid #0f766e;
+  border: 1px solid rgba(194, 84, 10, 0.18);
+  border-left: 4px solid #c2540a;
   border-radius: 0 12px 12px 0;
-  color: #38504d;
-  background: #edf7f6;
+  color: #4a3b33;
+  background: #fdf2e9;
 }
 
 .markdown-preview blockquote > :last-child {
@@ -252,7 +252,7 @@ body {
   width: 16px;
   height: 16px;
   margin-right: 8px;
-  accent-color: #0f766e;
+  accent-color: #c2540a;
   transform: translateY(2px);
 }
 
