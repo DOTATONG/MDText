@@ -14,7 +14,7 @@
     · <a href="#english">English</a>
     · <a href="#ai-build">AI 辅助编译 / Build with AI</a>
   </p>
-  <p><strong>Version / 版本：</strong>4.0.0 · Unofficial fork of <a href="https://github.com/isunky/MDView">isunky/MDView</a></p>
+  <p><strong>Version / 版本：</strong>4.0.1 · Unofficial fork of <a href="https://github.com/isunky/MDView">isunky/MDView</a></p>
   <p><sub>MDText 是 MDView 的非官方分支，原作者为 Sunky。/ MDText is an unofficial fork of MDView by Sunky.</sub></p>
 </div>
 
@@ -349,7 +349,7 @@ SignPath signing applies to releases after configuration and approval. Create th
 
 | 项目 / Item              | 内容 / Value                                                                       |
 |--------------------------|------------------------------------------------------------------------------------|
-| 版本 / Version           | 4.0.0                                                                              |
+| 版本 / Version           | 4.0.1                                                                              |
 | 作者 / Author            | [DOTATONG](https://github.com/DOTATONG)（fork 维护者 / fork maintainer）           |
 | 原作者 / Original author | [Sunky](https://www.sunky.net) / [isunky/MDView](https://github.com/isunky/MDView) |
 | 许可证 / License         | [GPL-3.0](LICENSE)                                                                 |
