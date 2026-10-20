@@ -110,105 +110,107 @@ export function ReadingSettingsDialog({
           <p>{t.readingSettingsSubtitle}</p>
         </header>
 
-        <section className="reading-settings-section" aria-labelledby="theme-mode-label">
-          <h3 id="theme-mode-label">{t.themeMode}</h3>
-          <div className="reading-theme-modes" role="group" aria-label={t.themeMode}>
-            <ThemeModeButton mode="system" value={preferences.themeMode} label={t.themeSystem} onChange={onUpdate} icon={<Monitor />} />
-            <ThemeModeButton mode="light" value={preferences.themeMode} label={t.themeLight} onChange={onUpdate} icon={<Sun />} />
-            <ThemeModeButton mode="dark" value={preferences.themeMode} label={t.themeDark} onChange={onUpdate} icon={<Moon />} />
-          </div>
-        </section>
+        <div className="reading-settings-body">
+          <section className="reading-settings-section" aria-labelledby="theme-mode-label">
+            <h3 id="theme-mode-label">{t.themeMode}</h3>
+            <div className="reading-theme-modes" role="group" aria-label={t.themeMode}>
+              <ThemeModeButton mode="system" value={preferences.themeMode} label={t.themeSystem} onChange={onUpdate} icon={<Monitor />} />
+              <ThemeModeButton mode="light" value={preferences.themeMode} label={t.themeLight} onChange={onUpdate} icon={<Sun />} />
+              <ThemeModeButton mode="dark" value={preferences.themeMode} label={t.themeDark} onChange={onUpdate} icon={<Moon />} />
+            </div>
+          </section>
 
-        <section className="reading-settings-section" aria-labelledby="font-family-label">
-          <h3 id="font-family-label">{t.readingFont}</h3>
-          <div className="reading-font-options" role="group" aria-label={t.readingFont}>
-            <FontOption active={preferences.fontFamily === 'sans'} label={t.fontSans} onClick={() => { setIsFontPickerOpen(false); onUpdate({ fontFamily: 'sans' }) }} />
-            <FontOption active={preferences.fontFamily === 'serif'} label={t.fontSerif} onClick={() => { setIsFontPickerOpen(false); onUpdate({ fontFamily: 'serif' }) }} />
-            <FontOption active={preferences.fontFamily === 'monospace'} label={t.fontMonospace} onClick={() => { setIsFontPickerOpen(false); onUpdate({ fontFamily: 'monospace' }) }} />
-            <FontOption
-              active={preferences.fontFamily === 'custom'}
-              disabled={!systemFontAccess.supportsSystemFonts}
-              label={t.fontCustom}
-              onClick={openFontPicker}
-            />
-          </div>
-          <p className="reading-font-description">
-            {systemFontAccess.supportsSystemFonts ? t.fontCustomDescription : t.fontCustomUnavailable}
-          </p>
-          {isFontPickerOpen && systemFontAccess.supportsSystemFonts ? (
-            <div className="reading-font-picker">
-              <div className="reading-font-picker-header">
-                <span>{t.fontCustomChoose}</span>
-                {preferences.fontFamily === 'custom' && preferences.customFontFamily ? (
-                  <span className="reading-font-selected">{t.fontCustomSelected(preferences.customFontFamily)}</span>
+          <section className="reading-settings-section" aria-labelledby="font-family-label">
+            <h3 id="font-family-label">{t.readingFont}</h3>
+            <div className="reading-font-options" role="group" aria-label={t.readingFont}>
+              <FontOption active={preferences.fontFamily === 'sans'} label={t.fontSans} onClick={() => { setIsFontPickerOpen(false); onUpdate({ fontFamily: 'sans' }) }} />
+              <FontOption active={preferences.fontFamily === 'serif'} label={t.fontSerif} onClick={() => { setIsFontPickerOpen(false); onUpdate({ fontFamily: 'serif' }) }} />
+              <FontOption active={preferences.fontFamily === 'monospace'} label={t.fontMonospace} onClick={() => { setIsFontPickerOpen(false); onUpdate({ fontFamily: 'monospace' }) }} />
+              <FontOption
+                active={preferences.fontFamily === 'custom'}
+                disabled={!systemFontAccess.supportsSystemFonts}
+                label={t.fontCustom}
+                onClick={openFontPicker}
+              />
+            </div>
+            <p className="reading-font-description">
+              {systemFontAccess.supportsSystemFonts ? t.fontCustomDescription : t.fontCustomUnavailable}
+            </p>
+            {isFontPickerOpen && systemFontAccess.supportsSystemFonts ? (
+              <div className="reading-font-picker">
+                <div className="reading-font-picker-header">
+                  <span>{t.fontCustomChoose}</span>
+                  {preferences.fontFamily === 'custom' && preferences.customFontFamily ? (
+                    <span className="reading-font-selected">{t.fontCustomSelected(preferences.customFontFamily)}</span>
+                  ) : null}
+                </div>
+                <input
+                  type="search"
+                  value={fontQuery}
+                  onChange={(event) => setFontQuery(event.currentTarget.value)}
+                  placeholder={t.fontCustomSearch}
+                  aria-label={t.fontCustomSearch}
+                />
+                {fontListState === 'loading' ? <p className="reading-font-status">{t.fontCustomLoading}</p> : null}
+                {fontListState === 'error' ? (
+                  <div className="reading-font-error">
+                    <span>{t.fontCustomLoadError}</span>
+                    <button type="button" onClick={() => void loadSystemFonts()}>{t.fontCustomRetry}</button>
+                  </div>
+                ) : null}
+                {fontListState === 'ready' && filteredFonts.length === 0 ? <p className="reading-font-status">{t.fontCustomEmpty}</p> : null}
+                {fontListState === 'ready' && filteredFonts.length > 0 ? (
+                  <div className="reading-font-list" role="listbox" aria-label={t.fontCustomChoose}>
+                    {filteredFonts.map((font) => (
+                      <button
+                        key={font}
+                        type="button"
+                        role="option"
+                        aria-selected={preferences.fontFamily === 'custom' && preferences.customFontFamily === font}
+                        className={preferences.fontFamily === 'custom' && preferences.customFontFamily === font ? 'active' : ''}
+                        style={{ fontFamily: quoteCssFontFamily(font) }}
+                        onClick={() => onUpdate({ fontFamily: 'custom', customFontFamily: font })}
+                      >
+                        <span>{font}</span>
+                        <small>Aa 中文</small>
+                      </button>
+                    ))}
+                  </div>
                 ) : null}
               </div>
-              <input
-                type="search"
-                value={fontQuery}
-                onChange={(event) => setFontQuery(event.currentTarget.value)}
-                placeholder={t.fontCustomSearch}
-                aria-label={t.fontCustomSearch}
-              />
-              {fontListState === 'loading' ? <p className="reading-font-status">{t.fontCustomLoading}</p> : null}
-              {fontListState === 'error' ? (
-                <div className="reading-font-error">
-                  <span>{t.fontCustomLoadError}</span>
-                  <button type="button" onClick={() => void loadSystemFonts()}>{t.fontCustomRetry}</button>
-                </div>
-              ) : null}
-              {fontListState === 'ready' && filteredFonts.length === 0 ? <p className="reading-font-status">{t.fontCustomEmpty}</p> : null}
-              {fontListState === 'ready' && filteredFonts.length > 0 ? (
-                <div className="reading-font-list" role="listbox" aria-label={t.fontCustomChoose}>
-                  {filteredFonts.map((font) => (
-                    <button
-                      key={font}
-                      type="button"
-                      role="option"
-                      aria-selected={preferences.fontFamily === 'custom' && preferences.customFontFamily === font}
-                      className={preferences.fontFamily === 'custom' && preferences.customFontFamily === font ? 'active' : ''}
-                      style={{ fontFamily: quoteCssFontFamily(font) }}
-                      onClick={() => onUpdate({ fontFamily: 'custom', customFontFamily: font })}
-                    >
-                      <span>{font}</span>
-                      <small>Aa 中文</small>
-                    </button>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          ) : null}
-        </section>
-
-        <section className="reading-settings-section reading-settings-sliders" aria-label={t.readingLayout}>
-          <RangeSetting label={t.fontSize(preferences.fontSize)} value={preferences.fontSize} range={READING_FONT_SIZE_RANGE} onChange={(fontSize) => onUpdate({ fontSize })} />
-          <RangeSetting label={t.lineHeight(preferences.lineHeight)} value={preferences.lineHeight} range={READING_LINE_HEIGHT_RANGE} onChange={(lineHeight) => onUpdate({ lineHeight })} />
-          <RangeSetting label={t.contentWidth(preferences.contentWidth)} value={preferences.contentWidth} range={READING_CONTENT_WIDTH_RANGE} onChange={(contentWidth) => onUpdate({ contentWidth })} />
-        </section>
-
-        {onToggleFileAssociation ? (
-          <section className="reading-settings-section" aria-labelledby="file-association-label">
-            <h3 id="file-association-label">{t.fileAssociationSectionTitle}</h3>
-            <p className="reading-settings-description">{t.fileAssociationDescription}</p>
-            <button
-              type="button"
-              className="reading-settings-action"
-              disabled={fileAssociationBusy}
-              onClick={onToggleFileAssociation}
-            >
-              {fileAssociationRegistered
-                ? t.removeMarkdownAssociation
-                : t.addMarkdownAssociation}
-            </button>
+            ) : null}
           </section>
-        ) : null}
 
-        <footer className="reading-settings-actions">
-          <button type="button" className="reading-settings-reset" onClick={onReset}>
-            <RotateCcw aria-hidden="true" />
-            {t.resetReadingSettings}
-          </button>
-        </footer>
+          <section className="reading-settings-section reading-settings-sliders" aria-label={t.readingLayout}>
+            <RangeSetting label={t.fontSize(preferences.fontSize)} value={preferences.fontSize} range={READING_FONT_SIZE_RANGE} onChange={(fontSize) => onUpdate({ fontSize })} />
+            <RangeSetting label={t.lineHeight(preferences.lineHeight)} value={preferences.lineHeight} range={READING_LINE_HEIGHT_RANGE} onChange={(lineHeight) => onUpdate({ lineHeight })} />
+            <RangeSetting label={t.contentWidth(preferences.contentWidth)} value={preferences.contentWidth} range={READING_CONTENT_WIDTH_RANGE} onChange={(contentWidth) => onUpdate({ contentWidth })} />
+          </section>
+
+          {onToggleFileAssociation ? (
+            <section className="reading-settings-section" aria-labelledby="file-association-label">
+              <h3 id="file-association-label">{t.fileAssociationSectionTitle}</h3>
+              <p className="reading-settings-description">{t.fileAssociationDescription}</p>
+              <button
+                type="button"
+                className="reading-settings-action"
+                disabled={fileAssociationBusy}
+                onClick={onToggleFileAssociation}
+              >
+                {fileAssociationRegistered
+                  ? t.removeMarkdownAssociation
+                  : t.addMarkdownAssociation}
+              </button>
+            </section>
+          ) : null}
+
+          <footer className="reading-settings-actions">
+            <button type="button" className="reading-settings-reset" onClick={onReset}>
+              <RotateCcw aria-hidden="true" />
+              {t.resetReadingSettings}
+            </button>
+          </footer>
+        </div>
       </section>
     </div>
   )
