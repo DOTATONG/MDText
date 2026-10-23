@@ -528,6 +528,7 @@ export function useDocumentController({
     handleImportedDocument,
     handleOpenFile,
     handleOpenRecentFile,
+    handleRemoveRecentFile: forgetRecentFile,
     handleReloadDiskVersion,
     handleSaveFile,
     handleSaveFileAs,

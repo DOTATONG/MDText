@@ -5,6 +5,7 @@ import {
   FolderOpen,
   FileInput,
   Trash2,
+  X,
 } from 'lucide-react'
 import type { RecentFile } from '../../domain/recentFiles'
 import type { Translation } from '../../i18n'
@@ -18,6 +19,7 @@ type WelcomeWorkspaceProps = {
   onOpen: () => void | Promise<void>
   onImportDocx?: () => void | Promise<void>
   onOpenRecent: (path: string) => void | Promise<void>
+  onRemoveRecent: (path: string) => void
   onClearRecent: () => void
   t: Translation
 }
@@ -30,6 +32,7 @@ export function WelcomeWorkspace({
   onOpen,
   onImportDocx,
   onOpenRecent,
+  onRemoveRecent,
   onClearRecent,
   t,
 }: WelcomeWorkspaceProps) {
@@ -101,7 +104,7 @@ export function WelcomeWorkspace({
           {recentFiles.length > 0 ? (
             <ol className="welcome-recent-list">
               {recentFiles.map((file) => (
-                <li key={file.path}>
+                <li key={file.path} className="welcome-recent-row">
                   <button
                     type="button"
                     className="welcome-recent-item"
@@ -116,6 +119,15 @@ export function WelcomeWorkspace({
                       <span>{getParentPath(file.path)}</span>
                     </span>
                     <ChevronRight aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    className="welcome-recent-remove"
+                    onClick={() => onRemoveRecent(file.path)}
+                    aria-label={t.removeRecentFile(file.title)}
+                    title={t.removeRecentFile(file.title)}
+                  >
+                    <X aria-hidden="true" />
                   </button>
                 </li>
               ))}

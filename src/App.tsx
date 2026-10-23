@@ -130,6 +130,7 @@ function App({
     handleImportedDocument,
     handleOpenFile,
     handleOpenRecentFile,
+    handleRemoveRecentFile,
     handleReloadDiskVersion,
     handleSaveFile,
     handleSaveFileAs,
@@ -587,6 +588,7 @@ function App({
           onOpen={handleOpenFileWithPreviewPreload}
           onImportDocx={fileAccess.docxImport ? openDocxImport : undefined}
           onOpenRecent={handleOpenRecentFileWithPreviewPreload}
+          onRemoveRecent={handleRemoveRecentFile}
           onClearRecent={handleClearRecentFiles}
           t={t}
         />

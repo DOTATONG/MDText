@@ -124,6 +124,25 @@ describe('App', () => {
     expect(screen.queryByRole('heading', { name: 'Open a Markdown file' })).not.toBeInTheDocument()
   })
 
+  it('removes a single recent file from the welcome workspace', async () => {
+    const user = userEvent.setup()
+    seedRecentFiles([
+      recent('/tmp/recent.md', '2026-07-10T08:00:00.000Z'),
+      recent('/tmp/other.md', '2026-07-09T08:00:00.000Z'),
+    ])
+    renderWelcomeApp({ fileAccess: createFileAccess() })
+
+    await user.click(
+      screen.getByRole('button', { name: 'Remove recent.md from recent files' }),
+    )
+
+    expect(
+      screen.queryByRole('button', { name: 'Open recent file recent.md' }),
+    ).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Open recent file other.md' })).toBeInTheDocument()
+    expect(JSON.parse(window.localStorage.getItem(RECENT_FILES_STORAGE_KEY) ?? '[]')).toHaveLength(1)
+  })
+
   it('keeps edits made during an in-flight save marked as unsaved', async () => {
     const user = userEvent.setup()
     let completeSave: ((path: string) => void) | undefined

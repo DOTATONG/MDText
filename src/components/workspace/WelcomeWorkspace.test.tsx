@@ -11,6 +11,7 @@ const baseProps = {
   onNew: vi.fn(),
   onOpen: vi.fn(),
   onOpenRecent: vi.fn(),
+  onRemoveRecent: vi.fn(),
   onClearRecent: vi.fn(),
   t: translations.en,
 }
@@ -30,5 +31,26 @@ describe('WelcomeWorkspace', () => {
     render(<WelcomeWorkspace {...baseProps} />)
 
     expect(screen.queryByRole('button', { name: 'Import Word (.docx)' })).not.toBeInTheDocument()
+  })
+
+  it('removes a single recent file without opening it', async () => {
+    const user = userEvent.setup()
+    const onRemoveRecent = vi.fn()
+    const onOpenRecent = vi.fn()
+    render(
+      <WelcomeWorkspace
+        {...baseProps}
+        recentFiles={[
+          { path: '/tmp/a.md', title: 'a.md', lastOpenedAt: '2026-01-01T00:00:00.000Z' },
+        ]}
+        onOpenRecent={onOpenRecent}
+        onRemoveRecent={onRemoveRecent}
+      />,
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Remove a.md from recent files' }))
+
+    expect(onRemoveRecent).toHaveBeenCalledWith('/tmp/a.md')
+    expect(onOpenRecent).not.toHaveBeenCalled()
   })
 })

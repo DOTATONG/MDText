@@ -153,6 +153,7 @@
 .markdown-editor:focus-visible,
 .welcome-action:focus-visible,
 .welcome-recent-item:focus-visible,
+.welcome-recent-remove:focus-visible,
 .welcome-clear:focus-visible,
 .recent-file-reveal:focus-visible {
   outline: 2px solid var(--focus);
@@ -716,8 +717,18 @@
   border-bottom: 1px solid var(--border);
 }
 
+.welcome-recent-row {
+  display: flex;
+  align-items: stretch;
+}
+
+.welcome-recent-row:hover {
+  background: var(--surface-raised);
+}
+
 .welcome-recent-item {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   min-height: 62px;
   display: grid;
   grid-template-columns: 22px minmax(0, 1fr) 18px;
@@ -745,6 +756,27 @@
   width: 16px;
   height: 16px;
   color: var(--disabled);
+}
+
+.welcome-recent-remove {
+  flex: none;
+  width: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.welcome-recent-remove:hover {
+  color: var(--dirty);
+  background: var(--control-hover);
+}
+
+.welcome-recent-remove svg {
+  width: 16px;
+  height: 16px;
 }
 
 .welcome-recent-meta {
