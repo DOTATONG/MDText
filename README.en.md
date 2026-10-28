@@ -16,6 +16,8 @@
   <p><sub>Unofficial fork of <a href="https://github.com/isunky/MDView">isunky/MDView</a> by Sunky</sub></p>
 </div>
 
+---
+
 ## Preview
 
 <table>
@@ -36,29 +38,12 @@
 MDText is a lightweight, beautifully designed, free and ad-free Markdown reader. Read `.md` files with clear typography; it opens quickly, needs no account, and works just as well with your existing local documents. Editing and exporting a neatly
 formatted document are close at hand when you need them.
 
-### Open in one step
-
-Double-click a file, use "Open with", or drag a `.md` file into the window; the Windows portable build adds itself to the "Open with" list without administrator rights; multiple windows are supported.
-
-### Comfortable typography
-
-Light and dark themes; adjustable font, size, line spacing, and page width; interface zoom (`Ctrl` + `-`/`+`/`0`) is remembered.
-
-### Long-document navigation
-
-A collapsible outline with current-heading highlight; reading position and view settings are restored when you reopen a file.
-
-### Diagrams and formulas
-
-Mermaid, LaTeX, tables, and syntax highlighting; color swatches; diagrams and images support zoom, pan, and fit-to-window, with ordered browsing and saving in previews.
-
-### Light editing
-
-Source mode and synchronized split view; paste, drag in, or batch-insert images; find and replace, undo/redo, and draft recovery.
-
-### Word import and export
-
-Convert Word into a Markdown draft; export Word or standalone HTML, or print to PDF.
+- **Open in one step** — Double-click a file, use "Open with", or drag a `.md` file into the window; the Windows portable build adds itself to the "Open with" list without administrator rights; multiple windows are supported.
+- **Comfortable typography** — Light and dark themes; adjustable font, size, line spacing, and page width; interface zoom (`Ctrl` + `-`/`+`/`0`) is remembered.
+- **Long-document navigation** — A collapsible outline with current-heading highlight; reading position and view settings are restored when you reopen a file.
+- **Diagrams and formulas** — Mermaid, LaTeX, tables, and syntax highlighting; color swatches; diagrams and images support zoom, pan, and fit-to-window, with ordered browsing and saving in previews.
+- **Light editing** — Source mode and synchronized split view; paste, drag in, or batch-insert images; find and replace, undo/redo, and draft recovery.
+- **Word import and export** — Convert Word into a Markdown draft; export Word or standalone HTML, or print to PDF.
 
 ## Installation
 
@@ -73,22 +58,13 @@ Choose a package from [GitHub Releases](https://github.com/DOTATONG/MDText/relea
 
 ### Environment and file associations
 
-#### Windows
+- **Windows** — WebView2 Runtime must be installed separately; MDText does not bundle or download it. The MSI uses an English installer; the app supports Chinese and English.
+- **macOS** — The release is a Universal DMG (Intel and Apple Silicon, macOS 10.15+). It is not yet signed or notarized by Apple, so building from source on your own Mac is recommended; local builds may still trigger system security prompts.
+- **Edge extension** — Enable Developer mode at `edge://extensions`, choose **Load unpacked**, and select the extracted folder containing `manifest.json`.
+- **File associations** — Enabled by default in the MSI and can be deselected during installation; the portable ZIP registers nothing. Use Settings to add MDText to the current user's Markdown "Open with" list, which needs no administrator rights and
+  can be undone from the same button.
 
-Windows requires WebView2 Runtime to be installed separately; MDText does not bundle or download it. The MSI uses an English installer; the app supports Chinese and English.
-
-#### macOS
-
-The release is a Universal DMG (Intel and Apple Silicon, macOS 10.15+). It is not yet signed or notarized by Apple, so building from source on your own Mac is recommended; local builds may still trigger system security prompts.
-
-#### Edge extension
-
-Enable Developer mode at `edge://extensions`, choose **Load unpacked**, and select the extracted folder containing `manifest.json`.
-
-#### File associations
-
-Associations are enabled by default in the MSI and can be deselected during installation. The portable ZIP registers nothing; use Settings to add MDText to the current user's Markdown "Open with" list, which needs no administrator rights and can be
-undone from the same button. To disable associations during unattended installation (replace with your actual MSI filename):
+To disable associations during unattended installation (replace with your actual MSI filename):
 
 ```powershell
 msiexec /i MDText_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
@@ -98,7 +74,11 @@ See each release's signing status and the [code signing policy](CODE_SIGNING_POL
 
 ## Build with AI
 
-Let an AI coding tool with local terminal access handle the build. Ready-to-use prompts, macOS prerequisites, and manual build commands are in **[docs/BUILD_WITH_AI.md](docs/BUILD_WITH_AI.md)**.
+Let an AI coding tool with local terminal access handle the build:
+
+1. Download **Source code (zip)** from [Releases](https://github.com/DOTATONG/MDText/releases/latest) and extract it.
+2. Open the project folder in the AI tool on the target platform (build macOS on a Mac, Windows on Windows).
+3. Send the ready-to-use prompt in [docs/BUILD_WITH_AI.md](docs/BUILD_WITH_AI.md), install any prerequisites it lists, and wait for the package path.
 
 ## Reference
 

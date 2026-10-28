@@ -16,6 +16,8 @@
   <p><sub>非官方 fork，基于 <a href="https://github.com/isunky/MDView">isunky/MDView</a>（原作者 Sunky）</sub></p>
 </div>
 
+---
+
 ## 界面预览
 
 <table>
@@ -35,29 +37,12 @@
 
 MDText 是一款轻量、美观、免费无广告的 Markdown 阅读器。在清晰的排版中阅读 `.md` 文件；打开轻快，无需注册，也适合已有的本地文档。需要时还能顺手修改几处内容，或导出一份排版整洁的文档。
 
-### 打开即读
-
-双击、右键“打开方式”或拖入窗口；Windows 绿色版可在设置中加入“打开方式”，无需管理员权限；支持多窗口打开。
-
-### 舒适排版
-
-明暗主题，字体、字号、行距与正文宽度可调；界面缩放（`Ctrl` + `-`/`+`/`0`）会被记住。
-
-### 长文导航
-
-可折叠多级目录、当前位置高亮；重开文件恢复阅读进度与视图设置。
-
-### 图表与公式
-
-Mermaid、LaTeX、表格与代码高亮；支持色值色块；图表和图片可缩放、拖动、适应窗口，并在预览中按序浏览与保存。
-
-### 轻量编辑
-
-源码编辑与同步分屏；图片粘贴、拖入或批量插入；查找替换、撤销重做、草稿恢复。
-
-### Word 转换与导出
-
-导入 Word 为 Markdown 草稿；导出 Word、独立 HTML，或打印为 PDF。
+- **打开即读** — 双击、右键“打开方式”或拖入窗口；Windows 绿色版可在设置中加入“打开方式”，无需管理员权限；支持多窗口打开。
+- **舒适排版** — 明暗主题，字体、字号、行距与正文宽度可调；界面缩放（`Ctrl` + `-`/`+`/`0`）会被记住。
+- **长文导航** — 可折叠多级目录、当前位置高亮；重开文件恢复阅读进度与视图设置。
+- **图表与公式** — Mermaid、LaTeX、表格与代码高亮；支持色值色块；图表和图片可缩放、拖动、适应窗口，并在预览中按序浏览与保存。
+- **轻量编辑** — 源码编辑与同步分屏；图片粘贴、拖入或批量插入；查找替换、撤销重做、草稿恢复。
+- **Word 转换与导出** — 导入 Word 为 Markdown 草稿；导出 Word、独立 HTML，或打印为 PDF。
 
 ## 下载与安装
 
@@ -72,21 +57,12 @@ Mermaid、LaTeX、表格与代码高亮；支持色值色块；图表和图片�
 
 ### 环境与文件关联
 
-#### Windows
+- **Windows** — 需预先安装 [WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)，MDText 不附带或下载。MSI 安装界面为英文，应用支持中英文。
+- **macOS** — 发布包为 Universal DMG（Intel 与 Apple Silicon，macOS 10.15+），尚未完成 Apple 签名与公证，建议在自己的 Mac 上源码编译；本地构建仍可能出现系统安全提示。
+- **Edge 扩展** — 在 `edge://extensions` 开启开发人员模式，选择“加载解压缩的扩展”，选中解压后含 `manifest.json` 的文件夹。
+- **文件关联** — MSI 默认关联 `.md` 和 `.markdown`，安装时可取消；绿色版解压后不注册任何关联，可在“设置”中把 MDText 加入“打开方式”列表，无需管理员权限，再次点击同一按钮即可移除。
 
-需预先安装 [WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)，MDText 不附带或下载。MSI 安装界面为英文，应用支持中英文。
-
-#### macOS
-
-发布包为 Universal DMG（Intel 与 Apple Silicon，macOS 10.15+），尚未完成 Apple 签名与公证，建议在自己的 Mac 上源码编译；本地构建仍可能出现系统安全提示。
-
-#### Edge 扩展
-
-在 `edge://extensions` 开启开发人员模式，选择“加载解压缩的扩展”，选中解压后含 `manifest.json` 的文件夹。
-
-#### 文件关联
-
-MSI 默认关联 `.md` 和 `.markdown`，安装时可取消。绿色版解压后不注册任何关联，可在“设置”中把 MDText 加入“打开方式”列表；该操作只写入当前用户注册表，无需管理员权限，再次点击同一按钮即可移除。静默安装时可禁用关联（请替换为实际 MSI 文件名）：
+静默安装时可禁用文件关联（请替换为实际 MSI 文件名）：
 
 ```powershell
 msiexec /i MDText_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
@@ -94,9 +70,13 @@ msiexec /i MDText_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
 
 签名状态以各版本发布说明为准；详见[代码签名政策](CODE_SIGNING_POLICY.md)。
 
-## 用 AI 帮你编译
+## AI 辅助编译
 
-让能操作本地终端的 AI 编程工具协助构建，提示词、Mac 环境要求与手动编译命令见 **[docs/BUILD_WITH_AI.md](docs/BUILD_WITH_AI.md)**。
+让能操作本地终端的 AI 编程工具协助构建：
+
+1. 从 [Releases](https://github.com/DOTATONG/MDText/releases/latest) 下载 **Source code (zip)** 并解压。
+2. 在目标系统上用 AI 工具打开项目文件夹（Mac 在 Mac 上编译，Windows 在 Windows 上编译）。
+3. 发送 [docs/BUILD_WITH_AI.md](docs/BUILD_WITH_AI.md) 中的现成提示词，按提示安装依赖，等待安装包路径。
 
 ## 使用参考
 
