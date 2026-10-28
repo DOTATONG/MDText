@@ -54,22 +54,22 @@ const files = [
   updateJson('edge/public/manifest.json', (json) => {
     json.version = version
   }),
-  updateText('README.md', (content) => {
-    let nextContent = content
-    nextContent = replaceRequired(
-      nextContent,
-      /(<strong>Version \/ 版本：<\/strong>)[0-9]+\.[0-9]+\.[0-9]+/,
-      `$1${version}`,
-      'README header version',
-    )
-    nextContent = replaceRequired(
-      nextContent,
-      /(\| 版本 \/ Version[^|]+\| )[0-9]+\.[0-9]+\.[0-9]+([^|]+\|)/,
+  updateText('README.md', (content) =>
+    replaceRequired(
+      content,
+      /(\| 版本\s*\| )[0-9]+\.[0-9]+\.[0-9]+(\s*\|)/,
       `$1${version}$2`,
-      'README Project version row',
-    )
-    return nextContent
-  }),
+      'README.md Project version row',
+    ),
+  ),
+  updateText('README.en.md', (content) =>
+    replaceRequired(
+      content,
+      /(\| Version\s*\| )[0-9]+\.[0-9]+\.[0-9]+(\s*\|)/,
+      `$1${version}$2`,
+      'README.en.md Project version row',
+    ),
+  ),
 ]
 
 await Promise.all(files)

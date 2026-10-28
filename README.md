@@ -1,359 +1,174 @@
 <div align="center">
   <img src="src/assets/app-icon.png" alt="MDText logo" width="96" height="96" />
   <h1>MDText</h1>
-  <p><strong>面向 AI 场景的轻量 Markdown 阅读器。</strong><br />A lightweight Markdown reader for AI workflows.</p>
-  <p>美观易读 · 打开轻快 · 免费无广告<br />Beautifully readable · Quick to open · Free and ad-free</p>
+  <p><strong>轻量 Markdown 阅读器</strong></p>
+  <p>美观易读 · 打开轻快 · 免费无广告</p>
   <p>
     <a href="https://github.com/DOTATONG/MDText/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/DOTATONG/MDText?style=flat-square&color=0f8f83" /></a>
     <a href="LICENSE"><img alt="GPL-3.0 license" src="https://img.shields.io/github/license/DOTATONG/MDText?style=flat-square" /></a>
     <img alt="Windows, macOS, and Edge" src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Edge-334155?style=flat-square" />
   </p>
   <p>
-    <a href="https://github.com/DOTATONG/MDText/releases/latest"><strong>下载 / Download</strong></a>
-    · <a href="#中文">中文</a>
-    · <a href="#english">English</a>
-    · <a href="#ai-build">AI 辅助编译 / Build with AI</a>
+    <a href="https://github.com/DOTATONG/MDText/releases/latest"><strong>下载</strong></a>
+    · <strong>中文</strong>
+    · <a href="README.en.md">English</a>
   </p>
-  <p><strong>Version / 版本：</strong>4.0.1 · Unofficial fork of <a href="https://github.com/isunky/MDView">isunky/MDView</a></p>
-  <p><sub>MDText 是 MDView 的非官方分支，原作者为 Sunky。/ MDText is an unofficial fork of MDView by Sunky.</sub></p>
+  <p><sub>非官方 fork，基于 <a href="https://github.com/isunky/MDView">isunky/MDView</a>（原作者 Sunky）</sub></p>
 </div>
 
-## 界面预览 / Preview
+## 界面预览
 
 <table>
   <tr>
     <td width="50%" align="center">
-      <a href="docs/assets/screenshots/main.png"><img src="docs/assets/screenshots/main.png" alt="MDText 欢迎页与最近文件 / Welcome screen and recent files" width="100%" /></a>
-      <br /><sub>欢迎页 / Welcome screen</sub>
+      <a href="docs/assets/screenshots/main.png"><img src="docs/assets/screenshots/main.png" alt="MDText 欢迎页与最近文件" width="100%" /></a>
+      <br /><sub>欢迎页</sub>
     </td>
     <td width="50%" align="center">
-      <a href="docs/assets/screenshots/main2.png"><img src="docs/assets/screenshots/main2.png" alt="MDText 阅读工作区与目录导航 / Reading workspace and outline" width="100%" /></a>
-      <br /><sub>阅读工作区 / Reading workspace</sub>
+      <a href="docs/assets/screenshots/main2.png"><img src="docs/assets/screenshots/main2.png" alt="MDText 阅读工作区与目录导航" width="100%" /></a>
+      <br /><sub>阅读工作区</sub>
     </td>
   </tr>
 </table>
 
-## 中文
+## 功能简介
 
-**让 AI 生成的内容，也有舒适的阅读体验。**
+MDText 是一款轻量、美观、免费无广告的 Markdown 阅读器。在清晰的排版中阅读 `.md` 文件；打开轻快，无需注册，也适合已有的本地文档。需要时还能顺手修改几处内容，或导出一份排版整洁的文档。
 
-MDText 是一款轻量、美观、免费无广告的 Markdown 阅读器。将 AI 生成的方案、笔记或技术说明保存为 Markdown 文件，即可在清晰的排版中阅读，用目录浏览长文，查看其中的图表与公式。打开轻快，无需注册，也适合你已有的本地文档。
+### 打开即读
 
-阅读是核心，编辑与转换随手可用：需要时修改几处内容，或导出一份排版整洁的文档，与他人分享。
+双击、右键“打开方式”或拖入窗口；Windows 绿色版可在设置中加入“打开方式”，无需管理员权限；支持多窗口打开。
 
-想看看这些功能在实际阅读里是什么感觉？可以读读原作者 Sunky 写的[《给 Markdown 一个好读的家：我为什么做了 MDView》](docs/articles/MDView-wechat-intro.zh-CN.md)。
+### 舒适排版
 
-**打开文件，随手即来**
+明暗主题，字体、字号、行距与正文宽度可调；界面缩放（`Ctrl` + `-`/`+`/`0`）会被记住。
 
-双击 `.md` 文件，或在右键“打开方式”里选择 MDText，都能直接开始阅读；也可以把 `.md` 文件拖进窗口打开。Windows 绿色版无需管理员权限，在“设置”里即可把 MDText 加入 Markdown 文件的“打开方式”列表。已经打开 MDText 时再打开文件，会在现有窗口中加载。
+### 长文导航
 
-**舒适阅读，自由排版**
+可折叠多级目录、当前位置高亮；重开文件恢复阅读进度与视图设置。
 
-明暗主题与细致的文字排版，让内容清晰呈现。字体、字号、行距和正文宽度均可调整；Windows 和 macOS 还可直接选择电脑中已安装的字体，找到适合自己的阅读方式。
+### 图表与公式
 
-界面整体也能缩放，`Ctrl` 配合 `-`、`+`、`0` 分别是缩小、放大和恢复默认；“应用”菜单里同样可以操作，缩放比例会被记住。
+Mermaid、LaTeX、表格与代码高亮；支持色值色块；图表和图片可缩放、拖动、适应窗口，并在预览中按序浏览与保存。
 
-**长篇文档，定位自如**
+### 轻量编辑
 
-可折叠的多级目录支持章节跳转与当前位置高亮。再次打开文件，恢复阅读进度、缩放和视图设置，接着上次往下读。
+源码编辑与同步分屏；图片粘贴、拖入或批量插入；查找替换、撤销重做、草稿恢复。
 
-**图表、公式与配色，一目了然**
+### Word 转换与导出
 
-直接预览 Mermaid 图表、LaTeX 公式、表格和高亮代码。支持的颜色值旁会显示对应色块，查看设计规范与配色方案更直观。
+导入 Word 为 Markdown 草稿；导出 Word、独立 HTML，或打印为 PDF。
 
-双击 Mermaid 图表可打开独立预览；图表和图片预览都支持滚轮或按钮缩放、拖动移动，以及一键适应窗口。
+## 下载与安装
 
-预览弹窗可按文档顺序浏览图片和 Mermaid 图表，通过上一张/下一张按钮或左右方向键切换，并显示当前位置。
+从 [GitHub Releases](https://github.com/DOTATONG/MDText/releases/latest) 选择适合的版本。
 
-在预览弹窗中可直接保存当前图片：普通图片保留原格式，Mermaid 图表保存为完整 PNG 图片，不受当前缩放和拖动影响。
+| 平台           | 推荐方式                                                  |
+|----------------|-----------------------------------------------------------|
+| Windows        | **MSI**：安装、文件关联与更新检查                         |
+| Windows 绿色版 | **ZIP**：解压后运行                                       |
+| macOS          | **[本机源码编译](docs/BUILD_WITH_AI.md)**（推荐 AI 辅助） |
+| Microsoft Edge | **Extension ZIP**：解压后加载                             |
 
-**阅读为主，随手可改**
+### 环境与文件关联
 
-切换源码编辑，或在同步分屏中边写边看。图片可粘贴、拖入或批量插入，表格与公式也有快捷入口；查找替换、撤销重做和草稿恢复，让日常修改更省心。
+#### Windows
 
-**Word 转入，精致导出**
+需预先安装 [WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)，MDText 不附带或下载。MSI 安装界面为英文，应用支持中英文。
 
-导入 Word 即可转换为 Markdown 草稿，编辑后保存为 `.md` 文件。也可导出排版美观的 Word、独立 HTML，或通过系统打印生成 PDF，让整理好的内容便于分享与交付。
+#### macOS
 
-## English
+发布包为 Universal DMG（Intel 与 Apple Silicon，macOS 10.15+），尚未完成 Apple 签名与公证，建议在自己的 Mac 上源码编译；本地构建仍可能出现系统安全提示。
 
-**Give AI-generated content a better place to be read.**
+#### Edge 扩展
 
-MDText is a lightweight, thoughtfully designed Markdown reader, free and ad-free. Save AI-generated plans, notes, or technical explanations as Markdown files, then read them with clear typography, section navigation, diagrams, and formulas. It opens
-quickly, needs no account, and works just as well with your existing local documents.
+在 `edge://extensions` 开启开发人员模式，选择“加载解压缩的扩展”，选中解压后含 `manifest.json` 的文件夹。
 
-Reading comes first. Editing and conversion are close at hand when you need to revise a passage or share a neatly formatted document.
+#### 文件关联
 
-**Open a file in one step**
-
-Double-click a `.md` file, or right-click it and choose MDText under "Open with"; you can also drag a `.md` file into the window. The Windows portable build adds MDText to the Markdown "Open with" list from Settings without administrator rights, and
-a file opened while MDText is already running loads in the window you have.
-
-**A polished reading experience**
-
-Light and dark themes pair with carefully styled text. Adjust the font, size, line spacing, and page width; on Windows and macOS, you can also choose any installed font for comfortable reading.
-
-The whole interface zooms as well: `Ctrl` with `-`, `+`, and `0` shrinks, enlarges, and resets it. The same commands sit in the App menu, and the level is remembered.
-
-**Pick up where you left off**
-
-A collapsible outline lets you jump between sections and highlights your current heading. Reopen a file to restore its reading position, zoom, and view settings.
-
-**Diagrams, formulas, and colors in context**
-
-Preview Mermaid diagrams, LaTeX formulas, tables, and highlighted code. Color swatches appear beside supported color values, making palettes and design specifications easier to read.
-
-Double-click a Mermaid diagram to open a separate preview. Diagram and image previews support wheel or button zoom, dragging to pan, and fitting to the window.
-
-Browse images and Mermaid diagrams in document order using the previous/next buttons or arrow keys, with a current-position indicator.
-
-Save the current image from the preview: regular images keep their original format, while Mermaid diagrams are saved as complete PNG images, independent of zoom and pan.
-
-**Built for reading, ready for quick edits**
-
-Switch to source editing or write alongside a synchronized preview. Paste, drop, or batch-insert images, with quick tools for tables and formulas. Find and replace, undo and redo, and draft recovery support everyday revisions.
-
-**From Word to Markdown, and back to polished documents**
-
-Import Word as a Markdown draft, then edit and save it as a `.md` file. Export neatly formatted Word documents or standalone HTML, or print to PDF for sharing and delivery.
-
-## 下载与安装 / Installation
-
-从 [GitHub Releases](https://github.com/DOTATONG/MDText/releases/latest) 选择适合的版本。 / Choose a package from GitHub Releases.
-
-| 平台 / Platform           | 推荐方式 / Recommended option                                                                            |
-|---------------------------|----------------------------------------------------------------------------------------------------------|
-| Windows                   | **MSI**：安装、文件关联与更新检查 / Installer, file associations, and update checks                      |
-| Windows 绿色版 / Portable | **ZIP**：解压后运行 / Extract and run                                                                    |
-| macOS                     | **[本机源码编译 / Local build](#macos-build)**：推荐使用 AI 编程工具辅助 / AI-assisted build recommended |
-| Microsoft Edge            | **Extension ZIP**：解压后加载 / Extract and load unpacked                                                |
-
-**Windows：**需要预先安装 [WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)，MDText 不附带或下载运行时。MSI 安装界面为英文，应用支持中英文。
-
-**macOS：**因发布包尚未完成 Apple 签名与公证，建议在自己的 Mac 上[通过 AI 辅助编译](#ai-build)。本地构建仍可能出现系统安全提示。
-
-<details>
-<summary>English installation notes</summary>
-
-Windows requires WebView2 Runtime to be installed separately; MDText does not bundle or download it. The MSI uses an English installer; the app supports Chinese and English.
-
-The macOS Universal DMG supports Intel and Apple Silicon on macOS 10.15+. It uses ad-hoc signing without Developer ID signing or Apple notarization and may be blocked by macOS. We recommend building from source on your own Mac.
-
-</details>
-
-<details>
-<summary>Edge 扩展与 Windows 部署 / Edge and Windows deployment</summary>
-
-**Edge：**在 `edge://extensions` 开启开发人员模式，选择“加载解压缩的扩展”，选中解压后含 `manifest.json` 的文件夹。
-
-**Edge:** enable Developer mode at `edge://extensions`, choose **Load unpacked**, and select the extracted folder containing `manifest.json`.
-
-**Windows：**MSI 默认关联 `.md` 和 `.markdown`，安装时可取消。绿色版解压后不注册任何关联，可在 MDText 的“设置”里把 MDText 加入 Markdown 文件的“打开方式”列表；该操作只写入当前用户注册表，无需管理员权限，再次点击同一个按钮即可移除。静默安装时可通过以下参数禁用关联，请替换为实际
-MSI 文件名。
-
-**Windows:** Markdown associations are enabled by default and can be deselected. Extracting the portable ZIP registers nothing; use the File association section in MDText Settings to add MDText to the Markdown "Open with" list for the current user,
-which needs no administrator rights and can be undone from the same button. To disable associations during unattended installation, replace the example filename below with your MSI:
+MSI 默认关联 `.md` 和 `.markdown`，安装时可取消。绿色版解压后不注册任何关联，可在“设置”中把 MDText 加入“打开方式”列表；该操作只写入当前用户注册表，无需管理员权限，再次点击同一按钮即可移除。静默安装时可禁用关联（请替换为实际 MSI 文件名）：
 
 ```powershell
 msiexec /i MDText_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
 ```
 
-签名状态以各版本发布说明为准；详见[代码签名政策](CODE_SIGNING_POLICY.md)。 / See each release's signing status and the [code signing policy](CODE_SIGNING_POLICY.md).
+签名状态以各版本发布说明为准；详见[代码签名政策](CODE_SIGNING_POLICY.md)。
 
-</details>
+## 用 AI 帮你编译
 
-<a id="macos-build"></a>
-<a id="ai-build"></a>
+让能操作本地终端的 AI 编程工具协助构建，提示词、Mac 环境要求与手动编译命令见 **[docs/BUILD_WITH_AI.md](docs/BUILD_WITH_AI.md)**。
 
-## 用 AI 帮你编译 / Build with AI
+## 使用参考
 
-无需先熟悉编译命令，让能操作本地终端的 AI 编程工具协助完成：
+### 常用快捷键
 
-1. 从 [Releases](https://github.com/DOTATONG/MDText/releases/latest) 下载 **Source code (zip)** 并解压。
-2. 用 AI 编程工具打开解压后的项目文件夹。Mac 版本需在 Mac 上编译，Windows 版本需在 Windows 上编译。
-3. 发送下方对应的提示词，按提示完成必要的环境安装，等待 AI 给出安装包位置。
+| 操作            | Windows                   | macOS               |
+|-----------------|---------------------------|---------------------|
+| 新建            | `Ctrl+N`                  | `Command+N`         |
+| 打开            | `Ctrl+O`                  | `Command+O`         |
+| 保存            | `Ctrl+S`                  | `Command+S`         |
+| 另存为          | `Ctrl+Shift+S`            | `Command+Shift+S`   |
+| 查找            | `Ctrl+F`                  | `Command+F`         |
+| 撤销            | `Ctrl+Z`                  | `Command+Z`         |
+| 重做            | `Ctrl+Y` / `Ctrl+Shift+Z` | `Command+Shift+Z`   |
+| 粗体            | `Ctrl+B`                  | `Command+B`         |
+| 斜体            | `Ctrl+I`                  | `Command+I`         |
+| 插入链接        | `Ctrl+K`                  | `Command+K`         |
+| 缩进 / 反向缩进 | `Tab` / `Shift+Tab`       | `Tab` / `Shift+Tab` |
 
-首次准备环境与下载依赖需要联网。
+### 数学公式
 
-**Mac 提示词**
+`$...$` 插入行内公式，单独成行的 `$$` 包裹公式块；编辑时点击 `Σ` 使用模板与实时预览，普通美元符号写为 `\$`。
 
-```text
-请帮我将当前文件夹中的 MDText 源码编译为这台 Mac 可安装的版本。
+### Word 导入
 
-先阅读项目构建说明，检查本机环境，说明缺失的依赖并协助安装。
-使用项目现有构建配置生成适合这台 Mac 的 DMG 安装包。
-遇到错误请定位原因、做必要修复并重试，保留我的已有修改。
-沿用本地签名配置，不关闭系统安全机制，不上传或发布产物。
-完成后确认安装包已生成，告诉我完整路径和安装方法；如未成功，请说明具体阻塞原因。
-```
+Word 转换在本机完成，首次使用需要 Python 和转换组件，下载组件需要联网。
 
-**Windows 提示词**
+### 开发与打包
 
-```text
-请帮我将当前文件夹中的 MDText 源码编译为 Windows 安装版和绿色版。
+技术栈：Tauri 2 · React 19 · TypeScript · Vite。
 
-先阅读项目构建说明，检查本机环境，说明缺失的依赖并协助安装。
-优先使用项目现有的一键打包入口，生成 MSI、Portable ZIP 和校验文件。
-遇到错误请定位原因、做必要修复并重试，保留我的已有修改。
-使用本地打包配置，不要求发布签名密钥，不上传或发布产物。
-完成后确认文件已生成，告诉我完整路径和使用方法，并检查运行所需的 WebView2 是否可用。
-如未成功，请说明具体阻塞原因。
-```
-
-<details>
-<summary>English instructions and ready-to-use prompts</summary>
-
-Download a release's **Source code (zip)** and extract it. Open the project folder in an AI coding tool with local terminal access, then send the appropriate prompt below. Build on the target platform: macOS on a Mac, Windows on Windows. Initial
-setup requires internet access; follow any dependency installation steps the tool presents.
-
-**macOS**
-
-```text
-Build the MDText source in this folder into an installable app for this Mac.
-
-Read the project's build instructions, check the environment, and help install missing prerequisites.
-Use the existing build configuration to create a DMG for this Mac's architecture.
-Diagnose failures, make necessary fixes, and retry while preserving my existing changes.
-Keep local signing settings and system security protections. Do not upload or publish artifacts.
-Verify the DMG exists, then provide its full path and installation steps.
-If the build cannot finish, explain the specific blocker.
-```
-
-**Windows**
-
-```text
-Build the MDText source in this folder into Windows installer and portable packages.
-
-Read the project's build instructions, check the environment, and help install missing prerequisites.
-Use the existing one-step packaging entry point to create an MSI, Portable ZIP, and checksums.
-Diagnose failures, make necessary fixes, and retry while preserving my existing changes.
-Use local build settings without release signing keys. Do not upload or publish artifacts.
-Verify the files exist, provide their full paths and usage steps, and check WebView2 availability.
-If the build cannot finish, explain the specific blocker.
-```
-
-</details>
-
-<details>
-<summary>Mac 环境、手动命令与签名 / Mac prerequisites, commands, and signing</summary>
-
-准备 [Node.js 24](https://nodejs.org/en/download)、[Rust/Cargo stable](https://rustup.rs/) 和 Xcode Command Line Tools；详见 [Tauri 环境要求](https://v2.tauri.app/start/prerequisites/)。
-
-Install Node.js 24, stable Rust/Cargo, and Xcode Command Line Tools. See the Tauri prerequisites linked above.
-
-```bash
-# 仅在缺少 Apple 编译工具时执行 / Only if Apple's build tools are missing
-xcode-select --install
-
-# 在解压后的源码目录执行 / Run from the extracted source directory
-npm ci
-npm run desktop:build -- --bundles dmg
-```
-
-默认构建当前 Mac 架构的版本。签名机制参见 [Tauri macOS 签名说明](https://v2.tauri.app/distribute/sign/macos/)。
-
-The default build targets your Mac's architecture. See the Tauri macOS signing guide above for signing details.
-
-默认产物位于 `src-tauri/target/release/bundle/dmg/`，打开 DMG 后将 MDText 拖入“应用程序”。本地构建使用 ad-hoc 签名，不等于 Apple 公证，也不保证消除所有安全提示。
-
-Find the DMG in `src-tauri/target/release/bundle/dmg/`, open it, and drag MDText into Applications. Local builds use ad-hoc signing, are not Apple-notarized, and may still show security prompts.
-
-</details>
-
-## 使用参考 / Reference
-
-<details>
-<summary>常用快捷键 / Keyboard shortcuts</summary>
-
-| 操作 / Action                      | Windows                   | macOS               |
-|------------------------------------|---------------------------|---------------------|
-| 新建 / New                         | `Ctrl+N`                  | `Command+N`         |
-| 打开 / Open                        | `Ctrl+O`                  | `Command+O`         |
-| 保存 / Save                        | `Ctrl+S`                  | `Command+S`         |
-| 另存为 / Save As                   | `Ctrl+Shift+S`            | `Command+Shift+S`   |
-| 查找 / Find                        | `Ctrl+F`                  | `Command+F`         |
-| 撤销 / Undo                        | `Ctrl+Z`                  | `Command+Z`         |
-| 重做 / Redo                        | `Ctrl+Y` / `Ctrl+Shift+Z` | `Command+Shift+Z`   |
-| 粗体 / Bold                        | `Ctrl+B`                  | `Command+B`         |
-| 斜体 / Italic                      | `Ctrl+I`                  | `Command+I`         |
-| 插入链接 / Insert link             | `Ctrl+K`                  | `Command+K`         |
-| 缩进 / 反向缩进 / Indent / Outdent | `Tab` / `Shift+Tab`       | `Tab` / `Shift+Tab` |
-
-</details>
-
-<details>
-<summary>Word 导入 / Word import</summary>
-
-Word 转换在本机完成。首次使用需要 Python 和转换组件，下载组件需要联网。
-
-Word conversion runs locally. Initial setup requires Python and conversion components, with internet access for downloads.
-
-</details>
-
-<details>
-<summary>数学公式 / Math formulas</summary>
-
-使用 `$...$` 插入行内公式，单独成行的 `$$` 包裹公式块。编辑时点击 `Σ` 可使用公式模板与实时预览；普通美元符号写为 `\$`。
-
-Use `$...$` for inline math and `$$` on separate lines for display math. Click `Σ` for templates and a live preview. Escape a literal dollar sign as `\$`.
-
-</details>
-
-<details>
-<summary>开发与打包 / Development and packaging</summary>
-
-技术栈 / Stack：Tauri 2 · React 19 · TypeScript · Vite。
-
-准备 Node.js 24、Rust/Cargo 和[对应平台构建工具](https://v2.tauri.app/start/prerequisites/)，在源码目录运行： / Install Node.js 24, Rust/Cargo, and platform build tools, then run from the source directory:
+准备 Node.js 24、Rust/Cargo 和[对应平台构建工具](https://v2.tauri.app/start/prerequisites/)，然后运行：
 
 ```bash
 npm ci
 npm run desktop:dev
 ```
 
-| 目标 / Target                        | 命令 / Command                           |
+| 目标                                 | 命令                                     |
 |--------------------------------------|------------------------------------------|
 | Windows MSI                          | `npm run desktop:build -- --bundles msi` |
 | Windows MSI + Portable ZIP + SHA-256 | `npm run package:windows`                |
 | macOS DMG                            | `npm run desktop:build -- --bundles dmg` |
 | Edge ZIP                             | `npm run edge:package`                   |
 
-验证命令 / Verification：`npm test` · `npm run lint` · `npm run build` · `npm run test:e2e`。
+验证：`npm test` · `npm run lint` · `npm run build` · `npm run test:e2e`。
 
-版本管理 / Versioning：`npm run version:sync -- <major.minor.patch>`，然后 / then `npm run version:check`。
+版本管理：`npm run version:sync -- <major.minor.patch>`，然后 `npm run version:check`。
 
-维护者资料 / Maintainer docs: [`ROADMAP.md`](ROADMAP.md) · [`工程目录说明 / Project structure`](docs/PROJECT_STRUCTURE.md) · [`Fork 发布指南 / Fork release guide`](docs/FORK_RELEASING.md)。
+维护者资料：[`ROADMAP.md`](ROADMAP.md) · [`工程目录说明`](docs/PROJECT_STRUCTURE.md) · [`Fork 发布指南`](docs/FORK_RELEASING.md)。
 
-</details>
+### CI、发布与签名
 
-<details>
-<summary>CI、发布与签名 / CI, releases, and signing</summary>
+推送与 PR 执行质量检查；手动运行 CI 额外生成桌面安装包。推送 `v*` Tag 或运行 Release 工作流可发布 GitHub Release。详见 [`FORK_RELEASING.md`](docs/FORK_RELEASING.md)。
 
-普通推送与 PR 执行质量检查；手动运行 CI 额外生成桌面安装包。推送 `v*` Tag 或运行 Release 工作流可发布 GitHub Release。
-
-Pushes and PRs run quality checks; manual CI runs also build desktop installers. A `v*` tag or the Release workflow publishes a GitHub Release.
-
-| 集成 / Integration | 配置 / Configuration                                                                        |
-|--------------------|---------------------------------------------------------------------------------------------|
-| Windows SignPath   | Secret: `SIGNPATH_API_TOKEN`；Variable: `SIGNPATH_ORGANIZATION_ID`                          |
-| Tauri updater      | Secrets: `TAURI_SIGNING_PRIVATE_KEY`、`TAURI_SIGNING_PRIVATE_KEY_PASSWORD`                  |
-| Edge Add-ons       | Secret: `EDGE_ADDONS_API_KEY`；Variables: `EDGE_ADDONS_CLIENT_ID`、`EDGE_ADDONS_PRODUCT_ID` |
+| 集成             | 配置                                                                                        |
+|------------------|---------------------------------------------------------------------------------------------|
+| Windows SignPath | Secret: `SIGNPATH_API_TOKEN`；Variable: `SIGNPATH_ORGANIZATION_ID`                          |
+| Tauri updater    | Secrets: `TAURI_SIGNING_PRIVATE_KEY`、`TAURI_SIGNING_PRIVATE_KEY_PASSWORD`                  |
+| Edge Add-ons     | Secret: `EDGE_ADDONS_API_KEY`；Variables: `EDGE_ADDONS_CLIENT_ID`、`EDGE_ADDONS_PRODUCT_ID` |
 
 SignPath 签名仅用于 Release，需完成配置与审批；Edge 首次发布需在 Microsoft Partner Center 创建产品。macOS Developer ID 签名与公证尚未配置。
 
-SignPath signing applies to releases after configuration and approval. Create the initial Edge product in Microsoft Partner Center. macOS Developer ID signing and notarization are not yet configured.
+## 项目信息
 
-</details>
+| 项目   | 内容                                                                               |
+|--------|------------------------------------------------------------------------------------|
+| 版本   | 4.0.1                                                                              |
+| 作者   | [DOTATONG](https://github.com/DOTATONG)（fork 维护者）                             |
+| 原作者 | [Sunky](https://www.sunky.net) / [isunky/MDView](https://github.com/isunky/MDView) |
+| 许可证 | [GPL-3.0](LICENSE)                                                                 |
 
-## 项目信息 / Project
+MDText 是 [MDView](https://github.com/isunky/MDView) 的非官方分支，保留原项目的 GPL-3.0 许可证与原作者署名。
 
-| 项目 / Item              | 内容 / Value                                                                       |
-|--------------------------|------------------------------------------------------------------------------------|
-| 版本 / Version           | 4.0.1                                                                              |
-| 作者 / Author            | [DOTATONG](https://github.com/DOTATONG)（fork 维护者 / fork maintainer）           |
-| 原作者 / Original author | [Sunky](https://www.sunky.net) / [isunky/MDView](https://github.com/isunky/MDView) |
-| 许可证 / License         | [GPL-3.0](LICENSE)                                                                 |
-
-MDText 是 [MDView](https://github.com/isunky/MDView) 的非官方分支，保留原项目的 GPL-3.0 许可证与原作者署名。 / MDText is an unofficial fork of [MDView](https://github.com/isunky/MDView) and retains the original GPL-3.0 license and author attribution.
-
-第三方依赖保留原许可证。 / Third-party dependencies retain their original licenses.
+第三方依赖保留原许可证。

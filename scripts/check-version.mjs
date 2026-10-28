@@ -9,8 +9,8 @@ const versions = await Promise.all([
   readJsonVersion('src-tauri/tauri.conf.json', 'src-tauri/tauri.conf.json version'),
   readTextVersion('src/appInfo.ts', /version:\s*'([^']+)'/, 'src/appInfo.ts version'),
   readJsonVersion('edge/public/manifest.json', 'edge/public/manifest.json version'),
-  readTextVersion('README.md', /<strong>Version \/ 版本：<\/strong>([0-9]+\.[0-9]+\.[0-9]+)/, 'README.md header version'),
-  readTextVersion('README.md', /\| 版本 \/ Version[^|]+\| ([0-9]+\.[0-9]+\.[0-9]+)[^|]+\|/, 'README.md Project version row'),
+  readTextVersion('README.md', /\| 版本\s*\| ([0-9]+\.[0-9]+\.[0-9]+)\s*\|/, 'README.md Project version row'),
+  readTextVersion('README.en.md', /\| Version\s*\| ([0-9]+\.[0-9]+\.[0-9]+)\s*\|/, 'README.en.md Project version row'),
 ])
 
 const mismatches = versions.filter(({ version }) => version !== expectedVersion)
