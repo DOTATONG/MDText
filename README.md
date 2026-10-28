@@ -144,7 +144,7 @@ SignPath 签名仅用于 Release，需完成配置与审批；Edge 首次发布�
 
 | 项目   | 内容                                                                               |
 |--------|------------------------------------------------------------------------------------|
-| 版本   | 4.0.1                                                                              |
+| 版本   | 4.0.2                                                                              |
 | 作者   | [DOTATONG](https://github.com/DOTATONG)（fork 维护者）                             |
 | 原作者 | [Sunky](https://www.sunky.net) / [isunky/MDView](https://github.com/isunky/MDView) |
 | 许可证 | [GPL-3.0](LICENSE)                                                                 |

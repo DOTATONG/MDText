@@ -1,6 +1,6 @@
 [package]
 name = "mdtext"
-version = "4.0.1"
+version = "4.0.2"
 description = "MDText — a lightweight Markdown viewer and source editor."
 authors = ["MDText contributors"]
 license = "GPL-3.0"
