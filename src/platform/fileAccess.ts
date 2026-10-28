@@ -1,5 +1,7 @@
 import { invoke } from '@tauri-apps/api/core'
 import { listen, type UnlistenFn } from '@tauri-apps/api/event'
+import { getCurrentWindow } from '@tauri-apps/api/window'
+import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
 import { createExportDocxDefaultPath } from '../domain/exportDocxPath'
 import { createExportHtmlDefaultPath } from '../domain/exportHtmlPath'
 import { printHtmlInBrowser } from './printHtml'
@@ -87,7 +89,9 @@ export type FileAccess = {
   readRemoteImageFile?: (url: string) => Promise<LocalImageFile>
   writeImageAsset: (documentPath: string, image: ImageAssetWriteRequest) => Promise<WrittenImageAsset>
   readStartupMarkdownFile: () => Promise<OpenedMarkdownFile | null>
-  listenForOpenedFiles: (callback: (file: OpenedMarkdownFile) => void) => Promise<UnlistenFn | null>
+  listenForOpenedFiles: (
+    callback: (paths: string[]) => void | Promise<void>,
+  ) => Promise<UnlistenFn | null>
   docxImport?: DocxImportAccess
 }
 
@@ -240,6 +244,17 @@ export const tauriFileAccess: FileAccess = {
       return null
     }
 
+    const windowPath = windowFileParameter()
+    if (windowPath) {
+      return invoke<OpenedMarkdownFile>('open_markdown_file_at_path', { path: windowPath })
+    }
+
+    // Only the main window consumes command-line files; extra windows are either empty or were
+    // given their document through `windowFileParameter` above.
+    if (getCurrentWindow().label !== 'main') {
+      return null
+    }
+
     const paths = await invoke<string[]>('take_opened_files')
     const path = paths.at(0)
     return path ? invoke<OpenedMarkdownFile>('open_markdown_file_at_path', { path }) : null
@@ -250,15 +265,16 @@ export const tauriFileAccess: FileAccess = {
       return null
     }
 
-    return listen<string[]>('opened-files', async (event) => {
-      const path = event.payload.at(0)
-      if (!path) {
-        return
-      }
-
-      callback(await invoke<OpenedMarkdownFile>('open_markdown_file_at_path', { path }))
+    // Scoped to this window so a launch forwarded to one window is not handled by every window.
+    return getCurrentWebviewWindow().listen<string[]>('opened-files', (event) => {
+      void callback(event.payload)
     })
   },
+}
+
+/** The document path a newly created window was asked to show, carried on the window URL. */
+function windowFileParameter(): string | null {
+  return new URLSearchParams(window.location.search).get('file')
 }
 
 function isTauriRuntime(): boolean {

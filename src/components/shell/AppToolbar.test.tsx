@@ -47,6 +47,7 @@ function toolbar(windowFrame: AppWindowFrame) {
     recentFiles={[]}
     shortcuts={createAppShortcutHints('windows')}
     supportsAppUpdates={false}
+    supportsNewWindow={false}
     t={translations.en}
     updatePhase="idle"
     viewMode="preview"
@@ -65,6 +66,7 @@ function toolbar(windowFrame: AppWindowFrame) {
     }}
     closeFileTitle="Close File"
     newTitle="New"
+    newWindowTitle="New Window"
     openTitle="Open"
     saveTitle="Save"
     saveAsTitle="Save As"
@@ -77,6 +79,7 @@ function toolbar(windowFrame: AppWindowFrame) {
     onExportPdf={vi.fn()}
     onLanguage={vi.fn()}
     onNew={vi.fn()}
+    onNewWindow={vi.fn()}
     onOpen={vi.fn()}
     onOpenRecent={vi.fn()}
     onOpenReadingSettings={vi.fn()}

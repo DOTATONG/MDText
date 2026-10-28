@@ -11,7 +11,10 @@ use std::{
     collections::HashSet,
     fs,
     path::{Path, PathBuf},
-    sync::Mutex,
+    sync::{
+        atomic::{AtomicU64, Ordering},
+        Mutex,
+    },
     time::Duration,
 };
 
@@ -19,7 +22,7 @@ use base64::{engine::general_purpose, Engine as _};
 use docx_import::DocxImportRegistry;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
-use tauri::{AppHandle, Manager, State};
+use tauri::{AppHandle, Manager, State, WebviewUrl};
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
 
@@ -37,6 +40,8 @@ const FILE_ACCESS_DENIED: &str =
     "File access denied. Open or select the file in MDText before accessing it.";
 const MAX_IMAGE_ASSET_BYTES: usize = 10 * 1024 * 1024;
 const MAX_EXPORT_IMAGE_BYTES: usize = 20 * 1024 * 1024;
+/// Labels of windows created after startup. Kept unique for the lifetime of the process.
+static NEXT_WINDOW_ID: AtomicU64 = AtomicU64::new(1);
 /// Image types the editor can copy into `assets/`. SVG is excluded because the frontend keeps
 /// raster formats only.
 const DROPPED_IMAGE_MIME_TYPES: [&str; 6] = [
@@ -222,6 +227,38 @@ fn take_opened_files(opened_files: State<'_, OpenedFiles>) -> Vec<String> {
         .drain(..)
         .map(|path| path.to_string_lossy().to_string())
         .collect()
+}
+
+/// Opens another top-level window using the same platform window configuration as the main one.
+///
+/// When `path` is set, the window's frontend URL carries it as a `file` query parameter so the new
+/// window can load that document immediately after it starts.
+///
+/// This must stay `async`: window creation has to be dispatched to the main thread, and a
+/// synchronous command already occupies that thread, which would deadlock the whole application.
+#[tauri::command]
+async fn open_new_window(app: AppHandle, path: Option<String>) -> Result<(), String> {
+    let mut config = app
+        .config()
+        .app
+        .windows
+        .first()
+        .cloned()
+        .ok_or_else(|| "The window configuration is missing.".to_string())?;
+    config.label = format!("window-{}", NEXT_WINDOW_ID.fetch_add(1, Ordering::Relaxed));
+    config.title = "MDText".to_string();
+
+    if let Some(path) = path {
+        let encoded = url::form_urlencoded::byte_serialize(path.as_bytes()).collect::<String>();
+        config.url = WebviewUrl::App(PathBuf::from(format!("index.html?file={encoded}")));
+    }
+
+    tauri::WebviewWindowBuilder::from_config(&app, &config)
+        .map_err(|error| format!("Failed to configure the new window: {error}"))?
+        .build()
+        .map_err(|error| format!("Failed to open a new window: {error}"))?;
+
+    Ok(())
 }
 
 #[tauri::command]
@@ -661,7 +698,7 @@ pub fn run() {
     // of starting another copy of the application.
     #[cfg(target_os = "windows")]
     let builder = builder.plugin(tauri_plugin_single_instance::init(|app, argv, _cwd| {
-        focus_main_window(app);
+        focus_active_window(app);
 
         // `argv[0]` is the executable itself, and non-Markdown arguments are filtered out.
         let files = startup::collect_opened_files(argv.into_iter().skip(1));
@@ -683,6 +720,7 @@ pub fn run() {
     builder
         .invoke_handler(tauri::generate_handler![
             take_opened_files,
+            open_new_window,
             open_markdown_file_dialog,
             open_markdown_file_at_path,
             read_markdown_file,
@@ -865,13 +903,55 @@ fn push_opened_files(app: &AppHandle, files: Vec<PathBuf>) {
             .extend(authorized_files);
     }
 
-    let _ = app.emit("opened-files", payload);
+    // Only the window the user is looking at decides whether the file replaces its document or
+    // gets a new window. Broadcasting would make every open window react to the same launch.
+    match focused_window_label(app) {
+        Some(label) => {
+            let _ = app.emit_to(label, "opened-files", payload);
+        }
+        None => {
+            let _ = app.emit("opened-files", payload);
+        }
+    }
 }
 
-/// Brings the running instance to the foreground when the operating system hands it a file.
+/// The focused window's label, falling back to the main window and then to any open window.
+#[cfg(any(
+    target_os = "windows",
+    target_os = "macos",
+    target_os = "ios",
+    target_os = "android"
+))]
+fn focused_window_label(app: &AppHandle) -> Option<String> {
+    let windows = app.webview_windows();
+
+    if let Some((label, _)) = windows
+        .iter()
+        .find(|(_, window)| window.is_focused().unwrap_or(false))
+    {
+        return Some(label.clone());
+    }
+
+    if windows.contains_key("main") {
+        return Some("main".to_string());
+    }
+
+    windows.keys().next().cloned()
+}
+
+/// Brings the window the user was using to the foreground when the operating system hands the
+/// running instance a file. Falls back to the main window, then to any other open window.
 #[cfg(target_os = "windows")]
-fn focus_main_window(app: &AppHandle) {
-    let Some(window) = app.get_webview_window("main") else {
+fn focus_active_window(app: &AppHandle) {
+    let windows = app.webview_windows();
+    let window = windows
+        .values()
+        .find(|window| window.is_focused().unwrap_or(false))
+        .or_else(|| windows.get("main"))
+        .or_else(|| windows.values().next())
+        .cloned();
+
+    let Some(window) = window else {
         return;
     };
 

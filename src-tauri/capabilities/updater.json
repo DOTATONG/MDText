@@ -3,7 +3,8 @@
   "identifier": "windows-updater",
   "description": "Allows the main window to check and install Windows application updates.",
   "windows": [
-    "main"
+    "main",
+    "window-*"
   ],
   "platforms": [
     "windows"

@@ -35,6 +35,8 @@ type UseDocumentControllerOptions = {
   discardUnsavedMessage: string
   recentFileOpenFailedMessage: string
   fileOperationFailedMessage: string
+  /** Opens a file in a separate window instead of replacing the document in this one. */
+  openNewWindow: (path: string) => Promise<void>
   draftBackupFailedMessage: string
   externalFileUpdatedMessage: string
   externalFileConflictMessage: string
@@ -51,6 +53,7 @@ export function useDocumentController({
   discardUnsavedMessage,
   recentFileOpenFailedMessage,
   fileOperationFailedMessage,
+  openNewWindow,
   draftBackupFailedMessage,
   externalFileUpdatedMessage,
   externalFileConflictMessage,
@@ -69,6 +72,7 @@ export function useDocumentController({
   const [externalFileState, setExternalFileState] = useState<ExternalFileState | null>(null)
   const saveOperationRef = useRef<Promise<string | null> | null>(null)
   const documentRef = useRef(markdownDocument)
+  const isWelcomeVisibleRef = useRef(isWelcomeVisible)
   const [documentSessionId, setDocumentSessionId] = useState(createDocumentDraftId)
   const sessionIdRef = useRef(documentSessionId)
   const backupFailureNotifiedRef = useRef(false)
@@ -76,6 +80,10 @@ export function useDocumentController({
   useEffect(() => {
     documentRef.current = markdownDocument
   }, [markdownDocument])
+
+  useEffect(() => {
+    isWelcomeVisibleRef.current = isWelcomeVisible
+  }, [isWelcomeVisible])
 
   const canDiscardUnsavedChanges = useCallback((): boolean => {
     return !markdownDocument.isDirty || window.confirm(discardUnsavedMessage)
@@ -141,6 +149,36 @@ export function useDocumentController({
     }
   }, [draftBackupFailedMessage, isStartupResolved, pendingDraft])
 
+  const handleOpenedFiles = useCallback(async (paths: string[]) => {
+    // A file handed to a window that is still empty belongs in that window. Once a document is
+    // visible, the window is kept and each other file gets its own window.
+    const currentDocument = documentRef.current
+    let opensInThisWindow = isWelcomeVisibleRef.current
+      || (currentDocument.path === null && !currentDocument.isDirty)
+
+    for (const path of paths) {
+      if (opensInThisWindow) {
+        try {
+          loadFile(await fileAccess.openMarkdownFileAtPath(path), true)
+          opensInThisWindow = false
+        } catch (error) {
+          setStatusMessage(getErrorMessage(error, fileOperationFailedMessage))
+        }
+        continue
+      }
+
+      if (documentRef.current.path === path) {
+        continue
+      }
+
+      try {
+        await openNewWindow(path)
+      } catch (error) {
+        setStatusMessage(getErrorMessage(error, fileOperationFailedMessage))
+      }
+    }
+  }, [fileAccess, fileOperationFailedMessage, loadFile, openNewWindow])
+
   useEffect(() => {
     let disposed = false
     let unlisten: (() => void) | null = null
@@ -153,13 +191,17 @@ export function useDocumentController({
           loadFile(startupFile)
           setPendingDraft(null)
         }
+      } catch (error) {
+        if (!disposed) {
+          setStatusMessage(getErrorMessage(error, fileOperationFailedMessage))
+        }
       } finally {
         if (!disposed) {
           setIsStartupResolved(true)
         }
       }
 
-      const dispose = await fileAccess.listenForOpenedFiles((file) => loadFile(file, true))
+      const dispose = await fileAccess.listenForOpenedFiles(handleOpenedFiles)
       if (disposed) {
         dispose?.()
         return
@@ -174,7 +216,7 @@ export function useDocumentController({
       disposed = true
       unlisten?.()
     }
-  }, [fileAccess, loadFile])
+  }, [fileAccess, fileOperationFailedMessage, handleOpenedFiles, loadFile])
 
   const checkCurrentFile = useCallback(async () => {
     const current = documentRef.current

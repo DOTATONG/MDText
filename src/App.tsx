@@ -50,6 +50,8 @@ import type { FileAccess } from './platform/fileAccess'
 import type { DocxImportStatus } from './platform/fileAccess'
 import { openExternalLink } from './platform/externalLinks'
 import type { AppUpdateClient } from './platform/appUpdates'
+import type { AppWindowsClient } from './platform/appWindows'
+import { tauriAppWindows } from './platform/appWindows'
 import { unsupportedAppUpdateClient } from './platform/unsupportedAppUpdates'
 import type { FileAssociationClient } from './platform/fileAssociation'
 import { tauriFileAssociation } from './platform/fileAssociation'
@@ -73,6 +75,7 @@ type ViewMode = ReadingViewMode
 
 type AppProps = {
   appUpdateClient?: AppUpdateClient
+  appWindows?: AppWindowsClient
   fileAccess: FileAccess
   fileAssociation?: FileAssociationClient
   initialLanguage?: AppLanguage
@@ -83,6 +86,7 @@ type AppProps = {
 
 function App({
   appUpdateClient = unsupportedAppUpdateClient,
+  appWindows = tauriAppWindows,
   fileAccess,
   fileAssociation = tauriFileAssociation,
   initialLanguage,
@@ -159,6 +163,7 @@ function App({
     externalFileSaveBlockedMessage: t.externalFileSaveBlocked,
     recentFileOpenFailedMessage: t.recentFileOpenFailed,
     fileOperationFailedMessage: t.fileOperationFailed,
+    openNewWindow: appWindows.openNewWindow,
     onCloseMenu: closeMenu,
     onViewModeChange: setViewMode,
   })
@@ -236,6 +241,12 @@ function App({
     preloadMarkdownPreview()
     await handleOpenFile()
   }, [handleOpenFile])
+  const handleNewWindow = useCallback(() => {
+    closeMenu()
+    void appWindows.openNewWindow().catch((error: unknown) => {
+      setStatusMessage(getErrorMessage(error))
+    })
+  }, [appWindows, closeMenu, setStatusMessage])
   const handleOpenRecentFileWithPreviewPreload = useCallback(async (path: string) => {
     preloadMarkdownPreview()
     await handleOpenRecentFile(path)
@@ -543,12 +554,14 @@ function App({
         menuBarRef={menuBarRef}
         nativeFileTitle={nativeFileTitle}
         newTitle={newTitle}
+        newWindowTitle={t.newWindowLabel}
         openTitle={openTitle}
         recentFiles={recentFiles}
         saveAsTitle={saveAsTitle}
         saveTitle={saveTitle}
         shortcuts={shortcuts}
         supportsAppUpdates={supportsAppUpdates}
+        supportsNewWindow={appWindows.supportsMultipleWindows}
         t={t}
         updateActionTitle={updateActionTitle}
         updatePhase={updatePhase}
@@ -565,6 +578,7 @@ function App({
         onImportDocx={fileAccess.docxImport ? openDocxImport : undefined}
         onLanguage={handleLanguageSelect}
         onNew={handleNewDocumentWithPreviewPreload}
+        onNewWindow={handleNewWindow}
         onOpen={() => void handleOpenFileWithPreviewPreload()}
         onOpenRecent={(path) => void handleOpenRecentFileWithPreviewPreload(path)}
         onOpenReadingSettings={handleOpenReadingSettings}

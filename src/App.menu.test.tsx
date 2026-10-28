@@ -75,25 +75,71 @@ describe('App', () => {
   })
 
   it('adds markdown files opened by the desktop shell listener to recent files', async () => {
-    let openedFileCallback: ((file: OpenedMarkdownFile) => void) | null = null
-    const listenForOpenedFiles = vi.fn(async (callback: (file: OpenedMarkdownFile) => void) => {
+    let openedFileCallback: ((paths: string[]) => void | Promise<void>) | null = null
+    const listenForOpenedFiles = vi.fn(async (callback: (paths: string[]) => void | Promise<void>) => {
       openedFileCallback = callback
       return null
     })
-    renderApp({ fileAccess: createFileAccess({ listenForOpenedFiles }) })
+    const openMarkdownFileAtPath = vi.fn(async (path: string) => file(path, '# Associated'))
+    renderApp({ fileAccess: createFileAccess({ listenForOpenedFiles, openMarkdownFileAtPath }) })
 
     await waitFor(() => {
       expect(openedFileCallback).not.toBeNull()
     })
 
     await act(async () => {
-      openedFileCallback?.(file('/tmp/associated.md', '# Associated'))
+      await openedFileCallback?.(['/tmp/associated.md'])
     })
 
     expect(await screen.findByRole('heading', { name: 'Associated' })).toBeInTheDocument()
     await waitFor(() => {
       expect(getStoredRecentFiles().map((file) => file.path)).toEqual(['/tmp/associated.md'])
     })
+  })
+
+  it('opens a file in a new window when the current window already shows a document', async () => {
+    let openedFileCallback: ((paths: string[]) => void | Promise<void>) | null = null
+    const listenForOpenedFiles = vi.fn(async (callback: (paths: string[]) => void | Promise<void>) => {
+      openedFileCallback = callback
+      return null
+    })
+    const openMarkdownFileAtPath = vi.fn(async (path: string) => file(path, '# Current'))
+    const openNewWindow = vi.fn(async () => undefined)
+    renderWelcomeApp({
+      appWindows: { supportsMultipleWindows: true, openNewWindow },
+      fileAccess: createFileAccess({
+        startupFile: file('/tmp/current.md', '# Current'),
+        listenForOpenedFiles,
+        openMarkdownFileAtPath,
+      }),
+    })
+
+    expect(await screen.findByRole('heading', { name: 'Current' })).toBeInTheDocument()
+    await waitFor(() => {
+      expect(openedFileCallback).not.toBeNull()
+    })
+
+    await act(async () => {
+      await openedFileCallback?.(['/tmp/other.md'])
+    })
+
+    expect(openNewWindow).toHaveBeenCalledWith('/tmp/other.md')
+    expect(openMarkdownFileAtPath).not.toHaveBeenCalled()
+    expect(screen.getByRole('heading', { name: 'Current' })).toBeInTheDocument()
+  })
+
+  it('opens a new window from the File menu', async () => {
+    const user = userEvent.setup()
+    const openNewWindow = vi.fn(async () => undefined)
+    renderWelcomeApp({
+      appWindows: { supportsMultipleWindows: true, openNewWindow },
+      fileAccess: createFileAccess(),
+    })
+
+    await user.click(screen.getByRole('button', { name: 'File' }))
+    await user.click(screen.getByRole('menuitem', { name: 'New Window' }))
+
+    expect(openNewWindow).toHaveBeenCalledOnce()
   })
 
   it('places save actions directly below the open action in the File menu', async () => {
@@ -115,6 +161,7 @@ describe('App', () => {
         .map((item) => item.getAttribute('aria-label') ?? item.firstChild?.textContent),
     ).toEqual([
       'New',
+      'New Window',
       'Open Markdown File',
       'Save',
       'Save As',
@@ -266,6 +313,7 @@ describe('App', () => {
     await openFileMenu(user)
 
     expect(screen.getByRole('menuitem', { name: 'New' })).toBeEnabled()
+    expect(screen.getByRole('menuitem', { name: 'New Window' })).toBeDisabled()
     expect(screen.getByRole('menuitem', { name: 'Open Markdown File' })).toBeDisabled()
     expect(screen.getByRole('menuitem', { name: 'Save' })).toBeDisabled()
     expect(screen.getByRole('menuitem', { name: 'Save As' })).toBeDisabled()

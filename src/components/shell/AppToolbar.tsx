@@ -28,10 +28,10 @@ export type AppToolbarZoom = {
 export function AppToolbar({
   activeMenu, canRevealFiles, documentPath, documentTitle, isSaving, isWelcomeVisible,
   language, menuBarRef, nativeFileTitle, recentFiles, shortcuts, supportsAppUpdates, t, updatePhase,
-  updateActionTitle, viewMode, closeFileTitle, newTitle, openTitle, saveTitle, saveAsTitle,
-  windowFrame, zoom,
+  updateActionTitle, viewMode, closeFileTitle, newTitle, newWindowTitle, openTitle, saveTitle,
+  saveAsTitle, supportsNewWindow, windowFrame, zoom,
   onAbout, onCheckUpdates, onClearRecent, onCloseDocument, onExportDocx, onExportHtml, onExportPdf,
-  onImportDocx, onLanguage, onNew, onOpen, onOpenRecent, onOpenReadingSettings, onReveal,
+  onImportDocx, onLanguage, onNew, onNewWindow, onOpen, onOpenRecent, onOpenReadingSettings, onReveal,
   onSave, onSaveAs, onToggleMenu, onViewMode,
 }: {
   activeMenu: AppMenuId | null
@@ -46,6 +46,7 @@ export function AppToolbar({
   recentFiles: RecentFile[]
   shortcuts: AppShortcutHints
   supportsAppUpdates: boolean
+  supportsNewWindow: boolean
   t: Translation
   updatePhase: AppUpdatePhase
   updateActionTitle?: string
@@ -54,6 +55,7 @@ export function AppToolbar({
   zoom: AppToolbarZoom
   closeFileTitle: string
   newTitle: string
+  newWindowTitle: string
   openTitle: string
   saveTitle: string
   saveAsTitle: string
@@ -67,6 +69,7 @@ export function AppToolbar({
   onImportDocx?: () => void
   onLanguage: (language: AppLanguage) => void
   onNew: () => void
+  onNewWindow: () => void
   onOpen: () => void
   onOpenRecent: (path: string) => void
   onOpenReadingSettings: () => void
@@ -104,6 +107,7 @@ export function AppToolbar({
         </button>
         {activeMenu === 'file' ? <div className="action-menu-panel" role="menu">
           <button type="button" className="action-menu-item" onClick={onNew} title={newTitle} aria-keyshortcuts={shortcuts.new.aria} role="menuitem">{t.createNew}<MenuShortcut hint={shortcuts.new} /></button>
+          <button type="button" className="action-menu-item" onClick={onNewWindow} disabled={!supportsNewWindow} title={supportsNewWindow ? newWindowTitle : t.newWindowUnavailable} role="menuitem">{t.newWindow}</button>
           <button type="button" className="action-menu-item" onClick={onOpen} disabled={!nativeFilesEnabled} title={nativeFileTitle ?? openTitle} aria-keyshortcuts={shortcuts.open.aria} role="menuitem">{t.openMarkdownFile}<MenuShortcut hint={shortcuts.open} /></button>
           {onImportDocx ? <button type="button" className="action-menu-item" onClick={onImportDocx} disabled={!nativeFilesEnabled} title={nativeFileTitle} role="menuitem">{t.importDocx}</button> : null}
           <button type="button" className="action-menu-item" onClick={onSave} disabled={isWelcomeVisible || !nativeFilesEnabled || isSaving} title={nativeFileTitle ?? saveTitle} aria-keyshortcuts={shortcuts.save.aria} role="menuitem">{t.save}<MenuShortcut hint={shortcuts.save} /></button>
