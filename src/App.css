@@ -705,7 +705,7 @@
 }
 
 .welcome-recent-list {
-  max-height: min(390px, calc(var(--ui-vh) * 0.46));
+  /*max-height: min(390px, calc(var(--ui-vh) * 0.46));*/
   overflow: auto;
   margin: 0;
   padding: 0;
