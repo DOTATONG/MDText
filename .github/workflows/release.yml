@@ -169,8 +169,14 @@ jobs:
 
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add README.md package.json package-lock.json src/appInfo.ts edge/public/manifest.json \
-              src-tauri/Cargo.toml src-tauri/Cargo.lock src-tauri/tauri.conf.json
+            # Stage every tracked file modified by version:sync so newly added
+            # version-bearing files (e.g. README.en.md) are never left behind.
+            git add -u
+            if [[ -n "$(git status --porcelain)" ]]; then
+              echo "::error::Version sync left uncommitted files:"
+              git status --porcelain
+              exit 1
+            fi
             git commit -m "chore: release $tag"
             git push origin "HEAD:$DEFAULT_BRANCH"
             sha="$(git rev-parse HEAD)"

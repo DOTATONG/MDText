@@ -146,7 +146,7 @@ SignPath signing applies to releases after configuration and approval. Create th
 
 | Item            | Value                                                                              |
 |-----------------|------------------------------------------------------------------------------------|
-| Version         | 4.0.1                                                                              |
+| Version         | 4.0.2                                                                              |
 | Author          | [DOTATONG](https://github.com/DOTATONG) (fork maintainer)                          |
 | Original author | [Sunky](https://www.sunky.net) / [isunky/MDView](https://github.com/isunky/MDView) |
 | License         | [GPL-3.0](LICENSE)                                                                 |
