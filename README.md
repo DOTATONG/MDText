@@ -55,8 +55,6 @@ MDText 是一款轻量、美观、免费无广告的 Markdown 阅读器。在清
 | macOS          | **[本机源码编译](docs/BUILD_WITH_AI.md)**（推荐 AI 辅助） |
 | Microsoft Edge | **Extension ZIP**：解压后加载                             |
 
-### 环境与文件关联
-
 - **Windows** — 需预先安装 [WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)，MDText 不附带或下载。MSI 安装界面为英文，应用支持中英文。
 - **macOS** — 发布包为 Universal DMG（Intel 与 Apple Silicon，macOS 10.15+），尚未完成 Apple 签名与公证，建议在自己的 Mac 上源码编译；本地构建仍可能出现系统安全提示。
 - **Edge 扩展** — 在 `edge://extensions` 开启开发人员模式，选择“加载解压缩的扩展”，选中解压后含 `manifest.json` 的文件夹。
@@ -80,7 +78,7 @@ msiexec /i MDText_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
 
 ## 使用参考
 
-### 常用快捷键
+### 1. 常用快捷键
 
 | 操作            | Windows                   | macOS               |
 |-----------------|---------------------------|---------------------|
@@ -96,15 +94,15 @@ msiexec /i MDText_x64.msi ASSOCIATE_MARKDOWN_FILES=0 /qn
 | 插入链接        | `Ctrl+K`                  | `Command+K`         |
 | 缩进 / 反向缩进 | `Tab` / `Shift+Tab`       | `Tab` / `Shift+Tab` |
 
-### 数学公式
+### 2. 数学公式
 
 `$...$` 插入行内公式，单独成行的 `$$` 包裹公式块；编辑时点击 `Σ` 使用模板与实时预览，普通美元符号写为 `\$`。
 
-### Word 导入
+### 3. Word 导入
 
 Word 转换在本机完成，首次使用需要 Python 和转换组件，下载组件需要联网。
 
-### 开发与打包
+### 4. 开发与打包
 
 技术栈：Tauri 2 · React 19 · TypeScript · Vite。
 
@@ -128,7 +126,7 @@ npm run desktop:dev
 
 维护者资料：[`ROADMAP.md`](ROADMAP.md) · [`工程目录说明`](docs/PROJECT_STRUCTURE.md) · [`Fork 发布指南`](docs/FORK_RELEASING.md)。
 
-### CI、发布与签名
+### 5. CI、发布与签名
 
 推送与 PR 执行质量检查；手动运行 CI 额外生成桌面安装包。推送 `v*` Tag 或运行 Release 工作流可发布 GitHub Release。详见 [`FORK_RELEASING.md`](docs/FORK_RELEASING.md)。
 

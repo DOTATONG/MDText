@@ -56,8 +56,6 @@ Choose a package from [GitHub Releases](https://github.com/DOTATONG/MDText/relea
 | macOS            | **[Build from source](docs/BUILD_WITH_AI.md)** (AI-assisted recommended) |
 | Microsoft Edge   | **Extension ZIP**: extract and load unpacked                             |
 
-### Environment and file associations
-
 - **Windows** — WebView2 Runtime must be installed separately; MDText does not bundle or download it. The MSI uses an English installer; the app supports Chinese and English.
 - **macOS** — The release is a Universal DMG (Intel and Apple Silicon, macOS 10.15+). It is not yet signed or notarized by Apple, so building from source on your own Mac is recommended; local builds may still trigger system security prompts.
 - **Edge extension** — Enable Developer mode at `edge://extensions`, choose **Load unpacked**, and select the extracted folder containing `manifest.json`.
@@ -82,7 +80,7 @@ Let an AI coding tool with local terminal access handle the build:
 
 ## Reference
 
-### Keyboard shortcuts
+### 1. Keyboard shortcuts
 
 | Action           | Windows                   | macOS               |
 |------------------|---------------------------|---------------------|
@@ -98,15 +96,15 @@ Let an AI coding tool with local terminal access handle the build:
 | Insert link      | `Ctrl+K`                  | `Command+K`         |
 | Indent / Outdent | `Tab` / `Shift+Tab`       | `Tab` / `Shift+Tab` |
 
-### Math formulas
+### 2. Math formulas
 
 Use `$...$` for inline math and `$$` on separate lines for display math. Click `Σ` for templates and live preview; escape a literal dollar sign as `\$`.
 
-### Word import
+### 3. Word import
 
 Word conversion runs locally; initial setup requires Python and conversion components, with internet access for downloads.
 
-### Development and packaging
+### 4. Development and packaging
 
 Stack: Tauri 2 · React 19 · TypeScript · Vite.
 
@@ -130,7 +128,7 @@ Versioning: `npm run version:sync -- <major.minor.patch>`, then `npm run version
 
 Maintainer docs: [`ROADMAP.md`](ROADMAP.md) · [`Project structure`](docs/PROJECT_STRUCTURE.md) · [`Fork release guide`](docs/FORK_RELEASING.md).
 
-### CI, releases, and signing
+### 5. CI, releases, and signing
 
 Pushes and PRs run quality checks; manual CI runs also build desktop installers. A `v*` tag or the Release workflow publishes a GitHub Release. See [`FORK_RELEASING.md`](docs/FORK_RELEASING.md).
 
