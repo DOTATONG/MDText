@@ -328,7 +328,7 @@ describe('App', () => {
     expect(screen.getByText('已保存')).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: '文件' }))
-    expect(screen.getByRole('menuitem', { name: '新建' })).toBeInTheDocument()
+    expect(screen.getByRole('menuitem', { name: '新建文件' })).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: '应用' }))
 
