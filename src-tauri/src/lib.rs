@@ -6,6 +6,7 @@ mod fs_utils;
 mod image_utils;
 mod startup;
 mod system_fonts;
+mod window_state;
 
 use std::{
     collections::HashSet,
@@ -247,6 +248,17 @@ async fn open_new_window(app: AppHandle, path: Option<String>) -> Result<(), Str
         .ok_or_else(|| "The window configuration is missing.".to_string())?;
     config.label = format!("window-{}", NEXT_WINDOW_ID.fetch_add(1, Ordering::Relaxed));
     config.title = "MDText".to_string();
+
+    // Open the new window with the same geometry as the one the user is working in, so switching
+    // documents never changes the layout.
+    if let Some(source) = active_window(&app) {
+        if let Some(state) = window_state::capture(&app, &source) {
+            window_state::apply_to_config(
+                &mut config,
+                &window_state::visible_on_screen(&app, &state),
+            );
+        }
+    }
 
     if let Some(path) = path {
         let encoded = url::form_urlencoded::byte_serialize(path.as_bytes()).collect::<String>();
@@ -694,6 +706,14 @@ pub fn run() {
     let startup_files_for_policy = startup_files.clone();
     let builder = tauri::Builder::default();
 
+    // The main window is created in `setup` rather than by Tauri, so the remembered geometry can be
+    // part of its initial configuration instead of resizing a window that is already visible.
+    let mut context: tauri::Context<tauri::Wry> = tauri::generate_context!();
+    #[cfg(desktop)]
+    for window in &mut context.config_mut().app.windows {
+        window.create = false;
+    }
+
     // Registered ahead of every other plugin so a second launch is handed to this instance instead
     // of starting another copy of the application.
     #[cfg(target_os = "windows")]
@@ -756,6 +776,28 @@ pub fn run() {
             let _ = persist_file_access_policy(app.handle(), &policy);
             app.manage(policy);
 
+            // `create` is cleared for the configured windows above, so the main window is built
+            // here with the geometry saved during the previous session already applied.
+            #[cfg(desktop)]
+            {
+                let mut config = app
+                    .config()
+                    .app
+                    .windows
+                    .first()
+                    .cloned()
+                    .ok_or("The window configuration is missing.")?;
+                if let Some(state) = window_state::load(app.handle()) {
+                    window_state::apply_to_config(
+                        &mut config,
+                        &window_state::visible_on_screen(app.handle(), &state),
+                    );
+                }
+                tauri::WebviewWindowBuilder::from_config(app.handle(), &config)?
+                    .build()
+                    .map_err(|error| format!("Failed to open the main window: {error}"))?;
+            }
+
             if cfg!(debug_assertions) {
                 app.handle().plugin(
                     tauri_plugin_log::Builder::default()
@@ -765,11 +807,16 @@ pub fn run() {
             }
             Ok(())
         })
-        .build(tauri::generate_context!())
+        .build(context)
         .expect("error while building tauri application")
-        .run(|app, event| {
+        .run(|app, event| match event {
+            tauri::RunEvent::WindowEvent {
+                label,
+                event: window_event,
+                ..
+            } => window_state::handle_window_event(app, &label, &window_event),
             #[cfg(any(target_os = "macos", target_os = "ios", target_os = "android"))]
-            if let tauri::RunEvent::Opened { urls } = event {
+            tauri::RunEvent::Opened { urls } => {
                 let files = urls
                     .into_iter()
                     .filter_map(|url| url.to_file_path().ok())
@@ -780,9 +827,7 @@ pub fn run() {
                     push_opened_files(app, files);
                 }
             }
-
-            #[cfg(not(any(target_os = "macos", target_os = "ios", target_os = "android")))]
-            let _ = (app, event);
+            _ => {}
         });
 }
 
@@ -913,6 +958,18 @@ fn push_opened_files(app: &AppHandle, files: Vec<PathBuf>) {
             let _ = app.emit("opened-files", payload);
         }
     }
+}
+
+/// The window the user is currently working in, falling back to the main window and then to any
+/// open window.
+fn active_window(app: &AppHandle) -> Option<tauri::WebviewWindow> {
+    let windows = app.webview_windows();
+    windows
+        .values()
+        .find(|window| window.is_focused().unwrap_or(false))
+        .or_else(|| windows.get("main"))
+        .or_else(|| windows.values().next())
+        .cloned()
 }
 
 /// The focused window's label, falling back to the main window and then to any open window.
