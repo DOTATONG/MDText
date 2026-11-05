@@ -700,6 +700,22 @@ fn reveal_file_in_folder(
         .map_err(|error| format!("Failed to reveal file: {error}"))
 }
 
+/// Opens a file linked from a rendered document with the system default program.
+#[tauri::command]
+fn open_local_file(app: AppHandle, path: String) -> Result<(), String> {
+    let path = PathBuf::from(path);
+    if !path.is_file() {
+        return Err(format!(
+            "The linked file does not exist: {}",
+            path.to_string_lossy()
+        ));
+    }
+
+    app.opener()
+        .open_path(path.to_string_lossy().to_string(), None::<&str>)
+        .map_err(|error| format!("Failed to open file: {error}"))
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let startup_files = collect_opened_files_from_args();
@@ -762,6 +778,7 @@ pub fn run() {
             read_remote_image_file,
             write_image_asset,
             reveal_file_in_folder,
+            open_local_file,
             list_system_font_families,
             get_app_distribution,
             get_markdown_file_association_status,

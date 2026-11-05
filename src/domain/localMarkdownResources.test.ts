@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
+  isLocalFileHref,
+  resolveLocalFilePath,
   resolveLocalMarkdownResource,
   resolveSameDocumentHeading,
 } from './localMarkdownResources'
@@ -66,6 +68,27 @@ describe('localMarkdownResources', () => {
   it('ignores external urls and unsupported local files', () => {
     expect(resolveLocalMarkdownResource('https://example.com/readme.md', 'C:\\Docs\\readme.md')).toBeNull()
     expect(resolveLocalMarkdownResource('archive.zip', 'C:\\Docs\\readme.md')).toBeNull()
+  })
+
+  it('detects local file links that the preview cannot render', () => {
+    expect(isLocalFileHref('LICENSE')).toBe(true)
+    expect(isLocalFileHref('./docs/guide.pdf')).toBe(true)
+    expect(isLocalFileHref('D:\\Docs\\LICENSE')).toBe(true)
+    expect(isLocalFileHref('file:///C:/Docs/LICENSE')).toBe(true)
+    expect(isLocalFileHref('#intro')).toBe(false)
+    expect(isLocalFileHref('https://example.com')).toBe(false)
+    expect(isLocalFileHref('mailto:dev@example.com')).toBe(false)
+  })
+
+  it('resolves local file links for the system opener', () => {
+    expect(resolveLocalFilePath('LICENSE', 'C:\\Docs\\readme.md')).toBe('C:\\Docs\\LICENSE')
+    expect(resolveLocalFilePath('./assets/report%20one.pdf', 'C:\\Docs\\readme.md')).toBe(
+      'C:\\Docs\\assets\\report one.pdf',
+    )
+    expect(resolveLocalFilePath('C:/Docs/LICENSE', null)).toBe('C:/Docs/LICENSE')
+    expect(resolveLocalFilePath('https://example.com', 'C:\\Docs\\readme.md')).toBeNull()
+    expect(resolveLocalFilePath('#intro', 'C:\\Docs\\readme.md')).toBeNull()
+    expect(resolveLocalFilePath('LICENSE', null)).toBeNull()
   })
 
   it('resolves same-document heading links without a file path', () => {

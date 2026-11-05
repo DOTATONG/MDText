@@ -14,7 +14,7 @@ describe('export html', () => {
         '<h1>标题</h1>',
         '<figure class="code-block"><figcaption class="code-block-header"><span>TypeScript</span><button>Copy</button></figcaption><pre><code>const ready = true</code></pre></figure>',
         '<div class="table-scroll"><table><thead><tr><th>A</th></tr></thead></table></div>',
-        '<span class="markdown-image"><img src="diagram.png" alt="Diagram"><span class="markdown-image-caption">Diagram</span></span>',
+        '<img class="markdown-inline-image" src="diagram.png" alt="Diagram">',
       ].join(''),
     })
 
@@ -27,7 +27,7 @@ describe('export html', () => {
     expect(html).toContain('hljs')
     expect(html).toContain('.code-block-header')
     expect(html).toContain('.table-scroll')
-    expect(html).toContain('.markdown-image-caption')
+    expect(html).toContain('.markdown-preview img')
   })
 
   it('creates default export paths from source markdown paths', () => {

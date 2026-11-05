@@ -12,6 +12,7 @@ import { tauriWindowFileDrop } from './platform/windowFileDrop.ts'
 import { tauriAppUpdateClient } from './platform/appUpdates.ts'
 import { bootstrapReadingTheme } from './platform/readingTheme.ts'
 import { setTheme } from '@tauri-apps/api/app'
+import { invoke } from '@tauri-apps/api/core'
 import { openUrl } from '@tauri-apps/plugin-opener'
 import { createTauriWindowFrame } from './platform/tauriWindowFrame.ts'
 import { nativeWindowFrame } from './platform/windowFrame.ts'
@@ -32,6 +33,7 @@ applyUiZoom(loadUiZoom())
 
 window.__MDVIEW_SYNC_NATIVE_THEME__ = setTheme
 window.__MDVIEW_OPEN_EXTERNAL_LINK__ = openUrl
+window.__MDVIEW_OPEN_LOCAL_FILE__ = (path) => invoke<void>('open_local_file', { path })
 
 const windowFrame = '__TAURI_INTERNALS__' in window
   ? createTauriWindowFrame()

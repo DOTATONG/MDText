@@ -7,12 +7,13 @@ import remarkGfm from 'remark-gfm'
 import { remarkCjkStrong } from '../../domain/remarkCjkStrong'
 import { remarkHeadingIds } from '../../domain/markdownOutline'
 import './highlightThemes.css'
-import { resolveLocalMarkdownResource, resolveSameDocumentHeading } from '../../domain/localMarkdownResources'
+import { isLocalFileHref, resolveLocalFilePath, resolveLocalMarkdownResource, resolveSameDocumentHeading } from '../../domain/localMarkdownResources'
 import { markdownSanitizeSchema, rehypeSafeHeadingIds, rehypeSourcePositions, rehypeWindowsFileUrls } from '../../domain/markdownSanitize'
 import { createSearchHighlightPlugin } from '../../domain/previewSearchHighlight'
 import type { EffectiveReadingTheme } from '../../domain/readingPreferences'
 import { isExternalWebUrl, openExternalLink, type OpenExternalLink } from '../../platform/externalLinks'
 import type { FileAccess } from '../../platform/fileAccess'
+import { openLocalFile, type OpenLocalFile } from '../../platform/localFiles'
 import { CodeBlock } from './CodeBlock'
 import { LocalMarkdownImage } from './LocalMarkdownImage'
 import { MermaidDiagram } from './MermaidDiagram'
@@ -87,6 +88,7 @@ type MarkdownPreviewProps = {
   readLocalImageFile?: FileAccess['readLocalImageFile']
   onOpenMarkdownLink?: (path: string, headingId?: string) => void
   onOpenExternalLink?: OpenExternalLink
+  onOpenLocalFile?: OpenLocalFile
   labels?: MarkdownPreviewLabels
   searchQuery?: string
   activeSearchIndex?: number
@@ -104,6 +106,7 @@ export const MarkdownPreview = memo(function MarkdownPreview({
   readLocalImageFile,
   onOpenMarkdownLink,
   onOpenExternalLink = openExternalLink,
+  onOpenLocalFile = openLocalFile,
   labels = defaultPreviewLabels,
   searchQuery = '',
   activeSearchIndex = 0,
@@ -121,7 +124,7 @@ export const MarkdownPreview = memo(function MarkdownPreview({
   const openMediaPreview = useCallback((element: HTMLElement) => {
     const article = articleRef.current
     if (!article) return
-    const elements = Array.from(article.querySelectorAll<HTMLElement>('.markdown-image > img[src], .mermaid-diagram'))
+    const elements = Array.from(article.querySelectorAll<HTMLElement>('img.markdown-inline-image[src], .mermaid-diagram'))
       .filter((item) => item.tagName === 'IMG' ? Boolean(item.getAttribute('src')) : Boolean(item.querySelector('svg')))
     const index = elements.indexOf(element)
     const media = readPreviewMedia(element, labels)
@@ -220,6 +223,17 @@ export const MarkdownPreview = memo(function MarkdownPreview({
         if (isExternalWebUrl(href)) {
           event.preventDefault()
           void Promise.resolve(onOpenExternalLink(href)).catch((error) => console.error('Failed to open external link', error))
+          return
+        }
+        if (isLocalFileHref(href)) {
+          // The preview cannot render other local resources such as LICENSE, so
+          // hand them to the system's default program instead of letting the
+          // WebView navigate to a dead end with no way back to the editing UI.
+          event.preventDefault()
+          const path = resolveLocalFilePath(href, sourcePath)
+          if (path) {
+            void Promise.resolve(onOpenLocalFile(path)).catch((error) => console.error('Failed to open local file', error))
+          }
         }
       }
       const external = isExternalWebUrl(href)
@@ -229,7 +243,7 @@ export const MarkdownPreview = memo(function MarkdownPreview({
       void node
       return <LocalMarkdownImage src={src} alt={alt} sourcePath={sourcePath} readLocalImageFile={readLocalImageFile} onPreview={openMediaPreview} {...props} />
     },
-  }), [labels, onOpenExternalLink, onOpenMarkdownLink, openMediaPreview, readLocalImageFile, sourcePath, theme])
+  }), [labels, onOpenExternalLink, onOpenLocalFile, onOpenMarkdownLink, openMediaPreview, readLocalImageFile, sourcePath, theme])
 
   useEffect(() => {
     const article = articleRef.current

@@ -263,7 +263,7 @@ describe('MarkdownPreview', () => {
 
     const image = screen.getByRole('img', { name: 'Diagram' })
     expect(image).toHaveAttribute('src', 'data:image/png;base64,abc')
-    expect(screen.getByText('Diagram')).toHaveClass('markdown-image-caption')
+    expect(image).toHaveClass('markdown-inline-image')
 
     fireEvent.click(image)
 
@@ -586,6 +586,66 @@ describe('MarkdownPreview', () => {
     expect(screen.getByRole('dialog', { name: 'Image preview' })).toBeInTheDocument()
     fireEvent.keyDown(window, { key: 'Escape' })
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('previews a linked image and opens its local file with the system default program', () => {
+    const onOpenLocalFile = vi.fn()
+    render(<MarkdownPreview
+      content={'[![License](license.svg)](LICENSE)'}
+      sourcePath="C:\\Docs\\readme.md"
+      onOpenLocalFile={onOpenLocalFile}
+    />)
+    const image = screen.getByRole('img', { name: 'License' })
+    expect(image.closest('a')).toHaveAttribute('href', 'LICENSE')
+
+    const click = createEvent.click(image, { bubbles: true, cancelable: true })
+    fireEvent(image, click)
+
+    expect(click.defaultPrevented).toBe(true)
+    expect(onOpenLocalFile).toHaveBeenCalledWith('C:\\Docs\\LICENSE')
+    expect(screen.getByRole('dialog', { name: 'Image preview' })).toBeInTheDocument()
+  })
+
+  it('opens unsupported local file links with the system default program', () => {
+    const onOpenLocalFile = vi.fn()
+    render(<MarkdownPreview
+      content={'[License](LICENSE)'}
+      sourcePath="C:\\Docs\\readme.md"
+      onOpenLocalFile={onOpenLocalFile}
+    />)
+    const link = screen.getByRole('link', { name: 'License' })
+
+    const click = createEvent.click(link, { bubbles: true, cancelable: true })
+    fireEvent(link, click)
+
+    expect(click.defaultPrevented).toBe(true)
+    expect(onOpenLocalFile).toHaveBeenCalledWith('C:\\Docs\\LICENSE')
+  })
+
+  it('renders every image inline without a figure caption', () => {
+    const { container } = render(
+      <MarkdownPreview content={'[![Badge](badge.svg)](badge.svg)\n\n![Diagram](diagram.png)\n\nRead [the ![Shot](shot.png) image](shot.png).'} sourcePath="C:/docs/README.md" />,
+    )
+
+    const badge = screen.getByRole('img', { name: 'Badge' })
+    expect(badge.closest('a')).toHaveAttribute('href', 'badge.svg')
+    expect(badge).toHaveClass('markdown-inline-image')
+
+    expect(screen.getByRole('img', { name: 'Diagram' })).toHaveClass('markdown-inline-image')
+
+    const inlineShot = screen.getByRole('img', { name: 'Shot' })
+    expect(inlineShot.closest('p')).toHaveTextContent('Read the image.')
+
+    expect(container.querySelectorAll('.markdown-image, .markdown-image-caption')).toHaveLength(0)
+  })
+
+  it('keeps linked images in the preview gallery', () => {
+    render(<MarkdownPreview content={'[![Badge](badge.svg)](badge.svg)\n\n![Standalone](standalone.png)'} sourcePath="C:/docs/README.md" />)
+
+    fireEvent.click(screen.getByRole('img', { name: 'Badge' }))
+    expect(screen.getByText('1 / 2')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Next image or diagram' }))
+    expect(screen.getByRole('img', { name: 'Standalone preview' })).toBeInTheDocument()
   })
 
   it('keeps galleries scoped to one document and excludes failed Mermaid diagrams', async () => {

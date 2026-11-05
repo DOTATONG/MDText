@@ -2390,7 +2390,6 @@
 .markdown-preview blockquote,
 .markdown-preview .table-scroll,
 .markdown-preview .code-block,
-.markdown-preview .markdown-image,
 .markdown-preview .mermaid-diagram,
 .markdown-preview .mermaid-loading,
 .markdown-preview .mermaid-error {
@@ -2431,13 +2430,6 @@
 
 .markdown-preview a:hover {
   text-decoration-thickness: 0.14em;
-}
-
-.markdown-preview a[target='_blank']::after {
-  content: '↗';
-  margin-left: 0.18em;
-  font-size: 0.78em;
-  text-decoration: none;
 }
 
 .markdown-preview strong {
@@ -2652,11 +2644,6 @@
   margin-left: -1.25em;
 }
 
-.markdown-image {
-  display: block;
-  text-align: center;
-}
-
 .markdown-preview img {
   max-width: 100%;
   max-height: min(calc(var(--ui-vh) * 0.68), 760px);
@@ -2667,13 +2654,6 @@
   background: var(--surface-raised);
   box-shadow: 0 12px 34px rgba(15, 23, 42, 0.08);
   cursor: zoom-in;
-}
-
-.markdown-image-caption {
-  display: block;
-  margin-top: 8px;
-  color: var(--text-muted);
-  font: 13px/1.45 var(--ui-font);
 }
 
 .image-preview-backdrop {

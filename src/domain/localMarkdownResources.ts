@@ -14,27 +14,59 @@ export function resolveLocalMarkdownResource(
   }
 
   const { pathPart, fragment } = splitFragment(href)
-  const decodedPath = toLocalPath(pathPart)
-  if (!sourcePath && !isAbsolutePath(decodedPath)) {
+  const extension = getExtension(toLocalPath(pathPart))
+  if (!imageExtensions.has(extension) && !markdownExtensions.has(extension)) {
     return null
   }
 
-  const extension = getExtension(decodedPath)
-  const resolvedPath = resolvePath(sourcePath ? dirname(sourcePath) : '', decodedPath)
+  const resolvedPath = resolveLocalFilePath(href, sourcePath)
+  if (!resolvedPath) {
+    return null
+  }
 
   if (imageExtensions.has(extension)) {
     return { kind: 'image', path: resolvedPath }
   }
 
-  if (markdownExtensions.has(extension)) {
-    return {
-      kind: 'markdown',
-      path: resolvedPath,
-      ...(fragment ? { headingId: decodePath(fragment) } : {}),
-    }
+  return {
+    kind: 'markdown',
+    path: resolvedPath,
+    ...(fragment ? { headingId: decodePath(fragment) } : {}),
+  }
+}
+
+/**
+ * Resolves any local-file link to an absolute path so the system can open it.
+ * Returns null for external URLs, same-document anchors and relative links
+ * without a source document to resolve them against.
+ */
+export function resolveLocalFilePath(
+  href: string | undefined,
+  sourcePath: string | null | undefined,
+): string | null {
+  if (!href || isExternalHref(href) || href.startsWith('#')) {
+    return null
   }
 
-  return null
+  const { pathPart } = splitFragment(href)
+  const decodedPath = toLocalPath(pathPart)
+  if (!sourcePath && !isAbsolutePath(decodedPath)) {
+    return null
+  }
+
+  return resolvePath(sourcePath ? dirname(sourcePath) : '', decodedPath)
+}
+
+/**
+ * Whether a link points into the local file system (relative path, drive path,
+ * UNC path or `file:` URL) instead of an external URL.
+ */
+export function isLocalFileHref(href: string | undefined): boolean {
+  if (!href || href.startsWith('#')) {
+    return false
+  }
+
+  return !isExternalHref(href)
 }
 
 export function resolveSameDocumentHeading(href: string | undefined): string | null {

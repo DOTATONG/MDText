@@ -10,7 +10,7 @@ type Props = Omit<ComponentProps<'img'>, 'src' | 'alt'> & {
   onPreview: (element: HTMLElement) => void
 }
 
-export function LocalMarkdownImage({ src, alt, sourcePath, readLocalImageFile, onPreview, ...props }: Props) {
+export function LocalMarkdownImage({ src, alt, className, sourcePath, readLocalImageFile, onPreview, ...props }: Props) {
   const [resolvedSrc, setResolvedSrc] = useState(src)
   const resource = resolveLocalMarkdownResource(src, sourcePath)
   const displaySrc = resource?.kind === 'image' && readLocalImageFile ? resolvedSrc : src
@@ -26,10 +26,13 @@ export function LocalMarkdownImage({ src, alt, sourcePath, readLocalImageFile, o
     return () => { canceled = true }
   }, [readLocalImageFile, resource?.kind, resource?.path, src])
 
-  return <>
-    <span className="markdown-image">
-      <img src={displaySrc} alt={alt} onClick={(event) => displaySrc && onPreview(event.currentTarget)} {...props} />
-      {alt ? <span className="markdown-image-caption">{alt}</span> : null}
-    </span>
-  </>
+  // Images stay in the inline flow everywhere, including inside links, so they
+  // never introduce a block-level line break; there is no figure caption.
+  return <img
+    src={displaySrc}
+    alt={alt}
+    className={className ? `markdown-inline-image ${className}` : 'markdown-inline-image'}
+    onClick={(event) => displaySrc && onPreview(event.currentTarget)}
+    {...props}
+  />
 }

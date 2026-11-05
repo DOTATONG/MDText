@@ -97,7 +97,6 @@ body {
 .markdown-preview blockquote,
 .markdown-preview .table-scroll,
 .markdown-preview .code-block,
-.markdown-preview .markdown-image,
 .markdown-preview .mermaid-diagram,
 .markdown-preview .mermaid-loading,
 .markdown-preview .mermaid-error {
@@ -261,11 +260,6 @@ body {
   margin-left: -1.25em;
 }
 
-.markdown-image {
-  display: block;
-  text-align: center;
-}
-
 .markdown-preview img {
   max-width: 100%;
   max-height: min(68vh, 760px);
@@ -275,13 +269,6 @@ body {
   border-radius: 14px;
   background: #fbfdfe;
   box-shadow: 0 12px 34px rgba(15, 23, 42, 0.08);
-}
-
-.markdown-image-caption {
-  display: block;
-  margin-top: 8px;
-  color: #667085;
-  font: 13px/1.45 'Segoe UI Variable Text', 'Segoe UI', 'Microsoft YaHei UI', 'Microsoft YaHei', system-ui, sans-serif;
 }
 
 .mermaid-diagram,
